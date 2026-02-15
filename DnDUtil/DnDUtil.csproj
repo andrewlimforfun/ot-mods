@@ -127,6 +127,7 @@
     <Copy SourceFiles="$(TargetDir)manifest.json" DestinationFolder="$(StagingDir)" />
     <Copy SourceFiles="$(ProjectDir)icon.png" DestinationFolder="$(StagingDir)" />
     <Copy SourceFiles="$(ProjectDir)README.md" DestinationFolder="$(StagingDir)" />
+    <Copy SourceFiles="$(ProjectDir)CHANGELOG.md" DestinationFolder="$(StagingDir)" />
 
     <ZipDirectory SourceDirectory="$(StagingDir)"
       DestinationFile="$(ZipOutputPath)"
