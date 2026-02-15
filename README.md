@@ -13,7 +13,7 @@ A mod to help players play chat-based Dungeons & Dragons within On-Together.
 - Multiple dice rolling in single command
 - In-game command management
 
-[📖 View detailed documentation](DnDUtil/README.md)
+[View detailed documentation](DnDUtil/README.md)
 
 ## Development Setup
 
