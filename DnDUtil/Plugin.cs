@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace DnDUtil
 {
-    [BepInPlugin(Plugin.ModGUID, Plugin.ModName, BuildInfo.Version)]
+    [BepInPlugin(Plugin.ModGUID, Plugin.ModName, Plugin.ModVersion)]
     public class Plugin : BaseUnityPlugin
     {
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
@@ -27,11 +27,12 @@ namespace DnDUtil
 
         public const string ModGUID = "com.andrewlin.ontogether.dndmod";
         public const string ModName = "DnDUtil";
+        public const string ModVersion = BuildInfo.Version;
 
         void Awake()
         {
             // This runs once when the game starts
-            Logger.LogInfo($"{ModName} v{BuildInfo.Version} is loaded!");
+            Logger.LogInfo($"{ModName} v{ModVersion} is loaded!");
 
             // Apply Harmony patches
             var harmony = new Harmony(ModGUID);

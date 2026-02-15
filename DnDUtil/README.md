@@ -50,9 +50,10 @@ A mod for On-Together that adds Dungeons & Dragons utilities to enhance your tab
 ### Automatic Installation (Recommended)
 
 1. Install [r2modman](https://thunderstore.io/package/ebkr/r2modman/) or Thunderstore Mod Manager
-2. Search for "DnDUtil" in the mod manager
-3. Click "Install"
-4. Launch the game through the mod manager
+2. Look for On-Together game
+3. Search for "DnDUtil" in the mod manager
+4. Click "Install"
+5. Launch the game through the mod manager
 
 ### Manual Installation
 
