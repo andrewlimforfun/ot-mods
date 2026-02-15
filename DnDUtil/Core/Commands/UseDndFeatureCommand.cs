@@ -6,6 +6,7 @@ namespace DnDUtil.Core.Commands
     {
         public const string CMD = "usedndfeature";
         public string Name => CMD;
+        public string ShortName => "udf";
         public string Description => "Toggle DnDUtil feature on/off. ";
 
         public void Execute(string[] args)

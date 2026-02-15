@@ -6,6 +6,7 @@ namespace DnDUtil.Core.Commands
     {
         public const string CMD = "showusercommand";
         public string Name => CMD;
+        public string ShortName => "suc";
         public string Description => "Toggle DnDUtil show/hide user command in chat." +
             "If enabled, user command such as '/roll' will be shown in chat. Current: " + 
             (Plugin.ShowCommand?.Value == true ? "shown" : "hidden");

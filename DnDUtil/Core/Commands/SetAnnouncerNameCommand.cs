@@ -7,6 +7,7 @@ namespace DnDUtil.Core.Commands
     {
         public const string CMD = "setannouncername";
         public string Name => CMD;
+        public string ShortName => "san";
         public string Description => "Set the name to use when sending messages to chat. Current: " + 
         (Plugin.AnnouncerChatName?.Value ?? Plugin.DefaultAnnouncerChatName);
 

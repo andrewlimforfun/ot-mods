@@ -8,6 +8,7 @@ namespace DnDUtil.Core.Commands
         public const string CMD = "help";
 
         public string Name => CMD;
+        public string ShortName => "h";
         public string Description => "Lists all available commands.";
 
         IEnumerable<IChatCommand>? commands;

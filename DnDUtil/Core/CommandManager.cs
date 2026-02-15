@@ -22,24 +22,16 @@ namespace DnDUtil.Core
                          && !t.IsAbstract);
 
             // Load all injected commands into a fast-lookup dictionary
-            this.commands = commandTypes.Select(t => (IChatCommand) Activator.CreateInstance(t)!)
-                .ToDictionary(c => c.Name.ToLower(), c => c);
-            foreach (var cmd in this.commands.Values)
+            this.commands = new Dictionary<string, IChatCommand>();
+            foreach (var cmdType in commandTypes)
             {
-                log.LogInfo($"Loaded /{cmd.ToString()}");
-            }
-
-            // Initialize the help command with the full list of commands for dynamic help text
-            InitializeHelpCommand(this.commands);
-        }
-
-        public CommandManager(IEnumerable<IChatCommand> commands)
-        {
-            // Load all injected commands into a fast-lookup dictionary
-            this.commands = commands.ToDictionary(c => c.Name.ToLower(), c => c);
-            foreach (var cmd in this.commands.Values)
-            {
-                log.LogInfo($"Loaded /{cmd.ToString()}");
+                var cmd = Activator.CreateInstance(cmdType) as IChatCommand;
+                if (cmd != null)
+                {
+                    this.commands[cmd.Name] = cmd;
+                    this.commands[cmd.ShortName] = cmd;
+                    log.LogInfo($"Loaded /{cmd.Name} (/{cmd.ShortName})");
+                }
             }
 
             // Initialize the help command with the full list of commands for dynamic help text

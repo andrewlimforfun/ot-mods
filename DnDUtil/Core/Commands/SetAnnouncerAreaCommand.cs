@@ -9,6 +9,7 @@ namespace DnDUtil.Core.Commands
         public static readonly string ValidAreasText = string.Join("|", ValidAreas);
         public const string CMD = "setannouncerarea";
         public string Name => CMD;
+        public string ShortName => "saa";
         public string Description => $"Set the area to use when announcing rolls: [{ValidAreasText}]. Current: " + (Plugin.AnnouncerArea?.Value ?? "self");
 
         

@@ -7,6 +7,7 @@ namespace DnDUtil.Core.Commands
     public class RollCommand : IChatCommand
     {
         public string Name => "roll";
+        public string ShortName => "r";
         public string Description => "Rolls a dice. E.g. '/roll 2d20 1d6' rolls 2 20-sided dice and 1 6-sided die.";
         public void Execute(string[] args)
         {
