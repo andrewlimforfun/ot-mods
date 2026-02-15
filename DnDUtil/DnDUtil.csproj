@@ -73,7 +73,7 @@
   </Target>
 
   <!-- Install mod locally for testing -->
-  <Target Name="InstallMod" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+  <Target Name="Install" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
     <!-- Have to set verbosity to -v detailed anyway to see the message -->
     <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalModInstallPath)" />
     <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
@@ -82,17 +82,23 @@
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalModInstallPath)" />
   </Target>
 
+  <Target Name="CleanInstall" AfterTargets="Clean">
+    <!-- Have to set verbosity to -v detailed anyway to see the message -->
+    <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalModInstallPath)" />
+    <RemoveDir Directories="$(LocalModInstallPath)" />
+  </Target>
+
   <!-- Generate manifest.json for Thunderstore Zip -->
   <Target Name="GenerateManifest" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
       <ManifestContent>
-      {
-        "name": "$(TeamName)_$(PackageName)",
+        {
+        "name": "$(PackageName)",
         "version_number": "$(Version)",
         "website_url": "$(Website)",
         "description": "$(Description)",
         "dependencies": ["BepInEx-BepInExPack-5.4.2304"]
-      }
+        }
       </ManifestContent>
     </PropertyGroup>
 
@@ -126,5 +132,5 @@
 
     <Message Importance="high" Text="Success! Zip created at: $(ZipOutputPath)" />
   </Target>
-  
+
 </Project>

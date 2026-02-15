@@ -38,7 +38,7 @@ namespace DnDUtil.Core.Commands
                 ChatUtils.AddGlobalNotification("Available commands:");
                 foreach (var cmd in commands)
                 {
-                    ChatUtils.AddGlobalNotification($"/{cmd.Name} :: {cmd.Description}");
+                    ChatUtils.AddGlobalNotification($"/{cmd.Name} (/{cmd.ShortName}) :: {cmd.Description}");
                 }
             }
         }
