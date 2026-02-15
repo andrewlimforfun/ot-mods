@@ -130,4 +130,5 @@ See [LICENSE](LICENSE) file for details.
 
 ## Additional Notes
 
-For detailed development notes and setup instructions, see [project_notes.md](project_notes.md).
+- For detailed development notes and setup instructions, see [project_notes.md](project_notes.md)
+- For version history and changes, see [CHANGELOG.md](DnDUtil/CHANGELOG.md)

@@ -12,11 +12,13 @@ A mod for On-Together that adds Dungeons & Dragons utilities to enhance your tab
 
 ## Commands
 
+> **Note:** Most commands have short aliases for faster typing (shown in parentheses).
+
 ### Core Commands
 
-- **`/help dnd`** - Display a list of all available DnD mod commands in-game
+- **`/help dnd`** (or `/h dnd`) - Display a list of all available DnD mod commands in-game
 
-- **`/roll XdY [MdN ...]`** - Roll dice with specified sides
+- **`/roll XdY [MdN ...]`** (or `/r XdY`) - Roll dice with specified sides
   - `X` = number of dice to roll
   - `Y` = number of sides on each die
   - You can roll multiple dice types in one command
@@ -28,22 +30,22 @@ A mod for On-Together that adds Dungeons & Dragons utilities to enhance your tab
 
 ### Configuration Commands
 
-- **`/setannouncerarea [self|local|global]`** - Set where roll results are displayed
+- **`/setannouncerarea [self|local|global]`** (or `/saa`) - Set where roll results are displayed
   - `self` - Only you see the results (default)
   - `local` - Nearby players see the results
   - `global` - All players see the results
-  - **Example:** `/setannouncerarea global`
+  - **Example:** `/setannouncerarea global` or `/saa global`
 
-- **`/setannouncername [name]`** - Set the display name for roll announcements
+- **`/setannouncername [name]`** (or `/san`) - Set the display name for roll announcements
   - Default: "DnDSystem"
-  - **Example:** `/setannouncername DungeonMaster`
+  - **Example:** `/setannouncername DungeonMaster` or `/san DM`
 
-- **`/showusercommand`** - Toggle visibility of your commands in chat
+- **`/showdndcommand`** (or `/sdc`) - Toggle visibility of your commands in chat
   - When enabled, other players see your command (e.g., "/roll 2d20")
   - When disabled, only the results are shown
   - Default: hidden
 
-- **`/usedndfeature`** - Enable or disable all DnD utility features
+- **`/usedndfeature`** (or `/udf`) - Enable or disable all DnD utility features
 
 ## Installation
 
@@ -85,14 +87,14 @@ Configuration files are automatically created in `BepInEx/config/` after first l
 ### Basic Rolling
 ```
 /roll 1d20          → Roll for initiative!
-/roll 2d6           → Roll damage for a greatsword
+/r 2d6              → Roll damage for a greatsword (short command)
 /roll 4d6           → Roll stats for character creation
 ```
 
 ### Multiple Dice
 ```
 /roll 1d20 8d6      → Roll attack with spell damage
-/roll 1d20 1d4      → Roll with bardic inspiration
+/r 1d20 1d4         → Roll with bardic inspiration (short command)
 ```
 
 ### Broadcasting to Others
@@ -117,3 +119,7 @@ For bug reports, feature requests, or questions:
 ## License
 
 See [LICENSE](../LICENSE) file for details.
+
+## Changelog
+
+For version history and release notes, see [CHANGELOG.md](CHANGELOG.md).
