@@ -87,7 +87,7 @@
     <PropertyGroup>
       <ManifestContent>
       {
-        "name": "$(AssemblyName)",
+        "name": "$(TeamName)_$(PackageName)",
         "version_number": "$(Version)",
         "website_url": "$(Website)",
         "description": "$(Description)",
@@ -96,7 +96,7 @@
       </ManifestContent>
     </PropertyGroup>
 
-    <Message Importance="high" Text="Generating manifest.json..." />
+    <Message Importance="high" Text="Generating manifest: $(TargetDir)manifest.json" />
 
     <WriteLinesToFile File="$(TargetDir)manifest.json"
       Lines="$(ManifestContent)"

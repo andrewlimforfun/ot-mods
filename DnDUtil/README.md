@@ -1,4 +1,4 @@
-﻿# DnDUtil:  
+# DnDUtil:  
 - roll dice with the result broadcasted to global/local chat
 - configure the broadcast name
 

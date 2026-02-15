@@ -1,4 +1,4 @@
-﻿# README
+# README
 
 On-Together DnD mod:
 
