@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Text.RegularExpressions;
 using DnDUtil.Core.Commands;
+using System;
 
 namespace DnDUtil.Patches
 {
@@ -28,11 +29,11 @@ namespace DnDUtil.Patches
             // unrecognized commands will be ignored and treated as normal chat messages
             if (Plugin.EnableFeature.Value == true || text.Contains(UseDndFeatureCommand.CMD))
             {
-                Plugin.CommandProcessor?.ProcessInput(text);
+                bool isProcessed = Plugin.CommandProcessor?.ProcessInput(text) ?? false;
 
                 // only clean the command from chat if the ShowCommand option is disabled
                 // otherwise the lock management and unselection can happen in the real OnEnterPressed
-                if (Plugin.ShowCommand?.Value == false)
+                if (Plugin.ShowCommand?.Value == false && isProcessed)
                 {
                     ChatUtils.CleanCommand();
                 }

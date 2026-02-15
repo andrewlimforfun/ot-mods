@@ -3,10 +3,9 @@
 
   <PropertyGroup>
     <!-- if we want to match On-Together's .NET version use netstandard2.1 instead of net10.0 -->
-    <!-- <TargetFramework>netstandard2.1</TargetFramework> -->
     <TeamName>AndrewLin</TeamName>
     <AssemblyName>AndrewLin.DnDUtil</AssemblyName>
-    <PackageName>DnDUtil</PackageName>
+    <PackageName>AndrewLin_DnDUtil</PackageName>
     <RootNamespace>DnDUtil</RootNamespace>
     <Description>A Dungeons and Dragons mod for On-Together.</Description>
     <Website>https://github.com/andrewlimforfun/ot-mods</Website>
@@ -18,15 +17,18 @@
     <!-- Configuration: Debug or Release override with CLI, dotnet build -c Release-->
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 
+    <ZipOutputName>$(TeamName)-$(PackageName)-v$(Version).zip</ZipOutputName>
     <!-- Local directory references -->
-    <LocalOnTogetherManagedPath>C:\Program Files (x86)\Steam\steamapps\common\On-Together\On-Together\OnTogether_Data\Managed</LocalOnTogetherManagedPath>
+    <LocalOnTogetherManagedPath>C:\Program Files (x86)\Steam\steamapps\common\On-Together\On-Together\OnTogether_Data\Managed\</LocalOnTogetherManagedPath>
     <!-- Local install directory-->
-    <LocalBepInExPluginPath>..\..\..\AppData\Roaming\r2modmanPlus-local\OnTogetherVirtualCoWorking\profiles\Default\BepInEx\plugins</LocalBepInExPluginPath>
-    <LocalModInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)\</LocalModInstallPath>
+    <LocalBepInExPluginPath>..\..\..\AppData\Roaming\r2modmanPlus-local\OnTogetherVirtualCoWorking\profiles\Default\BepInEx\plugins\</LocalBepInExPluginPath>
+    <LocalInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)\</LocalInstallPath>
+
   </PropertyGroup>
 
   <!-- NuGet Packages -->
   <ItemGroup>
+    <!-- dotnet nuget add source https://nuget.bepinex.dev/v3/index.json -n bepinex-->
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -75,17 +77,17 @@
   <!-- Install mod locally for testing -->
   <Target Name="Install" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
     <!-- Have to set verbosity to -v detailed anyway to see the message -->
-    <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalModInstallPath)" />
+    <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalInstallPath)" />
     <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
-    <MakeDir Directories="$(LocalModInstallPath)" />
+    <MakeDir Directories="$(LocalInstallPath)" />
 
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalModInstallPath)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalInstallPath)" />
   </Target>
 
   <Target Name="CleanInstall" AfterTargets="Clean">
     <!-- Have to set verbosity to -v detailed anyway to see the message -->
-    <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalModInstallPath)" />
-    <RemoveDir Directories="$(LocalModInstallPath)" />
+    <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalInstallPath)" />
+    <RemoveDir Directories="$(LocalInstallPath)" />
   </Target>
 
   <!-- Generate manifest.json for Thunderstore Zip -->
@@ -112,7 +114,7 @@
 
   <Target Name="CreateThunderstoreZip" AfterTargets="GenerateManifest" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
-      <ZipOutputPath>$(TargetDir)$(TeamName)-$(PackageName)-v$(Version).zip</ZipOutputPath>
+      <ZipOutputPath>$(TargetDir)$(ZipOutputName)</ZipOutputPath>
       <StagingDir>$(TargetDir)Staging\</StagingDir>
     </PropertyGroup>
 
