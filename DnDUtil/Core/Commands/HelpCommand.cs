@@ -11,11 +11,11 @@ namespace DnDUtil.Core.Commands
         public string ShortName => "h";
         public string Description => "Lists all available commands.";
 
-        IEnumerable<IChatCommand>? commands;
+        SortedSet<IChatCommand>? commands;
 
         public void Initialize(IEnumerable<IChatCommand> values)
         {
-            this.commands = values;
+            this.commands = new SortedSet<IChatCommand>(values);
         }
 
         public void Execute(string[] args)

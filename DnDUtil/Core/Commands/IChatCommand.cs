@@ -1,6 +1,8 @@
-﻿namespace DnDUtil.Core.Commands
+﻿using System;
+
+namespace DnDUtil.Core.Commands
 {
-    public interface IChatCommand
+    public interface IChatCommand : IComparable<IChatCommand>
     {
         string Name { get; }
         string ShortName => "";
@@ -12,6 +14,12 @@
         string ToString()
         {
             return Name;
+        }
+
+        int IComparable<IChatCommand>.CompareTo(IChatCommand? other)
+        {
+            if (other == null) return 1;
+            return string.Compare(Name, other.Name, StringComparison.Ordinal);
         }
     }
 }
