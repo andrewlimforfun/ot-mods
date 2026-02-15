@@ -16,14 +16,14 @@ namespace DnDUtil
     {
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
-        public static ConfigEntry<bool>? LocalChat { get; private set; }
-        public static ConfigEntry<string>? ChatName { get; private set; }
+        public static ConfigEntry<string>? AnnouncerArea { get; private set; }
+        public static ConfigEntry<string>? AnnouncerChatName { get; private set; }
 
         public static string? PlayerId { get; private set; }
 
         public static CommandManager? CommandProcessor { get; private set; }
 
-        public const string DefaultChatName = "DnDSystem";
+        public const string DefaultAnnouncerChatName = "DnDSystem";
 
         public const string ModGUID = "com.andrewlin.ontogether.dndmod";
         public const string ModName = "DnDUtil";
@@ -37,46 +37,21 @@ namespace DnDUtil
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(TextChannelManagerPatch));
 
+            InitConfig();
+
+            // Initialize command processor with all commands found via reflection
+            CommandProcessor = new CommandManager();
+        }
+
+        void InitConfig()
+        {
             // Initialize config entries
             // config only exists after plugin loads, so cant be in constructor
-
-            EnableFeature = Config.Bind(
-                "General",           // Section name
-                "EnableFeature",     // Key name
-                true,                // Default value
-                "Whether to enable the feature"  // Description
-            );
-
-            ShowCommand = Config.Bind(
-                "General",           // Section name
-                "ShowCommand",       // Key name
-                false,                // Default value
-                "Whether to show the typed commands in chat"  // Description
-            );
-
-            LocalChat = Config.Bind(
-                "General",           // Section name
-                "LocalRollChat",     // Key name
-                true,                // Default value
-                "Whether to show the roll results only to the local player"  // Description
-            );
-
-            ChatName = Config.Bind(
-                "General",           // Section name
-                "ChatName",         // Key name
-                DefaultChatName,    // Default value
-                "The name to use when sending messages to chat"  // Description
-            );
-
-            // get player id via reflection since TextChannelManager doesn't expose it and we need it to send messages
-            // alternatively get player id via Steamworks.SteamUser.GetSteamID().ToString()
-            TextChannelManager textChannelManager = NetworkSingleton<TextChannelManager>.I;
-            PlayerId = Traverse.Create(textChannelManager).Field<string>("_playerId").Value;
-            Logger.LogInfo($"Player ID: {PlayerId}");
-
-            // Initialize command processor with all commands
-            CommandProcessor = new CommandManager();
-
+            EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the DnD utility features.");
+            ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
+            
+            AnnouncerChatName = Config.Bind("General", "AnnouncerChatName", DefaultAnnouncerChatName, "The chat name to use when announcing rolls. Default is 'DnDSystem'.");
+            AnnouncerArea = Config.Bind("General", "AnnouncerArea", "self", "The area to use when announcing rolls [self|local|global]. Default is 'self'.");
         }
     }
 }

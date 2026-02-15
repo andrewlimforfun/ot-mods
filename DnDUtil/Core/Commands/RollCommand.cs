@@ -25,13 +25,26 @@ namespace DnDUtil.Core.Commands
                 try
                 {
                     List<int> rolls = DiceTokenToNumber(input);
-             
+
                     string result = string.Join(", ", rolls);
 
-                    var message = $"For {input} you rolled: {result}";
-                    ChatUtils.AddGlobalNotification(message);
-                    string chatName = Plugin.ChatName?.Value ?? Plugin.DefaultChatName;
-                    ChatUtils.SendMessageAsync(chatName, message);
+                    string userName = ChatUtils.GetUserName();
+                    var message = $"{userName} rolled {input}: {result}";
+                    string dndChatName = Plugin.AnnouncerChatName?.Value ?? Plugin.DefaultAnnouncerChatName;
+
+                    // pick notification or chat message based on config
+                    if (Plugin.AnnouncerArea?.Value == "self")
+                    {
+                        ChatUtils.AddGlobalNotification(message);
+                    }
+                    else if (Plugin.AnnouncerArea?.Value == "local")
+                    {
+                        ChatUtils.SendMessageAsync(dndChatName, message, Islocal: true);
+                    }
+                    else if (Plugin.AnnouncerArea?.Value == "global")
+                    {
+                        ChatUtils.SendMessageAsync(dndChatName, message);
+                    }
                 }
                 catch (ArgumentException ex)
                 {

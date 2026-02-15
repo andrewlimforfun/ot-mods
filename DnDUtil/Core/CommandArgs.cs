@@ -36,8 +36,9 @@ namespace DnDUtil.Core
                 return false;
             }
 
-            var parts = input.ToLower().Trim()[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var name = parts[0];
+            // don't lowercase input since some args may be case-sensitive (like names)
+            var parts = input.Trim()[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var name = parts[0].ToLower();
             var args = parts.Skip(1).ToArray();
         
             result = new CommandArgs(name, args);

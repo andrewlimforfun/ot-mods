@@ -12,6 +12,11 @@ public static class ChatUtils
         NetworkSingleton<TextChannelManager>.I.AddNotification(text);
     }
 
+    public static string GetUserName()
+    {
+        return NetworkSingleton<TextChannelManager>.I.UserName;
+    }
+
     public static void SendMessageAsync(string userName, string text, bool Islocal = false)
     {
         TextChannelManager textChannelManager = NetworkSingleton<TextChannelManager>.I;
@@ -19,9 +24,10 @@ public static class ChatUtils
         byte[] messageBytes = Encoding.Unicode.GetBytes(text[..Math.Min(text.Length, 250)]);
         byte[] userNameBytes = Encoding.Unicode.GetBytes(userName);
 
-        // get player id via reflection since TextChannelManager doesn't expose it and we need it to send messages
+        // get steam player id via reflection since TextChannelManager doesn't expose it and we need it to send messages
         // alternatively get player id via Steamworks.SteamUser.GetSteamID().ToString()
-        string playerId = Plugin.PlayerId ?? "0";
+        var playerId = Traverse.Create(textChannelManager).Field<string>("_playerId").Value ?? "0";
+
         textChannelManager.SendMessageAsync(messageBytes, userNameBytes, Islocal, mainPlayer.position, playerId);
     }
 
@@ -37,8 +43,12 @@ public static class ChatUtils
         // Removes focus from any currently selected UI element        
         EventSystem.current.SetSelectedGameObject(null);
 
-        // Clears the text input field
-        MonoSingleton<UIManager>.I.MessageInput.text = "";
+        // special exception for /help since this command is used by other plugins
+        if (MonoSingleton<UIManager>.I.MessageInput.text != "/help")
+        {
+            // Clears the text input field
+            MonoSingleton<UIManager>.I.MessageInput.text = "";
+        }
     }
 
 }

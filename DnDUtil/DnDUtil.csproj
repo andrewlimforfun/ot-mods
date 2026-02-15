@@ -10,7 +10,7 @@
     <RootNamespace>DnDUtil</RootNamespace>
     <Description>A Dungeons and Dragons mod for On-Together.</Description>
     <Website>https://github.com/andrewlimforfun/ot-mods</Website>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <TargetFramework>netstandard2.1</TargetFramework>
     <!-- only for net10 <ImplicitUsings>enable</ImplicitUsings> -->
     <Nullable>enable</Nullable>
@@ -21,7 +21,7 @@
     <!-- Local directory references -->
     <LocalOnTogetherManagedPath>C:\Program Files (x86)\Steam\steamapps\common\On-Together\On-Together\OnTogether_Data\Managed</LocalOnTogetherManagedPath>
     <!-- Local install directory-->
-    <LocalBepInExPluginPath>..\..\AppData\Roaming\r2modmanPlus-local\OnTogetherVirtualCoWorking\profiles\Default\BepInEx\plugins</LocalBepInExPluginPath>
+    <LocalBepInExPluginPath>..\..\..\AppData\Roaming\r2modmanPlus-local\OnTogetherVirtualCoWorking\profiles\Default\BepInEx\plugins</LocalBepInExPluginPath>
     <LocalModInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)\</LocalModInstallPath>
   </PropertyGroup>
 
