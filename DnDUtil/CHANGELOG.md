@@ -2,6 +2,11 @@
 
 All notable changes to DnDUtil will be documented in this file.
 
+## [0.0.5] - 2026-02-16
+
+### Fixed
+- Help text for OfficerBalls mods are no longer 'eaten'
+
 ## [0.0.4] - 2026-02-15
 
 ### Added
