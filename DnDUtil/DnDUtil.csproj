@@ -1,0 +1,130 @@
+﻿<!DOCTYPE Project>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- if we want to match On-Together's .NET version use netstandard2.1 instead of net10.0 -->
+    <!-- <TargetFramework>netstandard2.1</TargetFramework> -->
+    <TeamName>AndrewLin</TeamName>
+    <AssemblyName>AndrewLin.DnDUtil</AssemblyName>
+    <PackageName>DnDUtil</PackageName>
+    <RootNamespace>DnDUtil</RootNamespace>
+    <Description>A Dungeons and Dragons mod for On-Together.</Description>
+    <Website>https://github.com/andrewlimforfun/ot-mods</Website>
+    <Version>0.0.1</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!-- only for net10 <ImplicitUsings>enable</ImplicitUsings> -->
+    <Nullable>enable</Nullable>
+    <BepisVersion>5.4.21</BepisVersion>
+    <!-- Configuration: Debug or Release override with CLI, dotnet build -c Release-->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+
+    <!-- Local directory references -->
+    <LocalOnTogetherManagedPath>C:\Program Files (x86)\Steam\steamapps\common\On-Together\On-Together\OnTogether_Data\Managed</LocalOnTogetherManagedPath>
+    <!-- Local install directory-->
+    <LocalBepInExPluginPath>..\..\AppData\Roaming\r2modmanPlus-local\OnTogetherVirtualCoWorking\profiles\Default\BepInEx\plugins</LocalBepInExPluginPath>
+    <LocalModInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)\</LocalModInstallPath>
+  </PropertyGroup>
+
+  <!-- NuGet Packages -->
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" />
+    <PackageReference Include="HarmonyX" Version="2.10.1" />
+  </ItemGroup>
+
+  <!-- References to local installation for On Together -->
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(LocalOnTogetherManagedPath)\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(LocalOnTogetherManagedPath)\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(LocalOnTogetherManagedPath)\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(LocalOnTogetherManagedPath)\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="PurrNet.Runtime">
+      <HintPath>$(LocalOnTogetherManagedPath)\PurrNet.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(LocalOnTogetherManagedPath)\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Generate BuildInfo.g.cs with version info for use in the mod -->
+  <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <VersionFileContent>
+        namespace $(RootNamespace) {
+        public static class BuildInfo {
+        public const string Version = "$(Version)"%3b
+        }
+        }
+      </VersionFileContent>
+    </PropertyGroup>
+    <Message Importance="high" Text="Generating BuildInfo.g.cs..." />
+    <WriteLinesToFile File="BuildInfo.g.cs" Lines="$(VersionFileContent)" Overwrite="true" />
+  </Target>
+
+  <!-- Install mod locally for testing -->
+  <Target Name="InstallMod" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <!-- Have to set verbosity to -v detailed anyway to see the message -->
+    <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalModInstallPath)" />
+    <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
+    <MakeDir Directories="$(LocalModInstallPath)" />
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalModInstallPath)" />
+  </Target>
+
+  <!-- Generate manifest.json for Thunderstore Zip -->
+  <Target Name="GenerateManifest" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ManifestContent>
+      {
+        "name": "$(AssemblyName)",
+        "version_number": "$(Version)",
+        "website_url": "$(Website)",
+        "description": "$(Description)",
+        "dependencies": ["BepInEx-BepInExPack-5.4.2304"]
+      }
+      </ManifestContent>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="Generating manifest.json..." />
+
+    <WriteLinesToFile File="$(TargetDir)manifest.json"
+      Lines="$(ManifestContent)"
+      Overwrite="true"
+      Encoding="UTF-8" />
+  </Target>
+
+  <Target Name="CreateThunderstoreZip" AfterTargets="GenerateManifest" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ZipOutputPath>$(TargetDir)$(TeamName)-$(PackageName)-v$(Version).zip</ZipOutputPath>
+      <StagingDir>$(TargetDir)Staging\</StagingDir>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="Packaging mod for Thunderstore..." />
+
+    <RemoveDir Directories="$(StagingDir)" />
+    <MakeDir Directories="$(StagingDir)" />
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(StagingDir)" />
+    <Copy SourceFiles="$(TargetDir)manifest.json" DestinationFolder="$(StagingDir)" />
+    <Copy SourceFiles="$(ProjectDir)icon.png" DestinationFolder="$(StagingDir)" />
+    <Copy SourceFiles="$(ProjectDir)README.md" DestinationFolder="$(StagingDir)" />
+
+    <ZipDirectory SourceDirectory="$(StagingDir)"
+      DestinationFile="$(ZipOutputPath)"
+      Overwrite="true" />
+
+    <Message Importance="high" Text="Success! Zip created at: $(ZipOutputPath)" />
+  </Target>
+  
+</Project>

@@ -1,0 +1,4 @@
+﻿<Solution>
+  <Project Path="DnDUtil/DnDUtil.csproj" />
+  <Project Path="DnDUtil.Tests/DnDUtil.Tests.csproj" />
+</Solution>
