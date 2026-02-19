@@ -3,13 +3,13 @@ using DnDUtil;
 
 namespace DnDUtil.Core.Commands
 {
-    public class SetAnnouncerAreaCommand : IChatCommand
+    public class DndSetAnnouncerAreaCommand : IChatCommand
     {
         public static readonly HashSet<string> ValidAreas = new HashSet<string>() { "self", "local", "global" };
         public static readonly string ValidAreasText = string.Join("|", ValidAreas);
-        public const string CMD = "setannouncerarea";
+        public const string CMD = "dndsetannouncerarea";
         public string Name => CMD;
-        public string ShortName => "saa";
+        public string ShortName => "dsaa";
         public string Description => $"Set the area to use when announcing rolls: [{ValidAreasText}]. Current: " + (Plugin.AnnouncerArea?.Value ?? "self");
 
         
@@ -22,7 +22,7 @@ namespace DnDUtil.Core.Commands
 
             if (args.Length == 0)
             {
-                ChatUtils.AddGlobalNotification($"Usage: /setannouncerarea [{ValidAreasText}] - Sets the area to use when announcing rolls.");
+                ChatUtils.AddGlobalNotification($"Usage: /dndsetannouncerarea [{ValidAreasText}] - Sets the area to use when announcing rolls.");
                 return;
             }
 

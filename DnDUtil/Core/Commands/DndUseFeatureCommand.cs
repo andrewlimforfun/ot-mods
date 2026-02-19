@@ -2,11 +2,11 @@
 
 namespace DnDUtil.Core.Commands
 {
-    public class UseDndFeatureCommand : IChatCommand
+    public class DndUseFeatureCommand : IChatCommand
     {
-        public const string CMD = "usedndfeature";
+        public const string CMD = "dndusefeature";
         public string Name => CMD;
-        public string ShortName => "udf";
+        public string ShortName => "duf";
         public string Description => "Toggle DnDUtil feature on/off. ";
 
         public void Execute(string[] args)

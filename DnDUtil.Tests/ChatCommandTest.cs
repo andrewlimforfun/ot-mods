@@ -12,7 +12,7 @@ public class Tests
     [Test]
     public void TestRollCommandRepeatedDie()
     {
-        List<int> result = RollCommand.DiceTokenToNumber("3d6");
+        List<int> result = DndRollCommand.DiceTokenToNumber("3d6");
 
         Assert.That(result, Is.Not.Null, "Result should not be null.");
         Assert.That(result.Count, Is.EqualTo(3), "Should roll 3 dice.");
@@ -22,7 +22,7 @@ public class Tests
        [Test]
     public void TestRollCommandSingleDie()
     {
-        List<int> result = RollCommand.DiceTokenToNumber("d20");
+        List<int> result = DndRollCommand.DiceTokenToNumber("d20");
 
         Assert.That(result, Is.Not.Null, "Result should not be null.");
         Assert.That(result.Count, Is.EqualTo(1), "Should roll 1 die.");

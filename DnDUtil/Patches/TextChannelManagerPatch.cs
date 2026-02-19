@@ -27,7 +27,7 @@ namespace DnDUtil.Patches
             // process commands only if feature is enabled or its a feature toggle command, 
             // so that users can still toggle the feature on if they have it off
             // unrecognized commands will be ignored and treated as normal chat messages
-            if (Plugin.EnableFeature.Value == true || text.Contains(UseDndFeatureCommand.CMD))
+            if (Plugin.EnableFeature.Value == true || text.Contains(DndUseFeatureCommand.CMD))
             {
                 bool isProcessed = Plugin.CommandProcessor?.ProcessInput(text) ?? false;
 

@@ -3,11 +3,11 @@ using DnDUtil;
 
 namespace DnDUtil.Core.Commands
 {
-    public class SetAnnouncerNameCommand : IChatCommand
+    public class DndSetAnnouncerNameCommand : IChatCommand
     {
-        public const string CMD = "setannouncername";
+        public const string CMD = "dndsetannouncername";
         public string Name => CMD;
-        public string ShortName => "san";
+        public string ShortName => "dsan";
         public string Description => "Set the name to use when sending messages to chat. Current: " + 
         (Plugin.AnnouncerChatName?.Value ?? Plugin.DefaultAnnouncerChatName);
 
@@ -20,7 +20,7 @@ namespace DnDUtil.Core.Commands
 
             if (args.Length == 0)
             {
-                ChatUtils.AddGlobalNotification("Usage: /setchatname [name] - Sets the name to use when sending messages to chat.");
+                ChatUtils.AddGlobalNotification("Usage: /dndsetannouncername [name] - Sets the name to use when sending messages to chat.");
                 return;
             }
 
