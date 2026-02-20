@@ -2,6 +2,14 @@
 
 All notable changes to DnDUtil will be documented in this file.
 
+## [0.0.6] - 2026-02-20
+
+### Changed
+- Renamed `/usedndfeature` (`/udf`) to `/dndtoggle` (`/dt`)
+- Renamed `/setannouncerarea` (`/saa`) to `/dndsetannouncerarea` (`/dsaa`)
+- Renamed `/setannouncername` (`/san`) to `/dndsetannouncername` (`/dsan`)
+- Internal refactor: extracted `DndRollCommand` base class; command files renamed with `Dnd` prefix
+
 ## [0.0.5] - 2026-02-16
 
 ### Fixed

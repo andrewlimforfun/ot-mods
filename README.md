@@ -27,7 +27,7 @@ A mod to help players play chat-based Dungeons & Dragons within On-Together.
 1. **Clone the repository:**
    ```sh
    git clone <repository-url>
-   cd ot-mods
+   cd ot-mod-dnd
    ```
 
 2. **Add NuGet sources:**
@@ -75,7 +75,7 @@ dotnet test -v n
 ### Project Structure
 
 ```
-ot-mods/
+ot-mod-dnd/
 ├── DnDUtil/              # Main mod project
 │   ├── Core/             # Core functionality
 │   │   ├── Commands/     # Chat command implementations

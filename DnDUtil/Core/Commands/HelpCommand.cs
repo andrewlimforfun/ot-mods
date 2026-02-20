@@ -34,7 +34,6 @@ namespace DnDUtil.Core.Commands
 
                 // list all commands and descriptions
                 ChatUtils.AddGlobalNotification($"DnDUtil Version ({Plugin.ModVersion}).");
-                ChatUtils.AddGlobalNotification("thunderstore.io/c/on-together/p/AndrewLin/AndrewLin_DnDUtil");
                 ChatUtils.AddGlobalNotification("Available commands:");
                 foreach (var cmd in commands)
                 {

@@ -30,22 +30,22 @@ A mod for On-Together that adds Dungeons & Dragons utilities to enhance your tab
 
 ### Configuration Commands
 
-- **`/setannouncerarea [self|local|global]`** (or `/saa`) - Set where roll results are displayed
+- **`/dndsetannouncerarea [self|local|global]`** (or `/dsaa`) - Set where roll results are displayed
   - `self` - Only you see the results (default)
   - `local` - Nearby players see the results
   - `global` - All players see the results
-  - **Example:** `/setannouncerarea global` or `/saa global`
+  - **Example:** `/dndsetannouncerarea global` or `/dsaa global`
 
-- **`/setannouncername [name]`** (or `/san`) - Set the display name for roll announcements
+- **`/dndsetannouncername [name]`** (or `/dsan`) - Set the display name for roll announcements
   - Default: "DnDSystem"
-  - **Example:** `/setannouncername DungeonMaster` or `/san DM`
+  - **Example:** `/dndsetannouncername DungeonMaster` or `/dsan DM`
 
 - **`/showdndcommand`** (or `/sdc`) - Toggle visibility of your commands in chat
   - When enabled, other players see your command (e.g., "/roll 2d20")
   - When disabled, only the results are shown
   - Default: hidden
 
-- **`/usedndfeature`** (or `/udf`) - Enable or disable all DnD utility features
+- **`/dndtoggle`** (or `/dt`) - Enable or disable all DnD utility features
 
 ## Installation
 
@@ -99,14 +99,14 @@ Configuration files are automatically created in `BepInEx/config/` after first l
 
 ### Broadcasting to Others
 ```
-/setannouncerarea global    → Set to global chat
-/roll 1d20                  → Everyone sees your roll
-/setannouncerarea self      → Back to private rolling
+/dndsetannouncerarea global    → Set to global chat
+/roll 1d20                     → Everyone sees your roll
+/dndsetannouncerarea self      → Back to private rolling
 ```
 
 ### Custom Announcer Name
 ```
-/setannouncername DM        → Set name to "DM"
+/dndsetannouncername DM     → Set name to "DM"
 /roll 1d20                  → "DM rolled 1d20: 15"
 ```
 
