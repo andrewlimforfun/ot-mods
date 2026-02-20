@@ -31,8 +31,8 @@ A mod for On-Together that adds Dungeons & Dragons utilities to enhance your tab
 ### Configuration Commands
 
 - **`/dndsetannouncerarea [self|local|global]`** (or `/dsaa`) - Set where roll results are displayed
-  - `self` - Only you see the results (default)
-  - `local` - Nearby players see the results
+  - `self` - Only you see the results
+  - `local` - Nearby players see the results (default)
   - `global` - All players see the results
   - **Example:** `/dndsetannouncerarea global` or `/dsaa global`
 

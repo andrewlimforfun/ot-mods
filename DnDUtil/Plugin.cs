@@ -52,7 +52,7 @@ namespace DnDUtil
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
             
             AnnouncerChatName = Config.Bind("General", "AnnouncerChatName", DefaultAnnouncerChatName, "The chat name to use when announcing rolls. Default is 'DnDSystem'.");
-            AnnouncerArea = Config.Bind("General", "AnnouncerArea", "self", "The area to use when announcing rolls [self|local|global]. Default is 'self'.");
+            AnnouncerArea = Config.Bind("General", "AnnouncerArea", "local", "The area to use when announcing rolls [self|local|global]. Default is 'self'.");
         }
     }
 }
