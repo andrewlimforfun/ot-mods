@@ -16,7 +16,7 @@ A mod for On-Together that adds Dungeons & Dragons utilities to enhance your tab
 
 ### Core Commands
 
-- **`/help dnd`** (or `/h dnd`) - Display a list of all available DnD mod commands in-game
+- **`/dndhelp`** (or `/dh`) - Display a list of all available DnD mod commands in-game
 
 - **`/roll XdY [MdN ...]`** (or `/r XdY`) - Roll dice with specified sides
   - `X` = number of dice to roll
@@ -86,28 +86,28 @@ Configuration files are automatically created in `BepInEx/config/` after first l
 
 ### Basic Rolling
 ```
-/roll 1d20          → Roll for initiative!
-/r 2d6              → Roll damage for a greatsword (short command)
-/roll 4d6           → Roll stats for character creation
+/roll 1d20          -> Roll for initiative!
+/r 2d6              -> Roll damage for a greatsword (short command)
+/roll 4d6           -> Roll stats for character creation
 ```
 
 ### Multiple Dice
 ```
-/roll 1d20 8d6      → Roll attack with spell damage
-/r 1d20 1d4         → Roll with bardic inspiration (short command)
+/roll 1d20 8d6      -> Roll attack with spell damage
+/r 1d20 1d4         -> Roll with bardic inspiration (short command)
 ```
 
 ### Broadcasting to Others
 ```
-/dndsetannouncerarea global    → Set to global chat
-/roll 1d20                     → Everyone sees your roll
-/dndsetannouncerarea self      → Back to private rolling
+/dsaa global    -> Set to global chat
+/roll 1d20      -> Everyone sees your roll
+/dsaa self      -> Back to private rolling
 ```
 
 ### Custom Announcer Name
 ```
-/dndsetannouncername DM     → Set name to "DM"
-/roll 1d20                  → "DM rolled 1d20: 15"
+/dsan DM     -> Set name to "DM"
+/roll 1d20   -> "DM rolled 1d20: 15"
 ```
 
 ## Support
@@ -115,11 +115,3 @@ Configuration files are automatically created in `BepInEx/config/` after first l
 For bug reports, feature requests, or questions:
 - Open an issue on GitHub
 - Contact the mod author on the On-Together community Discord
-
-## License
-
-See [LICENSE](../LICENSE) file for details.
-
-## Changelog
-
-For version history and release notes, see [CHANGELOG.md](CHANGELOG.md).

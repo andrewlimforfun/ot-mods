@@ -20,25 +20,18 @@ namespace DnDUtil.Core.Commands
 
         public void Execute(string[] args)
         {
-            if (args.Length == 0)
+            if (commands == null)
             {
-                ChatUtils.AddGlobalNotification("/help dnd for DnD commands");
+                ChatUtils.AddGlobalNotification("No commands available!");
+                return;
             }
-            else if (args[0] == "dnd")
-            {
-                if (commands == null)
-                {
-                    ChatUtils.AddGlobalNotification("No commands available!");
-                    return;
-                }
 
-                // list all commands and descriptions
-                ChatUtils.AddGlobalNotification($"DnDUtil Version ({Plugin.ModVersion}).");
-                ChatUtils.AddGlobalNotification("Available commands:");
-                foreach (var cmd in commands)
-                {
-                    ChatUtils.AddGlobalNotification($"/{cmd.Name} (/{cmd.ShortName}) :: {cmd.Description}");
-                }
+            // list all commands and descriptions
+            ChatUtils.AddGlobalNotification($"DnDUtil Version ({Plugin.ModVersion}).");
+            ChatUtils.AddGlobalNotification("Available commands:");
+            foreach (var cmd in commands)
+            {
+                ChatUtils.AddGlobalNotification($"/{cmd.Name} (/{cmd.ShortName}) :: {cmd.Description}");
             }
         }
 

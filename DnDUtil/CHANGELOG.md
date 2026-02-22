@@ -2,6 +2,14 @@
 
 All notable changes to DnDUtil will be documented in this file.
 
+## [0.0.7] - 2026-02-22
+
+## Changed
+- Default `AnnouncerArea` (`/dsaa`) is now `local`
+
+## Removed
+- Help command `/help` is removed. Please use `/dndhelp`
+
 ## [0.0.6] - 2026-02-20
 
 ### Changed

@@ -42,15 +42,9 @@ public static class ChatUtils
 
         // Removes focus from any currently selected UI element        
         EventSystem.current.SetSelectedGameObject(null);
-        
-        var text = MonoSingleton<UIManager>.I.MessageInput.text;
 
-        // special exception for /help since this command is used by other plugins
-        if (!text.StartsWith("/help") || text == "/help dnd")
-        {
-            // Clears the text input field
-            MonoSingleton<UIManager>.I.MessageInput.text = "";
-        }
+        // clears text input field
+        MonoSingleton<UIManager>.I.MessageInput.text = "";
     }
 
 }

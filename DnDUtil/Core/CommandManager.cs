@@ -40,9 +40,9 @@ namespace DnDUtil.Core
 
         private static void InitializeHelpCommand(Dictionary<string, IChatCommand> commands)
         {
-            if (commands.TryGetValue(HelpCommand.CMD, out IChatCommand? helpCmd))
+            if (commands.TryGetValue(DndHelpCommand.CMD, out IChatCommand? helpCmd))
             {
-                (helpCmd as HelpCommand)?.Initialize(commands.Values);
+                (helpCmd as DndHelpCommand)?.Initialize(commands.Values);
             }
         }
 
