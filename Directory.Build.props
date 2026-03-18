@@ -18,7 +18,7 @@
         <ThunderstoreBepInExVersion>5.4.2305</ThunderstoreBepInExVersion>
 
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Configurations>Debug;Release;Install</Configurations>
+        <Configurations>Debug;Install;Publish</Configurations>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>

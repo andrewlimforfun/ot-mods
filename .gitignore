@@ -7,6 +7,9 @@
 BuildInfo.g.cs
 manifest.json
 
+# Ignore TCLI build
+build/
+
 # User-specific files
 *.rsuser
 *.suo
