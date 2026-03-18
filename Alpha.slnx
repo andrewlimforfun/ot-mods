@@ -1,0 +1,14 @@
+﻿<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Install" /> 
+  </Configurations>
+  <Project Name="Alpha" Path="Alpha\Alpha.csproj" Active="true" />
+  <Project Name="Alpha.Tests" Path="Alpha.Tests\Alpha.Tests.csproj" />
+  <!-- <Project Name="AlphaChatLog" Path="AlphaChatLog\AlphaChatLog.csproj" />
+  <Project Name="AlphaWebSocket" Path="AlphaWebSocket\AlphaWebSocket.csproj" />
+  <Project Name="AlphaTelegram" Path="AlphaTelegram\AlphaTelegram.csproj" /> -->
+</Solution>
