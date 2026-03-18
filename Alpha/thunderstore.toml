@@ -31,3 +31,6 @@ target = "/"
 [publish]
 repository = "https://thunderstore.io"
 communities = ["on-together"]
+
+[publish.categories]
+on-together = ["mods", "libraries"]

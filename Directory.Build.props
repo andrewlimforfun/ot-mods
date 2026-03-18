@@ -15,8 +15,6 @@
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Nullable>enable</Nullable>
 
-        <ThunderstoreBepInExVersion>5.4.2305</ThunderstoreBepInExVersion>
-
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Configurations>Debug;Install;Publish</Configurations>
 
