@@ -9,7 +9,7 @@ name = "FomoTelegram"
 # Do not edit this field manually — bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
 description = "FomoTelegram: A Fomo submod that relays On-Together chat messages to a Telegram chat via a Telegram Bot. Use /fomohelp and look for /fomotelegram commands"
-websiteUrl = "https://github.com/andrewlimforfun/ot-mod-fomo"
+websiteUrl = "https://github.com/andrewlimforfun/on-together-mods"
 containsNsfwContent = false
 
 [package.dependencies]

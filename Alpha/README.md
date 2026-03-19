@@ -4,7 +4,7 @@ A shared BepInEx mod for **On Together** that provides common utilities and a co
 
 - **Author:** AndrewLin
 - **Version:** 0.0.1
-- **Repository:** https://github.com/andrewlimforfun/ot-mod-alpha
+- **Repository:** https://github.com/andrewlimforfun/on-together-mods
 
 ---
 
