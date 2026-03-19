@@ -18,8 +18,8 @@
   </Folder>
 
   <Folder Name="/dnd/">
-    <Project Name="DnDUtil" Path="DnDUtil\DnDUtil.csproj" />
-    <Project Name="DnDUtil.Tests" Path="DnDUtil.Tests\DnDUtil.Tests.csproj" />
+    <Project Name="Dnd" Path="Dnd\Dnd.csproj" />
+    <Project Name="Dnd.Tests" Path="Dnd.Tests\Dnd.Tests.csproj" />
   </Folder>
 
   <Folder Name="/fomo/">
