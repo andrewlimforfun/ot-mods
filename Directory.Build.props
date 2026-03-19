@@ -29,7 +29,6 @@
             https://api.nuget.org/v3/index.json;
             https://nuget.bepinex.dev/v3/index.json;
             https://nuget.samboy.dev/v3/index.json;
-            $(MSBuildThisFileDirectory)..\nuget-local\
         </RestoreAdditionalProjectSources>
 
         <!-- r2modman local install path — override per-machine via Directory.Build.user -->
