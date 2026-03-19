@@ -3,9 +3,34 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
     <BuildType Name="Debug" />
-    <BuildType Name="Install" /> 
+    <BuildType Name="Release" />
+    <BuildType Name="Install" />
     <BuildType Name="Publish" />
   </Configurations>
-  <Project Name="Alpha" Path="Alpha\Alpha.csproj" Active="true" />
-  <Project Name="Alpha.Tests" Path="Alpha.Tests\Alpha.Tests.csproj" />
+
+  <Folder Name="/alpha/">
+    <Project Name="Alpha" Path="Alpha\Alpha.csproj" Active="true" />
+    <Project Name="Alpha.Tests" Path="Alpha.Tests\Alpha.Tests.csproj" />
+  </Folder>
+
+  <Folder Name="/chalky/">
+    <Project Name="Chalky" Path="Chalky\Chalky.csproj" />
+  </Folder>
+
+  <Folder Name="/dnd/">
+    <Project Name="DnDUtil" Path="DnDUtil\DnDUtil.csproj" />
+    <Project Name="DnDUtil.Tests" Path="DnDUtil.Tests\DnDUtil.Tests.csproj" />
+  </Folder>
+
+  <Folder Name="/fomo/">
+    <Project Name="Fomo" Path="Fomo\Fomo.csproj" />
+    <Project Name="FomoChatLog" Path="FomoChatLog\FomoChatLog.csproj" />
+    <Project Name="FomoTelegram" Path="FomoTelegram\FomoTelegram.csproj" />
+    <Project Name="FomoWebSocket" Path="FomoWebSocket\FomoWebSocket.csproj" />
+  </Folder>
+
+  <Folder Name="/remind/">
+    <Project Name="Remind" Path="Remind\Remind.csproj" />
+  </Folder>
+
 </Solution>

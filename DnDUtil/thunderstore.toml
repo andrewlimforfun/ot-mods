@@ -1,0 +1,37 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "AndrewLin"
+name = "DnDUtil"
+# Version is controlled by $(Version) in Directory.Build.props.
+# The MSBuild Publish target injects the correct value via --package-version at build time.
+# Do not edit this field manually — bump $(Version) in Directory.Build.props instead.
+versionNumber = "0.0.0"
+description = "A DnD dice mod for On-Together. Use /dndhelp"
+websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
+containsNsfwContent = false
+
+[package.dependencies]
+BepInEx-BepInExPack = "5.4.2305"
+AndrewLin-Alpha = "0.0.1"
+
+[build]
+icon = "./icon.png"
+readme = "./README.md"
+outdir = "./build"
+
+[[build.copy]]
+source = "./CHANGELOG.md"
+target = "/"
+
+[[build.copy]]
+source = "./bin/Publish/netstandard2.1/AndrewLin.DnDUtil.dll"
+target = "/"
+
+[publish]
+repository = "https://thunderstore.io"
+communities = ["on-together"]
+
+[publish.categories]
+on-together = ["mods"]

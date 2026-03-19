@@ -1,0 +1,17 @@
+﻿root = true
+
+# All files
+[*]
+indent_style = space
+insert_final_newline = true
+charset = utf-8
+end_of_line = crlf
+
+# XML and project files
+[*.{xml,csproj}]
+max_line_length = 200
+
+# Code files
+[*.{cs,csx,vb,vbx}]
+indent_size = 4
+max_line_length = 200

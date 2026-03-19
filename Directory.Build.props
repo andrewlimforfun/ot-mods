@@ -1,11 +1,13 @@
 <Project>
     <PropertyGroup>
         <!--
-      Bump this once to version all mods together.
-      Individual projects can override by re-declaring <Version> after this import.
+      Shared build properties for the on-together-mods monorepo.
+      Version here is Alpha's version. Each mod project overrides Version in its own csproj.
+      AlphaVersion is captured from Version at props evaluation time (before csproj overrides).
     -->
         <Authors>AndrewLin</Authors>
         <TeamName>AndrewLin</TeamName>
+        <!-- Alpha library version — bump when publishing a new Alpha NuGet -->
         <Version>0.0.1</Version>
         <RepositoryUrl>https://github.com/andrewlimforfun/on-together-mods</RepositoryUrl>
         <Website>$(RepositoryUrl)</Website>
@@ -15,8 +17,13 @@
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Nullable>enable</Nullable>
 
+        <!-- Version of the BepInEx dependency declared in thunderstore manifests -->
+        <ThunderstoreBepInExVersion>5.4.2305</ThunderstoreBepInExVersion>
+        <!-- Version of the Alpha NuGet consumed by the mods -->
+        <AlphaVersion>$(Version)</AlphaVersion>
+
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Configurations>Debug;Install;Publish</Configurations>
+        <Configurations>Debug;Release;Install;Publish</Configurations>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>
@@ -26,8 +33,6 @@
             $(MSBuildThisFileDirectory)..\nuget-local\
         </RestoreAdditionalProjectSources>
 
-        <!-- This path is used for local Install which automatically deploys the mod to the mod
-        manager-->
         <!-- r2modman local install path — override per-machine via Directory.Build.user -->
         <LocalBepInExPluginPath>$(APPDATA)\r2modmanPlus-local\OnTogetherVirtualCoWorking\profiles\Default\BepInEx\plugins\</LocalBepInExPluginPath>
     </PropertyGroup>
