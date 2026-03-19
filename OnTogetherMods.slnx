@@ -3,7 +3,6 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
     <BuildType Name="Debug" />
-    <BuildType Name="Release" />
     <BuildType Name="Install" />
     <BuildType Name="Publish" />
   </Configurations>

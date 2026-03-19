@@ -9,15 +9,13 @@
         <TeamName>AndrewLin</TeamName>
         <RepositoryUrl>https://github.com/andrewlimforfun/on-together-mods</RepositoryUrl>
         <Website>$(RepositoryUrl)</Website>
-
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>netstandard2.1</TargetFramework>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Nullable>enable</Nullable>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Configurations>Debug;Install;Publish</Configurations>
 
-        <!-- Version of the BepInEx dependency declared in thunderstore manifests -->
-        <ThunderstoreBepInExVersion>5.4.2305</ThunderstoreBepInExVersion>
-        
         <!-- Mods Versions -->
         <AlphaVersion>0.0.1</AlphaVersion>
         <ChalkyVersion>1.0.0</ChalkyVersion>
@@ -25,8 +23,6 @@
         <FomoVersion>1.0.0</FomoVersion>
         <RemindVersion>1.0.0</RemindVersion>
 
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Configurations>Debug;Release;Install;Publish</Configurations>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>
