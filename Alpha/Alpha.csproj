@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>$(AlphaVersion)</Version>
     <!-- if we want to match On-Together's .NET version use netstandard2.1 instead of net10.0 -->
     <AssemblyName>AndrewLin.OnTogether.Alpha</AssemblyName>
     <!-- Embed sources into the PDB so Ctrl+Click navigation works in consuming projects -->

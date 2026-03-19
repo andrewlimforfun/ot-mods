@@ -7,8 +7,6 @@
     -->
         <Authors>AndrewLin</Authors>
         <TeamName>AndrewLin</TeamName>
-        <!-- Alpha library version — bump when publishing a new Alpha NuGet -->
-        <Version>0.0.1</Version>
         <RepositoryUrl>https://github.com/andrewlimforfun/on-together-mods</RepositoryUrl>
         <Website>$(RepositoryUrl)</Website>
 
@@ -19,8 +17,13 @@
 
         <!-- Version of the BepInEx dependency declared in thunderstore manifests -->
         <ThunderstoreBepInExVersion>5.4.2305</ThunderstoreBepInExVersion>
-        <!-- Version of the Alpha NuGet consumed by the mods -->
-        <AlphaVersion>$(Version)</AlphaVersion>
+        
+        <!-- Mods Versions -->
+        <AlphaVersion>0.0.1</AlphaVersion>
+        <ChalkyVersion>1.0.0</ChalkyVersion>
+        <DndVersion>1.0.0</DndVersion>
+        <FomoVersion>1.0.0</FomoVersion>
+        <RemindVersion>1.0.0</RemindVersion>
 
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Configurations>Debug;Release;Install;Publish</Configurations>

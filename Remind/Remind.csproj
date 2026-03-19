@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <!-- if we want to match On-Together's .NET version use netstandard2.1 instead of net10.0 -->
-    <Version>1.0.0</Version>
+    <Version>$(RemindVersion)</Version>
     <AssemblyName>AndrewLin.Remind</AssemblyName>
     <PackageName>Remind</PackageName>
     <RootNamespace>Remind</RootNamespace>
