@@ -22,7 +22,7 @@
         <DndVersion>1.0.0</DndVersion>
         <FomoVersion>1.0.0</FomoVersion>
         <RemindVersion>1.0.0</RemindVersion>
-
+        <HushVersion>0.0.1</HushVersion>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>

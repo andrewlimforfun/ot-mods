@@ -32,4 +32,8 @@
     <Project Name="Remind" Path="Remind\Remind.csproj" />
   </Folder>
 
+  <Folder Name="/hush/">
+    <Project Name="Hush" Path="Hush\Hush.csproj" />
+  </Folder>
+
 </Solution>

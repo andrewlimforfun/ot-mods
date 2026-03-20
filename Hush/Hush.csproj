@@ -1,0 +1,73 @@
+<!DOCTYPE Project>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- if we want to match On-Together's .NET version use netstandard2.1 instead of net10.0 -->
+    <Version>$(HushVersion)</Version>
+    <AssemblyName>AndrewLin.Hush</AssemblyName>
+    <PackageName>Hush</PackageName>
+    <RootNamespace>Hush</RootNamespace>
+    <Description>Hush: A mod for On-Together with in-game utility commands including scheduled hushers (/hushmein, /hushlocalin, /hushglobalin), and more. Use /hushhelp</Description>
+    <LocalInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)Dev\</LocalInstallPath>
+  </PropertyGroup>
+
+  <!-- NuGet Packages -->
+  <ItemGroup>
+    <!-- dotnet nuget add source https://nuget.bepinex.dev/v3/index.json -n bepinex-->
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="OnTogether.GameLibs" Version="1.1.0" />
+    <PackageReference Include="UnityEngine.Modules" Version="6000.0.61" IncludeAssets="compile" />
+    <PackageReference Include="HarmonyX" Version="2.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alpha\Alpha.csproj" />
+  </ItemGroup>
+
+  <!-- Generate BuildInfo.g.cs with version info for use in the mod -->
+  <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <VersionFileContent>
+        namespace $(RootNamespace) {
+        public static class BuildInfo {
+        public const string Version = "$(Version)"%3b
+        }
+        }
+      </VersionFileContent>
+    </PropertyGroup>
+    <Message Importance="high" Text="Generating BuildInfo.g.cs..." />
+    <WriteLinesToFile File="BuildInfo.g.cs" Lines="$(VersionFileContent)" Overwrite="true" />
+  </Target>
+
+  <!-- Install mod locally for testing -->
+  <Target Name="Install" AfterTargets="Build" Condition="'$(Configuration)' == 'Install'">
+    <!-- Have to set verbosity to -v detailed anyway to see the message -->
+    <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalInstallPath)" />
+    <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
+    <MakeDir Directories="$(LocalInstallPath)" />
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalInstallPath)" />
+  </Target>
+
+  <Target Name="CleanInstall" AfterTargets="Clean" Condition="'$(Configuration)' == 'Install'">
+    <!-- Have to set verbosity to -v detailed anyway to see the message -->
+    <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalInstallPath)" />
+    <RemoveDir Directories="$(LocalInstallPath)" />
+  </Target>
+
+  <!--
+    Publish to Thunderstore: dotnet build -c Publish
+    Requires tcli (https://github.com/thunderstore-io/thunderstore-cli):
+      dotnet tool install -g tcli
+    Requires TCLI_AUTH_TOKEN env var
+  -->
+  <Target Name="ThunderstorePublish" AfterTargets="Build" Condition="'$(Configuration)' == 'Publish'">
+    <Message Importance="high" Text="Publishing $(PackageName) v$(Version) to Thunderstore..." />
+    <Exec WorkingDirectory="$(ProjectDir)"
+          Command="tcli publish --package-version $(Version)" />
+  </Target>
+
+
+</Project>
