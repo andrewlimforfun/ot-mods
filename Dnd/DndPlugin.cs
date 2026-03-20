@@ -41,7 +41,6 @@ namespace DnDUtil
             AlphaPlugin.CommandManager?.Register(new RollCommand());
             AlphaPlugin.CommandManager?.Register(new DndSetAnnouncerAreaCommand());
             AlphaPlugin.CommandManager?.Register(new DndSetAnnouncerNameCommand());
-            AlphaPlugin.CommandManager?.Register(new DndShowCommand());
             AlphaPlugin.CommandManager?.Register(new DndToggleCommand());
         }
 

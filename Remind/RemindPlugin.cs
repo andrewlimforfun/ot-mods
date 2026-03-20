@@ -63,7 +63,6 @@ namespace Remind
             AlphaPlugin.CommandManager?.Register(new RemindLocalInCommand());
             AlphaPlugin.CommandManager?.Register(new RemindMeAtCommand());
             AlphaPlugin.CommandManager?.Register(new RemindMeInCommand());
-            AlphaPlugin.CommandManager?.Register(new ShowRemindCommand());
             AlphaPlugin.CommandManager?.Register(new RemindToggleCommand());
 
             // Initialize the task scheduler

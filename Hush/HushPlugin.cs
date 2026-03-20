@@ -76,7 +76,6 @@ namespace Hush
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(TextChannelManagerPatch));
 
-            AlphaPlugin.CommandManager?.Register(new ShowHushCommand());
             AlphaPlugin.CommandManager?.Register(new HushToggleCommand());
             AlphaPlugin.CommandManager?.Register(new HushAddWordCommand());
             AlphaPlugin.CommandManager?.Register(new HushRemoveWordCommand());

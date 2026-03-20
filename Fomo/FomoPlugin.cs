@@ -96,7 +96,6 @@ namespace Fomo
             AlphaPlugin.CommandManager?.Register(new FomoChatSinkSetLocalRangeCommand());
             AlphaPlugin.CommandManager?.Register(new FomoMessageLimitCommand());
             AlphaPlugin.CommandManager?.Register(new FomoPlayerIdCommand());
-            AlphaPlugin.CommandManager?.Register(new ShowFomoCommand());
             AlphaPlugin.CommandManager?.Register(new FomoToggleCommand());
 
             // Register output sinks - sub-mods (FomoChatLog, FomoTelegram, etc.) register their own sinks.

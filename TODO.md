@@ -1,6 +1,8 @@
 # TODO
 
 - [x] figure out why install isnt changing stuff in ON2G
+- [x] Monorepo everything
+- [ ] Clean up show command configs
 
 ## Hush
 
@@ -30,7 +32,3 @@
 
 - [ ] add toggle default chat to local/global
 - [x] add /fomochatglobal /fcl
-
-## Organization
-
-- [x] Monorepo everything
