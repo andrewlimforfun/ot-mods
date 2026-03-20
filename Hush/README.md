@@ -39,6 +39,7 @@ Patterns are raw regular expressions. Use inline flags to control matching behav
 | Command | Short | Description |
 |---|---|---|
 | `/hushtoggle` | `/ht` | Toggle the filter on or off |
+| `/hushfilteraction <action>` | `/hfa` | Set the filter action: `Censor` or `Block` |
 | `/hushshowcommand` | `/hsc` | Toggle whether your typed commands appear in chat |
 
 ## Configuration

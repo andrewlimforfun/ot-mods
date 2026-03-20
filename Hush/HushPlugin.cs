@@ -83,6 +83,7 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushRemovePatternCommand());
             AlphaPlugin.CommandManager?.Register(new HushGetWordsCommand());
             AlphaPlugin.CommandManager?.Register(new HushGetPatternsCommand());
+            AlphaPlugin.CommandManager?.Register(new HushFilterActionCommand());
         }
 
         void InitConfig()

@@ -24,3 +24,4 @@ All notable changes to this project will be documented in this file.
 | `/hushremovepattern <regex>` | Remove a regex pattern |
 | `/hushgetpatterns` | List all patterns |
 | `/hushtoggle` | Toggle the filter on or off |
+| `/hushfilteraction <action>` | Set the filter action (`Censor` or `Block`) |
