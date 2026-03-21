@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Alpha\Alpha.csproj" />
+    <ProjectReference Include="..\Alpha\Alpha.csproj" SetConfiguration="Configuration=Debug" />
   </ItemGroup>
 
   <!-- Generate BuildInfo.g.cs with version info for use in the mod -->
