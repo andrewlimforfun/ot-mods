@@ -52,7 +52,7 @@ Located in `BepInEx/config/com.andrewlin.ontogether.hush.cfg`
 | `General > ShowCommand` | `false` | Show typed commands in chat |
 | `Filter > Action` | `Censor` | `Censor` replaces matches with asterisks. `Block` suppresses the entire message. |
 
-The filter word and pattern list is stored separately in `BepInEx/config/AndrewLin.Hush.filter.json` and is updated automatically whenever you add or remove an entry via a chat command.
+The filter word and pattern list is stored separately in `BepInEx/config/com.andrewlin.ontogether.echo.filter.json` and is updated automatically whenever you add or remove an entry via a chat command.
 
 ## Installation
 
