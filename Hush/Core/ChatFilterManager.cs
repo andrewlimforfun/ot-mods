@@ -179,8 +179,6 @@ namespace Hush.Core
         {
             var dto = new FilterConfig
             {
-                Action = Action,
-                CensorChar = CensorChar,
                 Words = new List<string>(_blockedWords),
                 Patterns = new List<string>(_rawPatterns),
             };
@@ -208,8 +206,6 @@ namespace Hush.Core
             }
             catch (Exception ex) { _log.LogWarning($"Failed to parse filter config: {ex.Message}"); return; }
             if (dto == null) return;
-            Action = dto.Action;
-            CensorChar = dto.CensorChar;
             _blockedWords.Clear();
             _rawPatterns.Clear();
             if (dto.Words != null)
@@ -230,8 +226,6 @@ namespace Hush.Core
 
         private class FilterConfig
         {
-            public FilterAction Action { get; set; } = FilterAction.Censor;
-            public char CensorChar { get; set; } = '*';
             public List<string>? Words { get; set; }
             public List<string>? Patterns { get; set; }
         }

@@ -23,10 +23,12 @@ namespace Hush
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
         public static ConfigEntry<FilterAction>? FilterActionConfig { get; private set; }
+        public static ConfigEntry<char>? CensorCharConfig { get; private set; }
+        public static ConfigEntry<string>? FilterConfigPathConfig { get; private set; }
         public static ChatFilterManager? FilterManager { get; private set; }
 
         public static string FilterConfigPath =>
-            Path.Combine(Paths.ConfigPath, "AndrewLin.Hush.filter.json");
+            FilterConfigPathConfig?.Value ?? Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json");
 
         private static ManualLogSource? _logger;
 
@@ -72,6 +74,14 @@ namespace Hush
                     if (FilterManager != null) FilterManager.Action = FilterActionConfig.Value;
                 };
             }
+            if (CensorCharConfig != null)
+            {
+                FilterManager.CensorChar = CensorCharConfig.Value;
+                CensorCharConfig.SettingChanged += (sender, args) =>
+                {
+                    if (FilterManager != null) FilterManager.CensorChar = CensorCharConfig.Value;
+                };
+            }
 
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(TextChannelManagerPatch));
@@ -84,6 +94,7 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushGetWordsCommand());
             AlphaPlugin.CommandManager?.Register(new HushGetPatternsCommand());
             AlphaPlugin.CommandManager?.Register(new HushFilterActionCommand());
+            AlphaPlugin.CommandManager?.Register(new HushCensorCharCommand());
         }
 
         void InitConfig()
@@ -92,6 +103,8 @@ namespace Hush
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
             FilterActionConfig = Config.Bind("Filter", "Action", FilterAction.Censor, "How the filter handles matched words: Censor (replace with asterisks) or Block (suppress entire message).");
+            CensorCharConfig = Config.Bind("Filter", "CensorChar", '*', "Character used to replace matched words when in Censor mode.");
+            FilterConfigPathConfig = Config.Bind("Filter", "ConfigPath", Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json"), "Path to the filter word list JSON file.");
         }
 
         /// <summary> Called every frame by Unity. We use it to execute actions on the main thread that were scheduled from background threads (e.g. WebSocket message handlers).</summary>
