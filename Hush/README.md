@@ -40,7 +40,8 @@ Patterns are raw regular expressions. Use inline flags to control matching behav
 |---|---|---|
 | `/hushtoggle` | `/ht` | Toggle the filter on or off |
 | `/hushfilteraction <action>` | `/hfa` | Set the filter action: `Censor` or `Block` |
-| `/hushshowcommand` | `/hsc` | Toggle whether your typed commands appear in chat |
+| `/hushcensorchar <char>` | `/hcc` | Set the character used to replace matched words in Censor mode |
+| `/hushloadfilter` | `/hlf` | Reload the filter word list from disk |
 
 ## Configuration
 
@@ -51,8 +52,10 @@ Located in `BepInEx/config/com.andrewlin.ontogether.hush.cfg`
 | `General > EnableFeature` | `true` | Master switch for the mod |
 | `General > ShowCommand` | `false` | Show typed commands in chat |
 | `Filter > Action` | `Censor` | `Censor` replaces matches with asterisks. `Block` suppresses the entire message. |
+| `Filter > CensorChar` | `*` | Character used to replace matched words when in Censor mode |
+| `Filter > ConfigPath` | *(see below)* | Path to the filter word list JSON file |
 
-The filter word and pattern list is stored separately in `BepInEx/config/com.andrewlin.ontogether.echo.filter.json` and is updated automatically whenever you add or remove an entry via a chat command.
+The filter word and pattern list is stored separately in `BepInEx/config/com.andrewlin.ontogether.hush.filter.json` and is updated automatically whenever you add or remove an entry via a chat command.
 
 ## Installation
 
