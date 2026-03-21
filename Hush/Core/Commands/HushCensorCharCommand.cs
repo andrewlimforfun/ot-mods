@@ -25,7 +25,7 @@ namespace Hush.Core.Commands
                 return;
             }
 
-            HushPlugin.CensorCharConfig.Value = args[0][0];
+            HushPlugin.CensorCharConfig.Value = args[0][0].ToString();
             ChatUtils.AddGlobalNotification($"Hush censor character set to '{args[0][0]}'.");
         }
     }

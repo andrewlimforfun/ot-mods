@@ -23,7 +23,7 @@ namespace Hush
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
         public static ConfigEntry<FilterAction>? FilterActionConfig { get; private set; }
-        public static ConfigEntry<char>? CensorCharConfig { get; private set; }
+        public static ConfigEntry<string>? CensorCharConfig { get; private set; }
         public static ConfigEntry<string>? FilterConfigPathConfig { get; private set; }
         public static ChatFilterManager? FilterManager { get; private set; }
 
@@ -76,10 +76,11 @@ namespace Hush
             }
             if (CensorCharConfig != null)
             {
-                FilterManager.CensorChar = CensorCharConfig.Value;
+                if (CensorCharConfig.Value.Length == 1) FilterManager.CensorChar = CensorCharConfig.Value[0];
                 CensorCharConfig.SettingChanged += (sender, args) =>
                 {
-                    if (FilterManager != null) FilterManager.CensorChar = CensorCharConfig.Value;
+                    if (FilterManager != null && CensorCharConfig.Value.Length == 1)
+                        FilterManager.CensorChar = CensorCharConfig.Value[0];
                 };
             }
 
@@ -95,6 +96,7 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushGetPatternsCommand());
             AlphaPlugin.CommandManager?.Register(new HushFilterActionCommand());
             AlphaPlugin.CommandManager?.Register(new HushCensorCharCommand());
+            AlphaPlugin.CommandManager?.Register(new HushLoadFilterCommand());
         }
 
         void InitConfig()
@@ -103,7 +105,7 @@ namespace Hush
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
             FilterActionConfig = Config.Bind("Filter", "Action", FilterAction.Censor, "How the filter handles matched words: Censor (replace with asterisks) or Block (suppress entire message).");
-            CensorCharConfig = Config.Bind("Filter", "CensorChar", '*', "Character used to replace matched words when in Censor mode.");
+            CensorCharConfig = Config.Bind("Filter", "CensorChar", "*", "Character used to replace matched words when in Censor mode.");
             FilterConfigPathConfig = Config.Bind("Filter", "ConfigPath", Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json"), "Path to the filter word list JSON file.");
         }
 
