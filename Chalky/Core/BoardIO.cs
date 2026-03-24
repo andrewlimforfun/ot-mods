@@ -4,6 +4,7 @@ using System.Linq;
 using BepInEx.Logging;
 using HarmonyLib;
 using Newtonsoft.Json;
+using PurrNet;
 using UnityEngine;
 using Alpha.Core.Util;
 
@@ -125,7 +126,7 @@ namespace Chalky.Core
 
             if (!board.isServer)
             {
-                ChatUtils.AddGlobalNotification("You're not the host, so other players will only see the changes after rejoining.");
+                ChatUtils.AddGlobalNotification("Relaying board to other players via the host...");
             }
 
             string boardPath = Path.Combine(ChalkyPlugin.SaveDir, name + ".chalkboard.json");
@@ -224,15 +225,38 @@ namespace Chalky.Core
         private static void BroadcastToPlayers(QuadPainterGPU board)
         {
             var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
-            int count = 0;
 
-            foreach (var player in playerIDs)
+            if (board.isServer)
             {
-                board.GetQuadImage(player, board.PaintColors);
-                count++;
+                // Host path: send directly to all players (server can target anyone)
+                int count = 0;
+                foreach (var player in playerIDs)
+                {
+                    board.GetQuadImage(player, board.PaintColors);
+                    count++;
+                }
+                Logger.LogInfo($"[BoardIO] Broadcast to {count} player(s).");
             }
+            else
+            {
+                // Non-host path: send to the host only. The host-side postfix
+                // on GetQuadImage_Original_1 will relay to all other players.
+                PlayerID? hostPlayer = null;
+                foreach (var p in playerIDs)
+                {
+                    if (p.isServer) { hostPlayer = p; break; }
+                }
 
-            Logger.LogInfo($"[BoardIO] Broadcast to {count} player(s).");
+                if (hostPlayer == null)
+                {
+                    Logger.LogWarning("[BoardIO] Could not find host player in PlayerIDs. Board not broadcast.");
+                    ChatUtils.AddGlobalNotification("Could not find host player to relay board.");
+                    return;
+                }
+
+                board.GetQuadImage(hostPlayer.Value, board.PaintColors);
+                Logger.LogInfo("[BoardIO] Sent board state to host for relay.");
+            }
         }
     }
 }

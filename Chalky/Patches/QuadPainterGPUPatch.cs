@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.IO;
 using BepInEx.Logging;
+using PurrNet;
 
 namespace Chalky.Patches
 {
@@ -107,6 +108,46 @@ namespace Chalky.Patches
             return false; // skip original Update
         }
 
+        /// <summary>
+        /// When the host receives board PaintColors from a non-host client via
+        /// GetQuadImage, relay the update to all other connected players.
+        /// The host's direct server path (BatchToTargets) bypasses the IsObserver
+        /// check that blocks the client→server→client relay path.
+        /// </summary>
+        [HarmonyPatch("GetQuadImage_Original_1")]
+        [HarmonyPostfix]
+        public static void RelayGetQuadImage(QuadPainterGPU __instance, RPCInfo rpcInfo)
+        {
+            // Only relay from the host/server
+            if (!__instance.isServer) return;
+
+#pragma warning disable Harmony003 // read-only access; Harmony003 is a false positive
+            var sender = rpcInfo.sender;
+#pragma warning restore Harmony003
+
+            // Only relay when the update came from a non-host player
+            if (sender == __instance.localPlayerForced) return;
+
+            // Default RPCInfo (local execution, no network sender) has sender == default.
+            // Skip relay for default sender to avoid triggering on host's own LoadBoard.
+            if (sender == default(PlayerID)) return;
+
+            var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
+            int count = 0;
+
+            foreach (var player in playerIDs)
+            {
+                // Skip the original sender (already has the data)
+                if (player == sender) continue;
+                // Skip self/host (just received and applied it)
+                if (player == __instance.localPlayerForced) continue;
+
+                __instance.GetQuadImage(player, __instance.PaintColors);
+                count++;
+            }
+
+            Logger.LogInfo($"[BoardIO relay] Host relayed board state to {count} other player(s).");
+        }
 
     }
 }
