@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2026-03-25
+
+### Added
+- Non-host clients can now load boards and broadcast to all players via host relay
+  - Board state is sent to the host, which relays to all other connected players
+  - Requires the host to also have Chalky installed
+
+### Changed
+- `/chalkyloadboard` no longer requires being the session host
+- Updated user-facing messages for non-host board loading
+
 ## [0.0.4] - 2026-02-22
 
 ### Removed
