@@ -9,7 +9,7 @@ name = "FomoChatLog"
 # Do not edit this field manually — bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
 description = "FomoChatLog: A Fomo submod that logs On-Together chat messages to a local text file. Use /fomohelp and look for /fomochatlog commands"
-websiteUrl = "https://github.com/andrewlimforfun/on-together-mods"
+websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
 containsNsfwContent = false
 
 [package.dependencies]

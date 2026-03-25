@@ -9,7 +9,7 @@ name = "FomoWebSocket"
 # Do not edit this field manually — bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
 description = "FomoWebSocket: WebSocket relay add-on for the Fomo mod. Use /fomohelp and look for /fomowebsocket commands"
-websiteUrl = "https://github.com/andrewlimforfun/on-together-mods"
+websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
 containsNsfwContent = false
 
 [package.dependencies]

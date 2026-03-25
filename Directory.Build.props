@@ -7,7 +7,7 @@
     -->
         <Authors>AndrewLin</Authors>
         <TeamName>AndrewLin</TeamName>
-        <RepositoryUrl>https://github.com/andrewlimforfun/on-together-mods</RepositoryUrl>
+        <RepositoryUrl>https://github.com/andrewlimforfun/ot-mods</RepositoryUrl>
         <Website>$(RepositoryUrl)</Website>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>netstandard2.1</TargetFramework>
