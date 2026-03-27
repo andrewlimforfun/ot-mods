@@ -17,6 +17,8 @@ namespace Alpha.Core.Util
 {
     public static class PlayerUtils
     {
+        private static readonly Regex _digitsRegex = new Regex(@"^\d+$", RegexOptions.Compiled);
+
         private static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{AlphaPlugin.ModName}.PU");
         public static string GetUserName()
         {
@@ -115,6 +117,23 @@ namespace Alpha.Core.Util
 
         public static PlayerDetail? FindPlayerBySteamPersona(string persona) =>
             FindPlayer((_steamId, _pid, _info, _transform) => SteamUtils.GetSteamPersonaName(_steamId)?.Contains(persona) == true);
+
+        /// <summary>
+        /// Resolves a free-form query to a player using the standard priority chain:
+        /// Steam ID suffix (if all digits) → fuzzy display name → Steam persona name.
+        /// </summary>
+        public static PlayerDetail? FindPlayerByQuery(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return null;
+
+            if (query.Equals("host", StringComparison.OrdinalIgnoreCase)) return GetHost();
+
+            bool allDigits = _digitsRegex.IsMatch(query);
+            PlayerDetail? target = allDigits ? FindPlayerBySteamIDSuffix(query) : null;
+            target ??= FuzzyFindPlayerByName(query);
+            target ??= FindPlayerBySteamPersona(query);
+            return target;
+        }
 
         public static PlayerDetail? GetHost()
         {
