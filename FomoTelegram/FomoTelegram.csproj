@@ -28,47 +28,5 @@
     <ProjectReference Include="..\Fomo\Fomo.csproj" />
   </ItemGroup>
 
-  <!-- Generate BuildInfo.g.cs -->
-  <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild">
-    <PropertyGroup>
-      <VersionFileContent>
-        namespace $(RootNamespace) {
-        public static class BuildInfo {
-        public const string Version = "$(Version)"%3b
-        }
-        }
-      </VersionFileContent>
-    </PropertyGroup>
-    <WriteLinesToFile File="BuildInfo.g.cs" Lines="$(VersionFileContent)" Overwrite="true" />
-  </Target>
-
-  <!-- Install target -->
-  <Target Name="Install" AfterTargets="Build" Condition="'$(Configuration)' == 'Install'">
-    <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalInstallPath)" />
-    <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
-    <MakeDir Directories="$(LocalInstallPath)" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalInstallPath)" />
-    <!-- @(ReferenceCopyLocalPaths) is an MSBuild item group that contains the full paths to all assemblies -->
-    <!-- Copy any transitive DLLs (Newtonsoft.Json is excluded at runtime; BepInEx already ships it) -->
-    <!-- <Copy SourceFiles="@(ReferenceCopyLocalPaths)" DestinationFolder="$(LocalInstallPath)" SkipUnchangedFiles="true" /> -->
-  </Target>
-
-  <Target Name="CleanInstall" AfterTargets="Clean" Condition="'$(Configuration)' == 'Install'">
-    <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalInstallPath)" />
-    <RemoveDir Directories="$(LocalInstallPath)" />
-  </Target>
-
-  <!--
-    Publish to Thunderstore: dotnet build -c Publish
-    Requires tcli (https://github.com/thunderstore-io/thunderstore-cli):
-      dotnet tool install -g tcli
-    Requires TCLI_AUTH_TOKEN env var
-  -->
-  <Target Name="ThunderstorePublish" AfterTargets="Build" Condition="'$(Configuration)' == 'Publish'">
-    <Message Importance="high" Text="Publishing $(PackageName) v$(Version) to Thunderstore..." />
-    <Exec WorkingDirectory="$(ProjectDir)"
-          Command="tcli publish --package-version $(Version)" />
-  </Target>
-
 
 </Project>

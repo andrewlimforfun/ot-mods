@@ -25,48 +25,5 @@
     <ProjectReference Include="..\Alpha\Alpha.csproj" SetConfiguration="Configuration=Debug" />
   </ItemGroup>
 
-  <!-- Generate BuildInfo.g.cs with version info for use in the mod -->
-  <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild">
-    <PropertyGroup>
-      <VersionFileContent>
-        namespace $(RootNamespace) {
-        public static class BuildInfo {
-        public const string Version = "$(Version)"%3b
-        }
-        }
-      </VersionFileContent>
-    </PropertyGroup>
-    <Message Importance="high" Text="Generating BuildInfo.g.cs..." />
-    <WriteLinesToFile File="BuildInfo.g.cs" Lines="$(VersionFileContent)" Overwrite="true" />
-  </Target>
-
-  <!-- Install mod locally for testing -->
-  <Target Name="Install" AfterTargets="Build" Condition="'$(Configuration)' == 'Install'">
-    <!-- Have to set verbosity to -v detailed anyway to see the message -->
-    <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalInstallPath)" />
-    <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
-    <MakeDir Directories="$(LocalInstallPath)" />
-
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalInstallPath)" />
-  </Target>
-
-  <Target Name="CleanInstall" AfterTargets="Clean" Condition="'$(Configuration)' == 'Install'">
-    <!-- Have to set verbosity to -v detailed anyway to see the message -->
-    <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalInstallPath)" />
-    <RemoveDir Directories="$(LocalInstallPath)" />
-  </Target>
-
-  <!--
-    Publish to Thunderstore: dotnet build -c Publish
-    Requires tcli (https://github.com/thunderstore-io/thunderstore-cli):
-      dotnet tool install -g tcli
-    Requires TCLI_AUTH_TOKEN env var
-  -->
-  <Target Name="ThunderstorePublish" AfterTargets="Build" Condition="'$(Configuration)' == 'Publish'">
-    <Message Importance="high" Text="Publishing $(PackageName) v$(Version) to Thunderstore..." />
-    <Exec WorkingDirectory="$(ProjectDir)"
-          Command="tcli publish --package-version $(Version)" />
-  </Target>
-
 
 </Project>

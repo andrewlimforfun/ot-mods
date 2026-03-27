@@ -1,18 +1,65 @@
 <Project>
-  <!--
-    Syncs [package.dependencies] versions in thunderstore.toml from Directory.Build.props
-    before every Publish build. This ensures dependency versions stay in sync with the
-    centralized version properties — no manual edits to thunderstore.toml needed.
-
-    Source of truth for all versions: Directory.Build.props
+    <!--
+    Common MSBuild targets for all mod projects in the monorepo.
+    Targets guarded by '$(PackageName)' != '' only run for mod projects.
+    Test projects do not set $(PackageName) and are unaffected.
+    Targets are ordered chronologically (ish): 
+    generate version file, clean install dir, install locally, 
+    sync thunderstore.toml, publish to Thunderstore.
   -->
-  <Target Name="SyncThunderstoreDeps"
-          BeforeTargets="ThunderstorePublish"
-          Condition="'$(Configuration)' == 'Publish' and Exists('$(ProjectDir)thunderstore.toml')">
 
-    <Message Importance="high" Text="Syncing thunderstore.toml dependency versions..." />
+    <!-- Generate BuildInfo.g.cs with the current version at build time -->
+    <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild" Condition="'$(PackageName)' != ''">
+        <PropertyGroup>
+            <VersionFileContent>
+                namespace $(RootNamespace) {
+                public static class BuildInfo {
+                public const string Version = "$(Version)"%3b
+                }
+                }
+            </VersionFileContent>
+        </PropertyGroup>
+        <Message Importance="high" Text="Generating BuildInfo.g.cs..." />
+        <WriteLinesToFile File="BuildInfo.g.cs" Lines="$(VersionFileContent)" Overwrite="true" />
+    </Target>
 
-    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)"
-          Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)sync-thunderstore-deps.ps1&quot; -TomlFile &quot;$(ProjectDir)thunderstore.toml&quot; -BepInExVersion &quot;$(BepInExVersion)&quot; -AlphaVersion &quot;$(AlphaVersion)&quot; -FomoVersion &quot;$(FomoVersion)&quot;" />
-  </Target>
+    <Target Name="CleanInstall" AfterTargets="Clean"
+        Condition="'$(Configuration)' == 'Install' and '$(PackageName)' != ''">
+        <Message Importance="high" Text="Deleting [$(TargetFileName)] from: $(LocalInstallPath)" />
+        <RemoveDir Directories="$(LocalInstallPath)" />
+    </Target>
+
+    <!-- Install mod locally for testing: dotnet build -c Install -->
+    <Target Name="Install" AfterTargets="Build"
+        Condition="'$(Configuration)' == 'Install' and '$(PackageName)' != ''">
+        <Message Importance="high" Text="Copying [$(TargetFileName)] to: $(LocalInstallPath)" />
+        <Error Condition="'$(LocalBepInExPluginPath)' == ''" Text="LocalBepInExPluginPath is empty! Check your PropertyGroup." />
+        <MakeDir Directories="$(LocalInstallPath)" />
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LocalInstallPath)" />
+    </Target>
+
+    <!--
+    Syncs [package.dependencies] versions in thunderstore.toml from Directory.Build.props
+    before every Publish build. Source of truth for all versions: Directory.Build.props
+  -->
+    <Target Name="SyncThunderstoreDeps"
+        BeforeTargets="ThunderstorePublish"
+        Condition="'$(Configuration)' == 'Publish' and Exists('$(ProjectDir)thunderstore.toml')">
+        <Message Importance="high" Text="Syncing thunderstore.toml dependency versions..." />
+        <Exec WorkingDirectory="$(MSBuildThisFileDirectory)"
+            Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)sync-thunderstore-deps.ps1&quot; -TomlFile &quot;$(ProjectDir)thunderstore.toml&quot; -BepInExVersion &quot;$(BepInExVersion)&quot; -AlphaVersion &quot;$(AlphaVersion)&quot; -FomoVersion &quot;$(FomoVersion)&quot;" />
+    </Target>
+
+    <!--
+    Publish to Thunderstore: dotnet build -c Publish
+    Requires tcli (https://github.com/thunderstore-io/thunderstore-cli):
+      dotnet tool install -g tcli
+    Requires TCLI_AUTH_TOKEN env var
+  -->
+    <Target Name="ThunderstorePublish" AfterTargets="Build"
+        Condition="'$(Configuration)' == 'Publish' and '$(PackageName)' != ''">
+        <Message Importance="high" Text="Publishing $(PackageName) v$(Version) to Thunderstore..." />
+        <Exec WorkingDirectory="$(ProjectDir)"
+            Command="tcli publish --package-version $(Version)" />
+    </Target>
 </Project>
