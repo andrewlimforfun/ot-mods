@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0]
+
+### Changed
+- Merged `/fomochatsinkgetlocalrange` (`/fcsglr`) and `/fomochatsinksetlocalrange` (`/fcsslr`) into `/fomochatsinklocalrange` (`/fcslr`) — no args gets the current value; passing a number sets it
+- `/fomoincomingmode` (`/fim`) — toggle whether messages dispatched from external sources (Telegram, WebSocket, etc.) are sent as global or local chat; persisted via config
+- `DispatchIncomingLocal` config entry (`Chat` section, default `false`) — set the default channel for dispatched incoming messages
+
+## [1.0.0]
+
+### Changed
+- Merged `/fomochatsinkgetlocalrange` (`/fcsglr`) and `/fomochatsinksetlocalrange` (`/fcsslr`) into `/fomochatsinklocalrange` (`/fcslr`) — no args gets the current value; passing a number sets it
+
 ## [0.2.4]
 
 ### Added

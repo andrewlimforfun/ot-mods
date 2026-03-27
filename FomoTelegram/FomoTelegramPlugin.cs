@@ -90,7 +90,7 @@ namespace FomoTelegram
                 "Telegram", "TelegramChatId",
                 FomoTelegramManager.PlaceholderChatId,
                 "Telegram chat / group / channel ID to forward messages to. " +
-                "Use @userinfobot or the Telegram API to find your chat ID.");
+                "Use @userinfobot or the Telegram API to find your chat ID. e.g. 1234567890");
 
             RelayGlobalChat = Config.Bind(
                 "Filters", "RelayGlobalChat",

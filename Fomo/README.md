@@ -20,10 +20,9 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 - `/fomotoggle` (`/ft`) :: Toggle Fomo feature on/off
 - `/fomoshowcommand` (`/fsc`) :: Toggle show/hide Fomo commands in chat
 - `/fomomessagelimit [global|local] <number>` (`/fml`) :: Set the global or local chat message window size
-- `/fomochatsinksetlocalrange <number>` (`/fcsslr`) :: Set local range for the chat sink
-- `/fomochatsinkgetlocalrange` (`/fcsglr`) :: Get the local range for the chat sink
+- `/fomochatsinklocalrange [number]` (`/fcslr`) :: Get or set the local range for the chat sink; no arg = get, number = set
 - `/fomochatsinkcleantags` (`/fcsct`) :: Toggle stripping TMP tags from all sink output
-- `/fomoplayerid` (`/fpi`) :: Print your current player ID
+- `/fomoincomingmode [global|local]` (`/fim`) :: Toggle or set the channel for incoming messages from external sources (Telegram, WebSocket); no argument toggles
 
 ### Examples
 
@@ -44,6 +43,7 @@ Located in `BepInEx/config/com.andrewlin.ontogether.fomo.cfg`
   - `GlobalMessageLimitCount` (default: `50`) :: Max messages shown in global chat window
   - `LocalMessageLimitCount` (default: `25`) :: Max messages shown in local chat window
   - `ChatLogLocalRange` (default: `5`) :: Local range threshold for relaying local chat messages to sinks
+  - `DispatchIncomingLocal` (default: `false`) :: When `true`, messages from external sources (Telegram, WebSocket, etc.) are sent as local chat instead of global
 
 ## Installation
 

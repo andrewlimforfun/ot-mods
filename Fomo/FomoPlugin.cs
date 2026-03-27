@@ -30,6 +30,7 @@ namespace Fomo
         public static ConfigEntry<int>? GlobalMessageLimitCount { get; private set; }
         public static ConfigEntry<int>? LocalMessageLimitCount { get; private set; }
         public static ConfigEntry<int>? ChatSinkLocalRange { get; private set; }
+        public static ConfigEntry<bool>? DispatchIncomingLocal { get; private set; }
         public static ChatSinkManager? SinkManager { get; private set; }
 
         // Thread-safe queue to marshal background-thread work onto the Unity main thread
@@ -49,22 +50,29 @@ namespace Fomo
 
             text = text.Trim();
 
-            if (text.StartsWith("/"))
+            if (AlphaPlugin.CommandManager != null && text.StartsWith("/") && text.Length > 2)
             {
                 RunOnMainThread(() =>
                 {
-                    if (text.StartsWith("/fomo"))
+                    // attempt to process commands via alpha command manager, bypassing message box UI
+                    var commandManager = AlphaPlugin.CommandManager;
+                    string commandName = text.Split(' ')[0][1..].ToLower();
+                    if (!string.IsNullOrWhiteSpace(commandName) && commandManager.ContainsCommand(commandName))
                     {
-                        bool isProcessed = AlphaPlugin.CommandManager?.ProcessInput(text) ?? false;
+                        // see if command is processed
+                        bool isProcessed = commandManager.ProcessInput(text);
                         if (isProcessed) return;
                     }
+
+                    // forward other mod's commands to message input box UI
                     ChatUtils.UISendMessage(text);
                 });
             }
             else
             {
                 string senderName = PlayerUtils.GetUserName();
-                ChatUtils.SendMessageAsync(senderName, text, false);
+                bool isLocal = DispatchIncomingLocal?.Value ?? false;
+                ChatUtils.SendMessageAsync(senderName, text, isLocal);
             }
         }
 
@@ -92,8 +100,8 @@ namespace Fomo
             AlphaPlugin.CommandManager?.Register(new FomoChatLocalCommand());
             AlphaPlugin.CommandManager?.Register(new FomoChatGlobalCommand());
             AlphaPlugin.CommandManager?.Register(new FomoChatSinkCleanTagsCommand());
-            AlphaPlugin.CommandManager?.Register(new FomoChatSinkGetLocalRangeCommand());
-            AlphaPlugin.CommandManager?.Register(new FomoChatSinkSetLocalRangeCommand());
+            AlphaPlugin.CommandManager?.Register(new FomoChatSinkLocalRangeCommand());
+            AlphaPlugin.CommandManager?.Register(new FomoIncomingModeCommand());
             AlphaPlugin.CommandManager?.Register(new FomoMessageLimitCommand());
             AlphaPlugin.CommandManager?.Register(new FomoToggleCommand());
 
@@ -110,6 +118,7 @@ namespace Fomo
             GlobalMessageLimitCount = Config.Bind("Chat", "GlobalMessageLimitCount", DefaultGlobalChatMessageLimit, "Max number of messages shown in the global chat window. Game default is 50.");
             LocalMessageLimitCount = Config.Bind("Chat", "LocalMessageLimitCount", DefaultLocalChatMessageLimit, "Max number of messages shown in the local chat window. Game default is 25.");
             ChatSinkLocalRange = Config.Bind("Chat", "ChatLogLocalRange", DefaultChatSinkLocalRange, "Local range for chat log messages.");
+            DispatchIncomingLocal = Config.Bind("Chat", "DispatchIncomingLocal", false, "When true, messages from external sources (Telegram, WebSocket, etc.) are dispatched as local chat instead of global.");
 
         }
 

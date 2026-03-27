@@ -49,6 +49,8 @@ namespace Alpha.Core.Command
             _log.LogInfo($"Registered command: /{command.Name}{shortInfo} [{ns}]");
         }
 
+        public bool ContainsCommand(string commandName) => _commands.ContainsKey(commandName);
+
         public bool ProcessInput(string input)
         {
             // Split "/roll 2d20 d7" -> ["roll", "2d20", "d7"]
