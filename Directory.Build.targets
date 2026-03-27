@@ -1,0 +1,18 @@
+<Project>
+  <!--
+    Syncs [package.dependencies] versions in thunderstore.toml from Directory.Build.props
+    before every Publish build. This ensures dependency versions stay in sync with the
+    centralized version properties — no manual edits to thunderstore.toml needed.
+
+    Source of truth for all versions: Directory.Build.props
+  -->
+  <Target Name="SyncThunderstoreDeps"
+          BeforeTargets="ThunderstorePublish"
+          Condition="'$(Configuration)' == 'Publish' and Exists('$(ProjectDir)thunderstore.toml')">
+
+    <Message Importance="high" Text="Syncing thunderstore.toml dependency versions..." />
+
+    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)"
+          Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)sync-thunderstore-deps.ps1&quot; -TomlFile &quot;$(ProjectDir)thunderstore.toml&quot; -BepInExVersion &quot;$(BepInExVersion)&quot; -AlphaVersion &quot;$(AlphaVersion)&quot; -FomoVersion &quot;$(FomoVersion)&quot;" />
+  </Target>
+</Project>

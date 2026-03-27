@@ -16,6 +16,9 @@
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Configurations>Debug;Install;Publish</Configurations>
 
+        <!-- External dependency versions — update here to sync all thunderstore.toml files -->
+        <BepInExVersion>5.4.2305</BepInExVersion>
+
         <!-- Mods Versions -->
         <AlphaVersion>0.0.1</AlphaVersion>
         <ChalkyVersion>1.0.2</ChalkyVersion>
