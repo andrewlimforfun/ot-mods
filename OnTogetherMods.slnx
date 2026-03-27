@@ -21,6 +21,10 @@
     <Project Name="Dnd.Tests" Path="Dnd.Tests\Dnd.Tests.csproj" />
   </Folder>
 
+  <Folder Name="/echo/">
+    <Project Name="Echo" Path="Echo\Echo.csproj" />
+  </Folder>
+
   <Folder Name="/fomo/">
     <Project Name="Fomo" Path="Fomo\Fomo.csproj" />
     <Project Name="FomoChatLog" Path="FomoChatLog\FomoChatLog.csproj" />

@@ -46,9 +46,6 @@ namespace Alpha
 
             // Shared command manager — consuming mods register their commands in their own Awake()
             CommandManager = new ChatCommandManager();
-
-            Logger.LogInfo($"Player ID: {PlayerUtils.GetPlayerId()}");
-            Logger.LogInfo($"Steam Player ID: {PlayerUtils.GetSteamPlayerIdString()}");
         }
 
         void InitConfig()

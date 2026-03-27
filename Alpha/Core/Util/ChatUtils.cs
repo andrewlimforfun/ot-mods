@@ -27,10 +27,10 @@ namespace Alpha.Core.Util
             textChannelManager.AddNotification(text);
         }
 
-        public static void SendMessageAsync(string userName, string text, bool IsLocal = false, string strategy = "word")
+        public static void SendMessageAsync(string userName, string text, bool IsLocal = false, string chunkStrategy = "word", Vector3? position = null)
         {
             // split text into chunks max 250 chars either using word or default to hard cut strategy
-            IStringChunker chunker = strategy.ToLower() switch
+            IStringChunker chunker = chunkStrategy.ToLower() switch
             {
                 "word" => new WordBoundaryChunker(),
                 _ => new HardCutChunker()
@@ -38,22 +38,23 @@ namespace Alpha.Core.Util
 
             foreach (var chunk in chunker.Chunk(text, MaxMessageLength))
             {
-                SendMessageTruncatedAsync(userName, chunk, IsLocal);
+                SendMessageTruncatedAsync(userName, chunk, IsLocal, position);
             }
         }
 
-        public static void SendMessageTruncatedAsync(string userName, string text, bool IsLocal = false)
+        public static void SendMessageTruncatedAsync(string userName, string text, bool IsLocal = false, Vector3? position = null)
         {
-            TextChannelManager textChannelManager = NetworkSingleton<TextChannelManager>.I;
-            Transform mainPlayer = textChannelManager.MainPlayer;
             byte[] messageBytes = Encoding.Unicode.GetBytes(text[..Math.Min(MaxMessageLength, text.Length)]);
             byte[] userNameBytes = Encoding.Unicode.GetBytes(userName);
 
-            var steamPlayerId = PlayerUtils.GetSteamPlayerIdString();
-            textChannelManager.SendMessageAsync(messageBytes, userNameBytes, IsLocal, mainPlayer.position, steamPlayerId);
+            string steamPlayerId = SteamUtils.GetPlayerSteamID();
+            
+            TextChannelManager textChannelManager = NetworkSingleton<TextChannelManager>.I;
+            Transform mainPlayer = textChannelManager.MainPlayer;
+            textChannelManager.SendMessageAsync(messageBytes, userNameBytes, IsLocal, position ?? mainPlayer.position, steamPlayerId);
         }
 
-        public static void CleanCommand(string helpCommand = "alpha")
+        public static void CleanCommand()
         {
             // These cleanup patterns follow TextChannelManager.OnEnterPressed logic
             // They will hide the command from the chat instead of sending them to the server
@@ -68,7 +69,7 @@ namespace Alpha.Core.Util
             // special exception for /help since this command is used by other plugins
             var text = MonoSingleton<UIManager>.I.MessageInput.text;
             // officer balls and jaide compatibility
-            if (!text.StartsWith("/help") || text == $"/help {helpCommand}")
+            if (!text.StartsWith("/help"))
             {
                 // Clears the text input field
                 MonoSingleton<UIManager>.I.MessageInput.text = "";

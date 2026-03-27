@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using System.IO;
 using BepInEx.Logging;
 using PurrNet;
+using Alpha.Core.Util;
 
 namespace Chalky.Patches
 {
@@ -106,6 +107,22 @@ namespace Chalky.Patches
             }
 
             return false; // skip original Update
+        }
+
+        [HarmonyPatch("GetQuadImage_Original_1")]
+        [HarmonyPrefix]
+        public static void SpoofHostPrefix(QuadPainterGPU __instance, ref RPCInfo rpcInfo)
+        {
+            if (ChalkyPlugin.SpoofHost?.Value != true) return;
+            rpcInfo.asServer = true;
+            
+            var host = PlayerUtils.GetHost();
+            if (host == null)
+            {
+                Logger.LogWarning("SpoofHost is enabled but no host player found. GetQuadImage RPC will not be spoofed.");
+                return;
+            }
+            rpcInfo.sender = host.PlayerID;
         }
 
         /// <summary>

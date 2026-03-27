@@ -61,7 +61,7 @@ namespace Fomo.Patches
             if (MonoSingleton<DataManager>.I.BanData.IgnorePlayers.Contains(playerID)) return;
             if (MonoSingleton<DataManager>.I.BanData.MutedPlayers.Contains(playerID)) return;
 
-            if (PlayerUtils.GetSteamPlayerIdString() == playerID) return;
+            if (SteamUtils.GetPlayerSteamID() == playerID) return;
 
             // fire-and-forget task to avoid hitching the main thread with file IO / WebSocket work
             _ = Task.Run(async () =>

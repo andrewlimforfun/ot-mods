@@ -95,14 +95,10 @@ namespace Fomo
             AlphaPlugin.CommandManager?.Register(new FomoChatSinkGetLocalRangeCommand());
             AlphaPlugin.CommandManager?.Register(new FomoChatSinkSetLocalRangeCommand());
             AlphaPlugin.CommandManager?.Register(new FomoMessageLimitCommand());
-            AlphaPlugin.CommandManager?.Register(new FomoPlayerIdCommand());
             AlphaPlugin.CommandManager?.Register(new FomoToggleCommand());
 
             // Register output sinks - sub-mods (FomoChatLog, FomoTelegram, etc.) register their own sinks.
             SinkManager = new ChatSinkManager();
-
-            Logger.LogInfo($"Player ID: {PlayerUtils.GetPlayerId()}");
-            Logger.LogInfo($"Steam Player ID: {PlayerUtils.GetSteamPlayerIdString()}");
         }
 
         void InitConfig()

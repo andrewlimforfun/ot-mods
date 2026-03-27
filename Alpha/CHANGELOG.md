@@ -36,8 +36,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **`PlayerUtils`**:
   - `GetUserName` / `GetUserNameNoFormat` — local player display name (raw and TMP-stripped).
-  - `GetSteamPlayerIdString` — cached Steam player ID string.
-  - `GetPlayerId` / `GetPlayerIdForced` — local `PlayerID` accessors.
 
 - **`TextChannelManagerPatch`** — Harmony patches on `TextChannelManager`:
   - `OnEnterPressed` prefix — intercepts slash commands and routes them through `CommandManager`.

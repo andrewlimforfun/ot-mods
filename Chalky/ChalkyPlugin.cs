@@ -20,6 +20,7 @@ namespace Chalky
         public static Color? chalkyColor = null;
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
+        public static ConfigEntry<bool>? SpoofHost { get; private set; }
         public static ConfigEntry<string>? BoardSaveDirectory { get; private set; }
 
         /// <summary>Resolved absolute path to the board save directory.</summary>
@@ -59,6 +60,7 @@ namespace Chalky
             // Initialize config entries
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
+            SpoofHost = Config.Bind("General", "SpoofHost", false, "If true, spoof rpcInfo in GetQuadImage so sender appears as the host and asServer is true.");
             BoardSaveDirectory = Config.Bind(
                 "Boards",
                 "BoardSaveDirectory",

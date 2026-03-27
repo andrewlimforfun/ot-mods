@@ -53,7 +53,7 @@ When the first command for a namespace is registered, a `/{namespace}help` comma
 | `SendMessageAsync(userName, text, isLocal)` | Sends a chat message (truncated to 250 chars). |
 | `SendChunkedMessageAsync(userName, text, isLocal, strategy)` | Splits long text into ≤250-char chunks and sends each one. Strategy: `"word"` (default) or `"hard"`. |
 | `CleanTMPTags(input)` | Strips TextMeshPro formatting tags (e.g. `<#ff0000>`, `<b>`) from a string. |
-| `CleanCommand(helpCommand)` | Hides a slash command from chat after it is processed (clears the input field). |
+| `CleanCommand()` | Hides a slash command from chat after it is processed (clears the input field). |
 | `UISendMessage(text)` | Injects text into the chat input field and submits it programmatically. |
 
 ---
@@ -75,9 +75,6 @@ Breaks arbitrary text into segments no longer than a given character limit.
 |--------|-------------|
 | `GetUserName()` | Returns the local player's display name (may contain TMP tags). |
 | `GetUserNameNoFormat()` | Returns the display name with TMP tags stripped. |
-| `GetSteamPlayerIdString()` | Returns the local player's Steam ID string (cached after first call). |
-| `GetPlayerId()` | Returns the local player's `PlayerID`. |
-| `GetPlayerIdForced()` | Returns the local player's forced `PlayerID`. |
 
 ---
 

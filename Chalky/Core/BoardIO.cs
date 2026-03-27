@@ -20,7 +20,7 @@ namespace Chalky.Core
     /// </summary>
     public static class BoardIO
     {
-        private readonly static ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource(ChalkyPlugin.ModName);
+        private readonly static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{ChalkyPlugin.ModName}.BIO");
 
         // ----
         // Public API
@@ -33,7 +33,7 @@ namespace Chalky.Core
         {
             if (!Directory.Exists(ChalkyPlugin.SaveDir))
             {
-                Logger.LogWarning($"[BoardIO] Save directory not found: {ChalkyPlugin.SaveDir}");
+                _log.LogWarning($"Save directory not found: {ChalkyPlugin.SaveDir}");
                 return new List<string>();
             }
 
@@ -52,7 +52,7 @@ namespace Chalky.Core
             var dm = MonoSingleton<DrawingManager>.I;
             if (dm == null)
             {
-                Logger.LogError("[BoardIO] DrawingManager not found.");
+                _log.LogError("DrawingManager not found.");
                 return -1;
             }
 
@@ -69,8 +69,8 @@ namespace Chalky.Core
 
             if (index < 0 || index >= dm.QuadPainterGPUS.Count)
             {
-                Logger.LogError(
-                    $"[BoardIO] Invalid board index {index}. " +
+                _log.LogError(
+                    $"Invalid board index {index}. " +
                     $"Valid range: 0–{dm.QuadPainterGPUS.Count - 1}. " +
                     "Interact with a board first, or pass an explicit index.");
                 return -1;
@@ -88,7 +88,7 @@ namespace Chalky.Core
             var dm = MonoSingleton<DrawingManager>.I;
             if (dm == null || index < 0 || index >= dm.QuadPainterGPUS.Count)
             {
-                Logger.LogError($"[BoardIO] SaveBoard: invalid state or index {index}");
+                _log.LogError($"SaveBoard: invalid state or index {index}");
                 return;
             }
 
@@ -101,7 +101,7 @@ namespace Chalky.Core
 
             string boardPath = Path.Combine(ChalkyPlugin.SaveDir, name + ".chalkboard.json");
             File.WriteAllText(boardPath, JsonConvert.SerializeObject(grid));
-            Logger.LogInfo($"[BoardIO] Board {index} saved to {boardPath}");
+            _log.LogInfo($"Board {index} saved to {boardPath}");
 
             SavePreview(board, name);
         }
@@ -118,7 +118,7 @@ namespace Chalky.Core
             var dm = MonoSingleton<DrawingManager>.I;
             if (dm == null || index < 0 || index >= dm.QuadPainterGPUS.Count)
             {
-                Logger.LogError($"[BoardIO] LoadBoard: invalid state or index {index}");
+                _log.LogError($"LoadBoard: invalid state or index {index}");
                 return;
             }
 
@@ -133,7 +133,7 @@ namespace Chalky.Core
             if (!File.Exists(boardPath))
             {
                 ChatUtils.AddGlobalNotification($"Board file not found: {name}.chalkboard.json");
-                Logger.LogError($"[BoardIO] File not found: {boardPath}");
+                _log.LogError($"File not found: {boardPath}");
                 return;
             }
 
@@ -147,12 +147,12 @@ namespace Chalky.Core
                 }
             }
 
-            Logger.LogInfo($"[BoardIO] PaintColors restored from {boardPath}");
+            _log.LogInfo($"PaintColors restored from {boardPath}");
 
             RebuildRenderTexture(board, dm);
             BroadcastToPlayers(board);
 
-            Logger.LogInfo($"[BoardIO] Board {index} loaded and synced to all players.");
+            _log.LogInfo($"Board {index} loaded and synced to all players.");
         }
 
         // ----
@@ -164,7 +164,7 @@ namespace Chalky.Core
             var rt = Traverse.Create(board).Field("_rt").GetValue<RenderTexture>();
             if (rt == null)
             {
-                Logger.LogWarning("[BoardIO] _rt is null - skipping PNG preview.");
+                _log.LogWarning("_rt is null - skipping PNG preview.");
                 return;
             }
 
@@ -179,7 +179,7 @@ namespace Chalky.Core
             File.WriteAllBytes(pngPath, tex.EncodeToPNG());
             Object.Destroy(tex);
 
-            Logger.LogInfo($"[BoardIO] Preview saved to {pngPath}");
+            _log.LogInfo($"Preview saved to {pngPath}");
         }
 
         private static void RebuildRenderTexture(QuadPainterGPU board, DrawingManager dm)
@@ -188,7 +188,7 @@ namespace Chalky.Core
             var rt = traverse.Field("_rt").GetValue<RenderTexture>();
             if (rt == null)
             {
-                Logger.LogError("[BoardIO] _rt is null - cannot rebuild render texture.");
+                _log.LogError("_rt is null - cannot rebuild render texture.");
                 return;
             }
 
@@ -219,44 +219,55 @@ namespace Chalky.Core
             // Flush the accumulated pixel batch to the RenderTexture
             traverse.Method("RenderBatch").GetValue();
 
-            Logger.LogInfo("[BoardIO] RenderTexture rebuilt from PaintColors.");
+            _log.LogInfo("RenderTexture rebuilt from PaintColors.");
         }
 
         private static void BroadcastToPlayers(QuadPainterGPU board)
         {
             var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
 
-            if (board.isServer)
+            if (board.isServer || ChalkyPlugin.SpoofHost?.Value == true)
             {
-                // Host path: send directly to all players (server can target anyone)
-                int count = 0;
-                foreach (var player in playerIDs)
+                if (ChalkyPlugin.SpoofHost?.Value == true)
                 {
-                    board.GetQuadImage(player, board.PaintColors);
-                    count++;
+                    _log.LogInfo("Broadcasting to all players with spoofed host RPCInfo.");
                 }
-                Logger.LogInfo($"[BoardIO] Broadcast to {count} player(s).");
+                BroadcastToAllPlayers(board);
             }
             else
             {
                 // Non-host path: send to the host only. The host-side postfix
                 // on GetQuadImage_Original_1 will relay to all other players.
-                PlayerID? hostPlayer = null;
-                foreach (var p in playerIDs)
+                PlayerID? hostPlayer = PlayerUtils.GetHost()?.PlayerID;
+                if (hostPlayer != null)
                 {
-                    if (p.isServer) { hostPlayer = p; break; }
+                    board.GetQuadImage(hostPlayer.Value, board.PaintColors);
+                    _log.LogInfo("Sent board state to host for relay.");
+                }
+                else
+                {
+                    _log.LogWarning("Could not find host player in PlayerIDs.");
+                    ChatUtils.AddGlobalNotification("Could not find host player to relay board. Broadcast to everyone");
+                    BroadcastToAllPlayers(board);
                 }
 
-                if (hostPlayer == null)
-                {
-                    Logger.LogWarning("[BoardIO] Could not find host player in PlayerIDs. Board not broadcast.");
-                    ChatUtils.AddGlobalNotification("Could not find host player to relay board.");
-                    return;
-                }
 
-                board.GetQuadImage(hostPlayer.Value, board.PaintColors);
-                Logger.LogInfo("[BoardIO] Sent board state to host for relay.");
             }
+        }
+
+        private static void BroadcastToAllPlayers(QuadPainterGPU board)
+        {
+            var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
+
+            // Host path: send directly to all players (server can target anyone)
+            int count = 0;
+            foreach (var player in playerIDs)
+            {
+                board.GetQuadImage(player, board.PaintColors);
+                count++;
+            }
+            _log.LogInfo($"Broadcast to {count} player(s).");
+
         }
     }
 }
