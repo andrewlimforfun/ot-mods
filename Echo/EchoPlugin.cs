@@ -7,6 +7,7 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using Echo.Core;
 using Echo.Core.Commands;
+using Echo.Patches;
 using Alpha;
 using Alpha.Core.Util;
 using HarmonyLib;
@@ -48,8 +49,15 @@ namespace Echo
             InitConfig();
 
             var harmony = new Harmony(ModGUID);
+            harmony.PatchAll(typeof(PlayerMovementControllerPatch));
 
             AlphaPlugin.CommandManager?.Register(new EchoToggleCommand());
+            //AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitSelfCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoTpToCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoWhoIsCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoCopyNameCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoRevertNameCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitCommand());
         }
 
         void InitConfig()

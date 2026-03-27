@@ -5,6 +5,12 @@ A BepInEx mod for [On Together](https://store.steampowered.com/app/2688490/On_To
 
 Type any command into the in-game chat. Commands start with `/` and are **not sent** to other players.
 
+| Command | Short | Description |
+|---------|-------|-------------|
+| `/echotoggle` | `/ht` | Toggle Echo on/off |
+| `/echocopyoutfit <slot>` | `/eco <slot>` | Copy current outfit/appearance to another slot (1–3) |
+| `/echohelp` | `/eh` | List all Echo commands |
+
 ## Configuration
 
 Located in `BepInEx/config/com.andrewlin.ontogether.echo.cfg`
