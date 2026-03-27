@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+.github/
+
 # Ignore our custom generated mod files
 BuildInfo.g.cs
 manifest.json

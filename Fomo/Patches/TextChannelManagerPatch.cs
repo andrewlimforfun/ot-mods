@@ -69,13 +69,10 @@ namespace Fomo.Patches
                 // filter by distance for local messages and include it in the channel label
                 string channel = isLocal ? "Local" : "Global";
 
-                int? distance = null;
-                if (isLocal)
-                {
-                    distance = (int) Vector3.Distance(senderPosition, NetworkSingleton<TextChannelManager>.I.MainPlayer.position);
-                    int localRange = FomoPlugin.ChatSinkLocalRange?.Value ?? FomoPlugin.DefaultChatSinkLocalRange;
-                    if (distance > localRange) return;
-                }
+                int? distance = (int) Vector3.Distance(senderPosition, NetworkSingleton<TextChannelManager>.I.MainPlayer.position);
+
+                int localRange = FomoPlugin.ChatSinkLocalRange?.Value ?? FomoPlugin.DefaultChatSinkLocalRange;
+                if (isLocal && distance > localRange) return;
 
                 // always clean username - hard to read otherwise
                 string cleanUserName = ChatUtils.CleanTMPTags(userName);
