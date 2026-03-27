@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-03-27
+
+### Added
+- Spoofing host feature (experimental)
+
+### Changed
+- Fixed occassional host not found issue
+
 ## [1.0.2] - 2026-03-25
 
 ### Added
