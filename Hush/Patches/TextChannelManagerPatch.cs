@@ -52,6 +52,13 @@ namespace Hush.Patches
 
             reader.Dispose();
 
+            // Drop messages from muted players before any further processing
+            if (HushPlugin.MuteManager?.IsMuted(playerID) == true)
+            {
+                _log.LogInfo($"[Server] Blocked message from muted player {playerID}.");
+                return false;
+            }
+
             // Decode the chat text and apply filter
             string text = Encoding.Unicode.GetString(textBytes);
             FilterResult result = filter.Apply(text);

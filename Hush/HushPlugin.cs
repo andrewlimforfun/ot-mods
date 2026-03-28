@@ -26,9 +26,13 @@ namespace Hush
         public static ConfigEntry<string>? CensorCharConfig { get; private set; }
         public static ConfigEntry<string>? FilterConfigPathConfig { get; private set; }
         public static ChatFilterManager? FilterManager { get; private set; }
+        public static PlayerMuteManager? MuteManager { get; private set; }
 
         public static string FilterConfigPath =>
             FilterConfigPathConfig?.Value ?? Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json");
+
+        public static string MutesConfigPath =>
+            Path.Combine(Paths.ConfigPath, $"{ModGUID}.mutes.json");
 
         private static ManualLogSource? _logger;
 
@@ -38,6 +42,14 @@ namespace Hush
             if (FilterManager == null) return;
             try { FilterManager.Save(FilterConfigPath); }
             catch (Exception ex) { _logger?.LogError($"Failed to save filter config: {ex.Message}"); }
+        }
+
+        /// <summary>Saves the current mute list to disk. Safe to call from commands.</summary>
+        public static void SaveMutes()
+        {
+            if (MuteManager == null) return;
+            try { MuteManager.Save(MutesConfigPath); }
+            catch (Exception ex) { _logger?.LogError($"Failed to save mutes: {ex.Message}"); }
         }
 
         // Thread-safe queue to marshal background-thread work onto the Unity main thread
@@ -84,6 +96,9 @@ namespace Hush
                 };
             }
 
+            MuteManager = new PlayerMuteManager();
+            MuteManager.Load(MutesConfigPath);
+
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(TextChannelManagerPatch));
 
@@ -97,6 +112,10 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushFilterActionCommand());
             AlphaPlugin.CommandManager?.Register(new HushCensorCharCommand());
             AlphaPlugin.CommandManager?.Register(new HushLoadFilterCommand());
+            AlphaPlugin.CommandManager?.Register(new HushMuteCommand());
+            AlphaPlugin.CommandManager?.Register(new HushUnmuteCommand());
+            AlphaPlugin.CommandManager?.Register(new HushTempMuteCommand());
+            AlphaPlugin.CommandManager?.Register(new HushGetMutesCommand());
         }
 
         void InitConfig()
@@ -116,6 +135,8 @@ namespace Hush
             {
                 return;
             }
+
+            MuteManager?.Tick();
 
             // Drain the main thread queue each frame
             while (_mainThreadQueue.TryDequeue(out Action action))

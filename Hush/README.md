@@ -2,11 +2,24 @@
 
 A BepInEx mod for [On Together](https://store.steampowered.com/app/2688490/On_Together/) that lets hosts and clients filter chat messages. Matched words can be censored with asterisks or blocked entirely. The filter list persists between sessions and can be managed from in-game chat commands.
 
-When installed on the host, the filter is enforced server-side before the message is relayed, so every connected client receives the already-filtered version regardless of whether they have the mod. Clients with the mod installed also apply the filter locally as a second layer.
+Hosts can also mute individual players permanently or for a fixed duration, suppressing their messages before they are relayed to any client.
+
+When installed on the host, the filter and mute system are enforced server-side before the message is relayed, so every connected client receives the already-filtered version regardless of whether they have the mod. Clients with the mod installed also apply the word filter locally as a second layer.
 
 ## In-Game Commands
 
 Type any command into the in-game chat. Commands start with `/` and are **not sent** to other players.
+
+### Player muting (host only)
+
+| Command | Short | Description |
+|---|---|---|
+| `/hushmute <player>` | `/hmu` | Permanently mute a player |
+| `/hushtmute <player> <duration>` | `/htm` | Temporarily mute a player (e.g. `10m`, `1h30m`, `30s`) |
+| `/hushunmute <player>` | `/humu` | Unmute a player (accepts Steam ID for offline players) |
+| `/hushgetmutes` | `/hgmu` | List all currently muted players with expiry |
+
+**Player query formats** — name (partial match), Steam ID suffix (digits only), or `_host`.
 
 ### Word management
 
@@ -56,6 +69,8 @@ Located in `BepInEx/config/com.andrewlin.ontogether.hush.cfg`
 | `Filter > ConfigPath` | *(see below)* | Path to the filter word list JSON file |
 
 The filter word and pattern list is stored separately in `BepInEx/config/com.andrewlin.ontogether.hush.filter.json` and is updated automatically whenever you add or remove an entry via a chat command.
+
+The player mute list (permanent and timed) is stored in `BepInEx/config/com.andrewlin.ontogether.hush.mutes.json` and is updated automatically on every mute/unmute. Timed mute expiry times survive game restarts.
 
 ## Installation
 

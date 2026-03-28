@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.5] - 2026-03-28
+
+### Added
+
+- Player mute system (host only): suppress all messages from specific players server-side.
+- `/hushmute <player>` — permanently mute a player by name or Steam ID suffix.
+- `/hushtmute <player> <duration>` — timed mute with ISO 8601 / `hh:mm:ss` duration (e.g. `10m`, `1h30m`, `30s`).
+- `/hushunmute <player>` — remove a permanent or timed mute. Accepts Steam ID for offline players.
+- `/hushgetmutes` — list all currently muted players with their expiry time.
+- Mute list persisted to `BepInEx/config/com.andrewlin.ontogether.hush.mutes.json`; timed mute expiry times are preserved across game restarts.
+
 ## [0.0.1] - 2026-03-20
 
 ### Added
