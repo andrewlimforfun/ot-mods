@@ -75,7 +75,7 @@ namespace Alpha.Core.Util
             }
         }
 
-        public static List<PlayerDetail> FindAllPlayers(Func<string, PlayerID, PlayerIDInfo, NetworkTransform, bool> predicate)
+        public static List<PlayerDetail> FindPlayers(Func<string, PlayerID, PlayerIDInfo, NetworkTransform, bool> predicate)
         {
             var controller = NetworkSingleton<PlayerPanelController>.I;
             if (controller == null) return new List<PlayerDetail>();
@@ -97,6 +97,7 @@ namespace Alpha.Core.Util
         {
             var controller = NetworkSingleton<PlayerPanelController>.I;
             if (controller == null) return null;
+
             for (int i = 0; i < controller.PlayerIDs.Count; i++)
             {
                 var steamId = controller.PlayerSteamIDs[i];
@@ -112,12 +113,6 @@ namespace Alpha.Core.Util
         public static PlayerDetail? FindPlayerBySteamID(string steamId) =>
             FindPlayer((_steamId, _pid, _info, _transform) => _steamId == steamId);
 
-        public static PlayerDetail? FindPlayerBySteamIDSuffix(string suffix) =>
-            FindPlayer((_steamId, _pid, _info, _transform) => _steamId.EndsWith(suffix));
-
-        public static PlayerDetail? FindPlayerBySteamPersona(string persona) =>
-            FindPlayer((_steamId, _pid, _info, _transform) => SteamUtils.GetSteamPersonaName(_steamId)?.Contains(persona) == true);
-
         /// <summary>
         /// Resolves a free-form query to a player using the standard priority chain:
         /// Steam ID suffix (if all digits) → fuzzy display name → Steam persona name.
@@ -126,14 +121,46 @@ namespace Alpha.Core.Util
         {
             if (string.IsNullOrWhiteSpace(query)) return null;
 
-            if (query.Equals("host", StringComparison.OrdinalIgnoreCase)) return GetHost();
+            if (query.Equals("_host", StringComparison.OrdinalIgnoreCase)) return GetHost();
 
-            bool allDigits = _digitsRegex.IsMatch(query);
-            PlayerDetail? target = allDigits ? FindPlayerBySteamIDSuffix(query) : null;
-            target ??= FuzzyFindPlayerByName(query);
-            target ??= FindPlayerBySteamPersona(query);
+            PlayerDetail? target = FindPlayer((_steamId, _pid, _info, _transform) =>
+                QueryMatchesPlayer(_steamId, _pid, _info, _transform, query));
             return target;
         }
+
+        public static List<PlayerDetail> FindPlayersByQuery(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return new List<PlayerDetail>();
+            List<PlayerDetail> matches = FindPlayers((_steamId, _pid, _info, _transform) =>
+                QueryMatchesPlayer(_steamId, _pid, _info, _transform, query));
+            return matches;
+        }
+
+        private static bool QueryMatchesPlayer(string steamId, PlayerID id, PlayerIDInfo info, NetworkTransform transform, string query)
+        {
+            // If the query is all digits, check if it matches the end of the Steam ID
+            bool allDigits = _digitsRegex.IsMatch(query);
+            if (allDigits && steamId.EndsWith(query))
+                return true;
+
+            // Check if the query matches the player's display name (with TMP tags)
+            string name = transform.GetComponent<PlayerController>().PlayerNameText.text;
+            if (query.Contains("<") && name.StartsWith(query, StringComparison.OrdinalIgnoreCase))
+                return true;
+            string cleanName = ChatUtils.CleanTMPTags(name).Trim();
+
+            // Check if the query matches in the player's display name (without TMP tags)
+            if (cleanName.Contains(query, StringComparison.OrdinalIgnoreCase) || Regex.IsMatch(cleanName, query, RegexOptions.IgnoreCase))
+                return true;
+
+            // Check if the query matches the player's Steam persona name
+            string? persona = SteamUtils.GetSteamPersonaName(steamId);
+            if (persona != null && persona.Contains(query, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
+
 
         public static PlayerDetail? GetHost()
         {
@@ -156,7 +183,7 @@ namespace Alpha.Core.Util
         }
         public static List<PlayerDetail> GetAllPlayers()
         {
-            return FindAllPlayers((_sid, _pid, _info, _t) => true);
+            return FindPlayers((_sid, _pid, _info, _t) => true);
         }
 
         public static string GetLobbyCode()
@@ -164,50 +191,19 @@ namespace Alpha.Core.Util
             return MonoSingleton<MultiplayerManager>.I.LobbyCode;
         }
 
+        public static string GetLobbyName()
+        {
+            return MonoSingleton<MultiplayerManager>.I.LobbyName;
+        }
+
         public static int GetPlayerCount()
         {
             return NetworkSingleton<PlayerPanelController>.I?.IDInfos?.Count ?? 0;
         }
 
-        /// <summary>
-        /// Fuzzy-finds a player by username. Matches are tried against the clean name (TMP tags stripped)
-        /// using the following priority: exact → starts-with → contains (all case-insensitive).
-        /// The query is also stripped of TMP tags before comparison.
-        /// </summary>
-        public static PlayerDetail? FuzzyFindPlayerByName(string query)
+        public static int GetMaxPlayers()
         {
-            if (string.IsNullOrEmpty(query)) return null;
-
-            string cleanQuery = ChatUtils.CleanTMPTags(query).Trim();
-            if (string.IsNullOrEmpty(cleanQuery)) return null;
-
-            var allPlayers = GetAllPlayers();
-
-            // Priority 1: exact match (case-insensitive)
-            foreach (var player in allPlayers)
-            {
-                string cleanName = ChatUtils.CleanTMPTags(player.UserName).Trim();
-                if (string.Equals(cleanName, cleanQuery, StringComparison.OrdinalIgnoreCase))
-                    return player;
-            }
-
-            // Priority 2: starts-with match (case-insensitive)
-            foreach (var player in allPlayers)
-            {
-                string cleanName = ChatUtils.CleanTMPTags(player.UserName).Trim();
-                if (cleanName.StartsWith(cleanQuery, StringComparison.OrdinalIgnoreCase))
-                    return player;
-            }
-
-            // Priority 3: contains match (case-insensitive)
-            foreach (var player in allPlayers)
-            {
-                string cleanName = ChatUtils.CleanTMPTags(player.UserName).Trim();
-                if (cleanName.Contains(cleanQuery, StringComparison.OrdinalIgnoreCase))
-                    return player;
-            }
-
-            return null;
+            return MonoSingleton<MultiplayerManager>.I._lobbyManager.CurrentLobby.MaxPlayers;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Alpha.Core.Command
         {
             var sorted = new SortedSet<IChatCommand>(_commands);
 
-            bool verbose = args.Length == 1 && args[0].ToLower() == "verbose";
+            bool verbose = args.Length == 1 && (args[0].ToLower() == "verbose" || args[0].ToLower() == "v");
             bool lookup  = args.Length == 1 && !verbose;
 
             if (args.Length == 0 || verbose)
@@ -37,6 +37,8 @@ namespace Alpha.Core.Command
                 ChatUtils.AddGlobalNotification($"/{_namespace}help — available commands:");
                 foreach (var cmd in sorted)
                 {
+                    if (cmd.IsHidden) continue; // skip hidden commands in general listing
+
                     string shortPart = string.IsNullOrWhiteSpace(cmd.ShortName) ? "" : $" (/{cmd.ShortName})";
                     string descPart  = verbose ? $": {cmd.Description}" : "";
                     ChatUtils.AddGlobalNotification($"/{cmd.Name}{shortPart}{descPart}");
@@ -44,6 +46,7 @@ namespace Alpha.Core.Command
                 return;
             }
 
+            // hidden commands can still be looked up directly by name
             if (lookup)
             {
                 string needle = args[0].ToLower();

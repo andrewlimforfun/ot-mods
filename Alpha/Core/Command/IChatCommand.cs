@@ -10,6 +10,9 @@ namespace Alpha.Core.Command
         
         // for help text categorization, should be the mod name or feature name that owns this command    
         string Namespace { get; } 
+
+        bool IsHidden => false; // if true, won't show in help listing but can still be executed if you know the name
+        
         void Execute(string[] args);
 
         // tostring

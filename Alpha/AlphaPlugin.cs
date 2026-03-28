@@ -9,6 +9,7 @@ using Alpha.Core.Util;
 using Alpha.Patches;
 using HarmonyLib;
 using UnityEngine;
+using Alpha.Core.Commands;
 
 
 namespace Alpha
@@ -46,6 +47,10 @@ namespace Alpha
 
             // Shared command manager — consuming mods register their commands in their own Awake()
             CommandManager = new ChatCommandManager();
+            CommandManager.Register(new AlphaMyPositionCommand());
+            CommandManager.Register(new AlphaWhoIsCommand());
+            CommandManager.Register(new AlphaServerInfoCommand());
+            CommandManager.Register(new AlphaAddNotificationCommand());
         }
 
         void InitConfig()
