@@ -9,7 +9,7 @@ namespace Echo.Core.Commands
     /// </summary>
     public class EchoCopyNameCommand : IChatCommand
     {
-        static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("Echo.ECONC");
+        static readonly ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource("Echo.ECONC");
 
         public string Name => "echocopyname";
         public string ShortName => "ecn";
@@ -27,7 +27,6 @@ namespace Echo.Core.Commands
             string query = string.Join(" ", args).Trim();
 
             PlayerDetail? target = PlayerUtils.FindPlayerByQuery(query);
-
             if (target == null)
             {
                 ChatUtils.AddGlobalNotification($"Player \"{query}\" not found.");
@@ -37,7 +36,7 @@ namespace Echo.Core.Commands
             string nameWithTags = target.UserName; // raw TMP string from PlayerNameText
             string cleanName = ChatUtils.CleanTMPTags(nameWithTags).Trim();
 
-            Logger.LogInfo($"Copying name from {cleanName}: \"{nameWithTags}\"");
+            _log.LogInfo($"Copying name from {cleanName}: \"{nameWithTags}\"");
             NameUtil.SetName(nameWithTags);
             ChatUtils.AddGlobalNotification($"Name copied from {nameWithTags}");
         }

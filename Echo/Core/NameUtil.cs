@@ -3,6 +3,7 @@ using Alpha.Core.Util;
 using BepInEx.Logging;
 using PurrNet;
 using UnityEngine;
+using BepInEx.Bootstrap;
 
 namespace Echo.Core
 {
@@ -41,6 +42,12 @@ namespace Echo.Core
                 tcm.MainCustomizationController.UpdatePlayerInfo(dm.PlayerData.GetPlayerIdInfo());
                 MonoSingleton<UIManager>.I.PlayerText.text = newName;
                 tcm.UserName = newName;
+            }
+            
+            // set officer balls configBaseName to new name so it shows in the player list and above the head
+            if (Chainloader.PluginInfos.TryGetValue("officerballs.StatusManager", out var basicInfo))
+            {
+                ChatUtils.UISendMessage($"/setname {newName}");
             }
 
             Logger.LogInfo($"Name set to: {newName}");
