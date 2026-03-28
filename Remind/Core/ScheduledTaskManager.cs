@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Xml;
 using BepInEx.Logging;
 using Alpha.Core.Util;
 
@@ -47,7 +46,7 @@ namespace Remind.Core
         /// </summary>
         public bool TryScheduleIn(string delay, Action action, out ScheduledTask? task, out string error)
         {
-            if (TryParseDelay(delay, out TimeSpan ts) && ts > TimeSpan.Zero)
+            if (TimeUtils.TryParseDuration(delay, out TimeSpan ts) && ts > TimeSpan.Zero)
             {
                 task = ScheduleIn(ts, action);
                 error = "";
@@ -56,22 +55,6 @@ namespace Remind.Core
             task = null;
             error = $"Invalid duration: '{delay}'. Use ISO 8601 (1h30m, 15s, PT1H30M) or hh:mm:ss.";
             return false;
-        }
-
-        private static bool TryParseDelay(string input, out TimeSpan result)
-        {
-            // Try ISO 8601: attach PT prefix if not already present (case-insensitive)
-            string upper = input.ToUpperInvariant();
-            string iso = upper.StartsWith("P") ? upper : "PT" + upper;
-            try
-            {
-                result = XmlConvert.ToTimeSpan(iso);
-                return true;
-            }
-            catch { }
-
-            // Fall back to TimeSpan.TryParse (hh:mm:ss, mm:ss, etc.)
-            return TimeSpan.TryParse(input, out result);
         }
 
         /// <summary>Schedule <paramref name="action"/> to run at a specific UTC instant.</summary>
