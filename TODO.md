@@ -1,5 +1,9 @@
 # TODO
 
+## Typeahead Adapter
+
+- [ ] Impl jaide command api adapter
+
 ## Remind
 
 - [ ] Formattable message
@@ -15,7 +19,7 @@
 
 ## Chalky
 
-- [ ] Test host spoofing
+- [x] Test host spoofing : FAIL
 
 ## Fomo
 

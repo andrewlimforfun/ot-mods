@@ -26,7 +26,7 @@ namespace Alpha.Core.Commands
             ChatUtils.AddGlobalNotification($"Lobby Name: {PlayerUtils.GetLobbyName()}");
             ChatUtils.AddGlobalNotification($"Lobby Code: {PlayerUtils.GetLobbyCode()}");
             ChatUtils.AddGlobalNotification($"Player Count: {PlayerUtils.GetPlayerCount()}/{PlayerUtils.GetMaxPlayers()}");
-            ChatUtils.AddGlobalNotification($"Host: {host?.UserNameTMP} (Steam: {host?.SteamPersonaName})");
+            ChatUtils.AddGlobalNotification($"Host: {host?.UserName} (Steam: {host?.SteamPersonaName})");
         }
     }
 }

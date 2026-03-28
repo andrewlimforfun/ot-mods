@@ -13,9 +13,11 @@ namespace Alpha.Core.Util
         public readonly NetworkTransform PlayerTransform;
         public TextMeshProUGUI UserNameTMP => PlayerTransform.GetComponent<PlayerController>().PlayerNameText;
         public string UserName => UserNameTMP.text;
+        public string UserNameClean => ChatUtils.CleanTMPTags(UserName).Trim();
         public string SteamPersonaName => SteamUtils.GetSteamPersonaName(SteamID);
-        public Vector3 Position => PlayerTransform.position;
-
+        // dont use PlayerTransform.position directly since it may not be valid for the local player; 
+        // use the Position property instead which handles this case
+        public Vector3 Position => PlayerTransform.transform.position;
 
         public PlayerDetail(string steamID, PlayerID playerID, PlayerIDInfo playerIDInfo, NetworkTransform playerTransform)
         {
