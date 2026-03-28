@@ -13,6 +13,8 @@ namespace Fomo.Core.Commands
             $"Get or set the local range for the chat sink. " +
             $"No args = get current value. Pass a number to set it. " +
             $"Current: {(FomoPlugin.ChatSinkLocalRange?.Value ?? FomoPlugin.DefaultChatSinkLocalRange)}";
+
+        public bool IsHidden => true; // this is a more technical setting that most users won't need to know about, but it can be useful for troubleshooting, so keep it visible in help listing
         public string Namespace => "fomo";
 
         public void Execute(string[] args)
