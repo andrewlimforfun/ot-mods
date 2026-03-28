@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using BepInEx.Logging;
 
 namespace Alpha.Core.Util
 {
@@ -19,6 +20,7 @@ namespace Alpha.Core.Util
     /// </summary>
     public sealed class TokenValidator
     {
+        private static readonly ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource("Alpha.TV");
         private readonly string _secretHash;
 
         /// <param name="secretHash">
@@ -37,12 +39,23 @@ namespace Alpha.Core.Util
         public bool IsValid(string? token)
         {
             if (string.IsNullOrEmpty(_secretHash)) return true;
-            if (string.IsNullOrEmpty(token)) return false;
+            if (string.IsNullOrEmpty(token))
+            {
+                _log.LogWarning("Token is null or empty."); 
+                return false;
+            }
 
             using var sha = SHA256.Create();
             byte[] bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(token));
             string hash = BitConverter.ToString(bytes).Replace("-", "").ToLower();
-            return hash == _secretHash;
+
+            bool isValid = hash == _secretHash;
+            if (!isValid)
+                _log.LogWarning($"Invalid token. Computed hash: {hash} does not match expected hash.");
+            else
+                _log.LogInfo("Token is valid.");
+                
+            return isValid;
         }
     }
 }

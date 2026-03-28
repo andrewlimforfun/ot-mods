@@ -25,8 +25,8 @@
         <DndVersion>1.0.2</DndVersion>
         <FomoVersion>1.2.2</FomoVersion>
         <RemindVersion>1.1.7</RemindVersion>
-        <HushVersion>0.0.6</HushVersion>
-        <EchoVersion>0.0.5</EchoVersion>
+        <HushVersion>0.1.0</HushVersion>
+        <EchoVersion>0.1.0</EchoVersion>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>

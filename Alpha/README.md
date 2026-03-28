@@ -3,8 +3,21 @@
 A shared BepInEx mod for **On Together** that provides common utilities and a command framework for other mods to build on.
 
 - **Author:** AndrewLin
-- **Version:** 0.0.1
 - **Repository:** https://github.com/andrewlimforfun/ot-mods
+
+---
+
+## In-Game Commands
+
+Alpha registers its own `/alpha` namespace commands. Type them in chat — they are intercepted locally and not sent to other players.
+
+| Command | Short | Description |
+|---|---|---|
+| `/alphaserverinfo` | `/asi` | Show lobby name, code, player count, and host info |
+| `/alphawhois [player]` | `/awi` | Show info about a player (name, Steam ID, position) |
+| `/alphamyposition` | `/amp` | Show your current world position |
+| `/alphaaddnotification <message>` | `/aan` | Post a local notification to your own chat |
+| `/alphahelp` | `/ah` | List all Alpha commands |
 
 ---
 
@@ -38,9 +51,9 @@ When the first command for a namespace is registered, a `/{namespace}help` comma
 
 **Built-in help usage:**
 ```
-/mymodhelpcommand
-/mymodhelp verbose       — includes descriptions
-/mymodhelp mycmd         — looks up a single command
+/{mymod}help
+/{mymod}help verbose       — includes descriptions
+/{mymod}help mycmd         — looks up a single command
 ```
 
 ---
@@ -55,6 +68,20 @@ When the first command for a namespace is registered, a `/{namespace}help` comma
 | `CleanTMPTags(input)` | Strips TextMeshPro formatting tags (e.g. `<#ff0000>`, `<b>`) from a string. |
 | `CleanCommand()` | Hides a slash command from chat after it is processed (clears the input field). |
 | `UISendMessage(text)` | Injects text into the chat input field and submits it programmatically. |
+
+---
+
+### Time Utilities (`TimeUtils`)
+
+| Method | Description |
+|--------|-------------|
+| `TryParseDuration(input, out TimeSpan result)` | Parses ISO 8601 durations (`1h30m`, `15s`, `PT1H30M`) and `hh:mm:ss` / `TimeSpan` strings. Returns `false` if unparseable. |
+
+**Example:**
+```csharp
+if (TimeUtils.TryParseDuration("10m", out TimeSpan duration))
+    // duration == TimeSpan.FromMinutes(10)
+```
 
 ---
 

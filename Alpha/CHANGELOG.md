@@ -4,6 +4,20 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.6] - 2026-03-29
+
+### Added
+
+- **`TimeUtils`** — `TryParseDuration(string, out TimeSpan)` parses ISO 8601 duration strings (`1h30m`, `15s`, `PT1H30M`) and `hh:mm:ss` / `TimeSpan` formats. Extracted from `Remind.ScheduledTaskManager` so any mod can share the same duration-parsing logic without a dependency on Remind.
+
+- In-game commands registered under the `alpha` namespace:
+  - `/alphaserverinfo` (`/asi`) — show lobby name, code, player count, and host.
+  - `/alphawhois [player]` (`/awi`) — show info about a player (name, Steam ID, position).
+  - `/alphamyposition` (`/amp`) — show your current world position.
+  - `/alphaaddnotification <message>` (`/aan`) — post a local notification to your own chat.
+  - `/alphahelp` (`/ah`) — list all Alpha commands.
+
+---
 ## [0.0.2] - 2026-03-18
 
 ### Added
@@ -13,6 +27,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - PlayerDetail that contains everything known about a player
 
 ## [0.0.1] - 2026-03-18
+
 
 ### Added
 

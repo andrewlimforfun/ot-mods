@@ -18,7 +18,7 @@ namespace Echo.Core.Commands
 
         public void Execute(string[] args)
         {
-            if (!EchoPlugin.Validator.IsValid(EchoPlugin.AccessToken?.Value))
+            if (EchoPlugin.AccessToken == null || !EchoPlugin.Validator.IsValid(EchoPlugin.AccessToken.Value.Trim()))
             {
                 ChatUtils.AddGlobalNotification("Access denied: You do not have permission to use this command.");
                 return;
