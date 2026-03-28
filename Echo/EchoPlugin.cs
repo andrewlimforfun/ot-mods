@@ -52,9 +52,7 @@ namespace Echo
             harmony.PatchAll(typeof(PlayerMovementControllerPatch));
 
             AlphaPlugin.CommandManager?.Register(new EchoToggleCommand());
-            //AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitSelfCommand());
             AlphaPlugin.CommandManager?.Register(new EchoTpToCommand());
-            AlphaPlugin.CommandManager?.Register(new EchoWhoIsCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoRevertNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitCommand());
