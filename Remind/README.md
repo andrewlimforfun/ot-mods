@@ -10,7 +10,6 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 |---|---|---|
 | `/remindhelp` | `/rh` | List all available commands |
 | `/remindtoggle` | `/rt` | Toggle Remind on/off |
-| `/remindshowcommand` | `/rsc` | Toggle showing commands in chat |
 | `/remindchatconfirmation` | `/rcc` | Toggle sending confirmation in chat after scheduling reminder |
 | `/remindmein` | `/rmi` | Show a private notification after a delay |
 | `/remindmeat` | `/rma` | Show a private notification at a specific time |

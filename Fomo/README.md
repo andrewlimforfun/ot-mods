@@ -18,9 +18,7 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 
 - `/fomohelp` (`/fh`) :: Lists all available commands
 - `/fomotoggle` (`/ft`) :: Toggle Fomo feature on/off
-- `/fomoshowcommand` (`/fsc`) :: Toggle show/hide Fomo commands in chat
 - `/fomomessagelimit [global|local] <number>` (`/fml`) :: Set the global or local chat message window size
-- `/fomochatsinklocalrange [number]` (`/fcslr`) :: Get or set the local range for the chat sink; no arg = get, number = set
 - `/fomochatsinkcleantags` (`/fcsct`) :: Toggle stripping TMP tags from all sink output
 - `/fomoincomingmode [global|local]` (`/fim`) :: Toggle or set the channel for incoming messages from external sources (Telegram, WebSocket); no argument toggles
 
