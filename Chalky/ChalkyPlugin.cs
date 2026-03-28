@@ -50,6 +50,7 @@ namespace Chalky
             AlphaPlugin.CommandManager?.Register(new ChalkyGetBoardsCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkyLoadBoardCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkySaveBoardCommand());
+            AlphaPlugin.CommandManager?.Register(new ChalkySpoofHostCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkySetSize());
             AlphaPlugin.CommandManager?.Register(new ChalkyToggleCommand());
         }
