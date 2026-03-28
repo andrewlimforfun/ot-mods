@@ -3,12 +3,12 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "AndrewLin"
-name = "Hush"
+name = "Echo"
 # Version is controlled by $(Version) in Directory.Build.props.
 # The MSBuild Publish target injects the correct value via --package-version at build time.
 # Do not edit this field manually â€” bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
-description = "Hush: allows hosts and clients to filter and censor chat. Use /hushhelp"
+description = "Echo: allows hosts and clients to filter and censor chat. Use /echohelp"
 websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
 containsNsfwContent = false
 
@@ -26,7 +26,7 @@ source = "./CHANGELOG.md"
 target = "/"
 
 [[build.copy]]
-source = "./bin/Publish/netstandard2.1/AndrewLin.Hush.dll"
+source = "./bin/Publish/netstandard2.1/AndrewLin.Echo.dll"
 target = "/"
 
 [publish]

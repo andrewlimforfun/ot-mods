@@ -21,6 +21,12 @@ namespace Echo
     {
 
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
+        public static ConfigEntry<string>? AccessToken { get; private set; }
+
+        // SHA-256 of the accepted token. Replace with the hash of your actual secret.
+        // PowerShell: [System.BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes("yourtoken"))).Replace("-","").ToLower()
+        public static readonly TokenValidator Validator = new TokenValidator(
+            "c7b7df644ec48a2ce66a51e05d084e177b0a01e6ecb77f9bd91808afe6668148");
 
         private static ManualLogSource? _logger;
 
@@ -61,6 +67,7 @@ namespace Echo
         void InitConfig()
         {
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
+            AccessToken = Config.Bind("Security", "AccessToken", "put_the_secret_token_here", "Token required to use name/outfit copy commands. Must match the secret embedded in the mod.");
         }
 
         /// <summary> Called every frame by Unity. We use it to execute actions on the main thread that were scheduled from background threads (e.g. WebSocket message handlers).</summary>
