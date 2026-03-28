@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Alpha.Core.Util;
 
 namespace Alpha.Core.Command
@@ -34,15 +35,16 @@ namespace Alpha.Core.Command
 
             if (args.Length == 0 || verbose)
             {
-                ChatUtils.AddGlobalNotification($"/{_namespace}help — available commands:");
+                var sb = new StringBuilder($"/{_namespace}help — available commands:");
                 foreach (var cmd in sorted)
                 {
                     if (cmd.IsHidden) continue; // skip hidden commands in general listing
 
                     string shortPart = string.IsNullOrWhiteSpace(cmd.ShortName) ? "" : $" (/{cmd.ShortName})";
                     string descPart  = verbose ? $": {cmd.Description}" : "";
-                    ChatUtils.AddGlobalNotification($"/{cmd.Name}{shortPart}{descPart}");
+                    sb.Append($"\n/{cmd.Name}{shortPart}{descPart}");
                 }
+                ChatUtils.AddGlobalNotification(sb.ToString());
                 return;
             }
 

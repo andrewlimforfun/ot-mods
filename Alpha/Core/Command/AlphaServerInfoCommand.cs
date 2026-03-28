@@ -23,10 +23,11 @@ namespace Alpha.Core.Commands
         public void Execute(string[] args)
         {
             var host = PlayerUtils.GetHost();
-            ChatUtils.AddGlobalNotification($"Lobby Name: {PlayerUtils.GetLobbyName()}");
-            ChatUtils.AddGlobalNotification($"Lobby Code: {PlayerUtils.GetLobbyCode()}");
-            ChatUtils.AddGlobalNotification($"Player Count: {PlayerUtils.GetPlayerCount()}/{PlayerUtils.GetMaxPlayers()}");
-            ChatUtils.AddGlobalNotification($"Host: {host?.UserName} (Steam: {host?.SteamPersonaName})");
+            ChatUtils.AddGlobalNotification(
+                $"Lobby Name: {PlayerUtils.GetLobbyName()}\n" +
+                $"Lobby Code: {PlayerUtils.GetLobbyCode()}\n" +
+                $"Player Count: {PlayerUtils.GetPlayerCount()}/{PlayerUtils.GetMaxPlayers()}\n" +
+                $"Host: {host?.UserName} (Steam: {host?.SteamPersonaName})");
         }
     }
 }

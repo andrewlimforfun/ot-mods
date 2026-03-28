@@ -12,13 +12,14 @@ namespace FomoTelegram.Commands
         public string Namespace => "fomo";
         public void Execute(string[] args)
         {
-            ChatUtils.AddGlobalNotification("To set up Telegram integration you need:");
-            ChatUtils.AddGlobalNotification("1. A Telegram Bot API key from @BotFather.");
-            ChatUtils.AddGlobalNotification("2. Your Telegram chat ID from @userinfobot.");
-            ChatUtils.AddGlobalNotification("3. Update the API key and chat ID in the mod configuration.");
-            ChatUtils.AddGlobalNotification("Config path: " + FomoTelegramPlugin.ConfigPath);
-            ChatUtils.AddGlobalNotification("4. Then restart the game.");
-            ChatUtils.AddGlobalNotification("Inputting API key and chat ID via chat commands is not supported for security reasons. Please update the config file directly.");
+            ChatUtils.AddGlobalNotification(
+                "To set up Telegram integration you need:\n" +
+                "1. A Telegram Bot API key from @BotFather.\n" +
+                "2. Your Telegram chat ID from @userinfobot.\n" +
+                "3. Update the API key and chat ID in the mod configuration.\n" +
+                "Config path: " + FomoTelegramPlugin.ConfigPath + "\n" +
+                "4. Then restart the game.\n" +
+                "Inputting API key and chat ID via chat commands is not supported for security reasons. Please update the config file directly.");
         }
     }
 }
