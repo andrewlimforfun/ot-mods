@@ -6,7 +6,7 @@ namespace = "AndrewLin"
 name = "FomoTelegram"
 # Version is controlled by $(Version) in Directory.Build.props.
 # The MSBuild Publish target injects the correct value via --package-version at build time.
-# Do not edit this field manually â€” bump $(Version) in Directory.Build.props instead.
+# Do not edit this field manually Ã¢â‚¬â€ bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
 description = "FomoTelegram: A Fomo submod that relays On-Together chat messages to a Telegram chat via a Telegram Bot. Use /fomohelp and look for /fomotelegram commands"
 websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
@@ -14,7 +14,7 @@ containsNsfwContent = false
 
 [package.dependencies]
 BepInEx-BepInExPack = "5.4.2305"
-AndrewLin-Fomo = "1.2.0"
+AndrewLin-Fomo = "1.2.2"
 
 [build]
 icon = "../icon.png"

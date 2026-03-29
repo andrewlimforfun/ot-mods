@@ -21,13 +21,14 @@ A [Fomo](https://thunderstore.io/c/on-together/p/AndrewLin/Fomo/) add-on for [On
 
 1. Open Telegram and message **@BotFather**
 2. Send `/newbot` and follow the prompts
-3. Copy the **API token** (looks like `123456789:ABCdefGHI…`)
+3. Copy the **API token** (looks like `123456789:ABCdefGHI…`) to somewhere safe
+4. Say hello to your own bot so it gains the rights to talk to you.
 
 ### 2. Find your Chat ID
 
-1. Add **@userinfobot** to your group or DM it
-2. It will reply with the chat ID
-3. Group IDs are negative (e.g. `-1001234567890`); user IDs are positive
+1. Say hello to user **@userinfobot**.
+2. It will reply with your chat ID.
+3. User chat IDs are positive e.g. `123456789`
 
 ### 3. Configure the mod
 
@@ -42,7 +43,7 @@ Fill in `TelegramBotApiKey` and `TelegramChatId`, then restart the game.
 ```ini
 [Telegram]
 TelegramBotApiKey = 123456789:ABCdefGHI…
-TelegramChatId    = -1001234567890
+TelegramChatId    = 234567890
 
 [Filters]
 RelayGlobalChat    = true
