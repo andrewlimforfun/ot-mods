@@ -22,7 +22,7 @@
 
     <!-- Reference the core Fomo mod so we can use IChatSink, ChatEntry, etc. -->
     <ItemGroup>
-        <ProjectReference Include="..\Fomo\Fomo.csproj" />
+        <ProjectReference Include="..\Fomo\Fomo.csproj"  SetConfiguration="Configuration=Debug"/>
     </ItemGroup>
 
 

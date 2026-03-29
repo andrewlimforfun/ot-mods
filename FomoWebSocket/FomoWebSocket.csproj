@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <!-- Reference main Fomo mod for its public API (ChatSinkManager, CommandManager, etc.) -->
-    <ProjectReference Include="..\Fomo\Fomo.csproj" />
+    <ProjectReference Include="..\Fomo\Fomo.csproj"  SetConfiguration="Configuration=Debug"/>
   </ItemGroup>
 
   <!-- FomoWebSocket ships Fleck.dll — copy it alongside the main assembly when installing locally -->
