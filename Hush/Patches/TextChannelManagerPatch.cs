@@ -5,6 +5,7 @@ using PurrNet;
 using PurrNet.Packing;
 using PurrNet.Transports;
 using Hush.Core;
+using Alpha.Core.Util;
 
 namespace Hush.Patches
 {
@@ -18,7 +19,7 @@ namespace Hush.Patches
     public static class TextChannelManagerPatch
     {
         private static readonly ManualLogSource _log =
-            Logger.CreateLogSource($"{HushPlugin.ModName}.Patch");
+            Logger.CreateLogSource($"{HushPlugin.ModName}.TCMP");
 
         /// <summary>
         /// Intercepts the chat RPC on the server before the relay broadcast.
@@ -55,6 +56,7 @@ namespace Hush.Patches
             // Drop messages from muted players before any further processing
             if (HushPlugin.MuteManager?.IsMuted(playerID) == true)
             {
+                ChatUtils.AddGlobalNotification($"Muted message from {playerID}.");
                 _log.LogInfo($"[Server] Blocked message from muted player {playerID}.");
                 return false;
             }
@@ -65,6 +67,7 @@ namespace Hush.Patches
 
             if (result.WasBlocked)
             {
+                ChatUtils.AddGlobalNotification($"Filter blocked message from {playerID}.");
                 _log.LogInfo($"[Server] Blocked message from {playerID}: \"{text}\"");
                 return false; // Skip entirely — message is never relayed
             }

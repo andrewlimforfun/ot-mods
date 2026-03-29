@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Alpha.Core.Util;
 using BepInEx.Logging;
 using Newtonsoft.Json;
 
@@ -64,7 +65,12 @@ namespace Hush.Core
             foreach (string id in expired)
             {
                 _timedMutes.Remove(id);
-                _log.LogInfo($"Timed mute expired: {id}");
+                // try to get player name for better UX in the notification, but fall back to Steam ID if not found
+                PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(id);
+                string displayId = player != null ? $"{player.UserName} ({id})" : id;
+
+                ChatUtils.AddGlobalNotification($"Timed mute expired for player {displayId}.");
+                _log.LogInfo($"Timed mute expired: {player?.UserNameClean ?? id}");
             }
         }
 

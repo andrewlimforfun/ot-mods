@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2026-03-29
+
+### Changed
+
+- Add notification on timed mute expiry
+- Add notification on blocked players
+
 ## [0.1.0] - 2026-03-29
 
 ### Added
