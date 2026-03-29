@@ -2,6 +2,21 @@
 
 All notable changes to FomoChatLog will be documented in this file.
 
+## [1.2.4] - 2026-03-29
+
+### Added
+- **Rolling daily log files** — each day's chat is written to a separate file with the date embedded in the filename (e.g. `on_together_chat_log_2026-03-29.txt`); no more single file that wipes itself at midnight
+- `MaxLogDays` config (default: `5`) — number of daily log files to keep; oldest files are pruned automatically on startup
+- `ChatLogManager` internal class — extracted path resolution, directory creation, and log pruning out of the plugin entry point
+
+### Changed
+- `ChatLogPath` config is now a **base path**; the date (`yyyy-MM-dd`) is appended automatically before the file extension
+- `/fomochatloggetpath` now shows today's full dated path
+- `/fomochatlogsetpath` sets the base path (date suffix is still appended automatically)
+
+### Removed
+- Previous behavior of deleting the single log file when a new day began
+
 ## [0.2.2] - 2026-03-04
 
 ### Changed

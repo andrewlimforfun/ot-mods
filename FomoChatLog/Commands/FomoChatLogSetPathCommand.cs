@@ -28,7 +28,7 @@ namespace FomoChatLog.Commands
                 return;
             }
 
-            FomoChatLogPlugin.SetChatLogPath(newPath);
+            FomoChatLogPlugin.ChatLog.SetBasePath(newPath);
 
             try
             {

@@ -13,7 +13,7 @@ namespace FomoChatLog.Commands
         public string Namespace => "fomo";
         public void Execute(string[] args)
         {
-            ChatUtils.AddGlobalNotification($"Chat log path: {FomoChatLogPlugin.GetChatLogPath()}");
+            ChatUtils.AddGlobalNotification($"Chat log path: {FomoChatLogPlugin.ChatLog.GetTodayPath()}");
         }
     }
 }

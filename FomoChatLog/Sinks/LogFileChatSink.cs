@@ -23,7 +23,7 @@ namespace FomoChatLog.Sinks
 
             try
             {
-                string logPath = FomoChatLogPlugin.GetChatLogPath();
+                string logPath = FomoChatLogPlugin.ChatLog.GetTodayPath();
                 string? format = entry.IsNotification
                                 ? FomoChatLogPlugin.NotificationFormat?.Value
                                 : FomoChatLogPlugin.MessageFormat?.Value;

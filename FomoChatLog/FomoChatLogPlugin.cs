@@ -7,6 +7,7 @@ using Fomo;
 using Fomo.Core;
 using Alpha;
 using FomoChatLog.Commands;
+using FomoChatLog.Core;
 using FomoChatLog.Sinks;
 
 namespace FomoChatLog
@@ -26,8 +27,12 @@ namespace FomoChatLog
         // -- Config entries ----------------------------------------------------
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         private static ConfigEntry<string>? ChatLogPathRaw { get; set; }
-        public static ConfigEntry<string>? MessageFormat { get; set; }
-        public static ConfigEntry<string>? NotificationFormat { get; set; }
+        public static ConfigEntry<int>? MaxLogDays { get; private set; }
+        public static ConfigEntry<string>? MessageFormat { get; private set; }
+        public static ConfigEntry<string>? NotificationFormat { get; private set; }
+
+        // -- Chat log manager --------------------------------------------------
+        public static ChatLogManager ChatLog { get; private set; } = null!;
 
         internal static ManualLogSource Log = null!;
 
@@ -37,7 +42,9 @@ namespace FomoChatLog
             Log.LogInfo($"{ModName} v{ModVersion} loading…");
 
             InitConfig();
-            InitializeChatLog();
+
+            ChatLog = new ChatLogManager(Log, EnableFeature!, ChatLogPathRaw!, MaxLogDays!);
+            ChatLog.Initialize();
 
             // Register the file sink with the core Fomo SinkManager
             FomoPlugin.SinkManager?.Register(new LogFileChatSink());
@@ -53,41 +60,6 @@ namespace FomoChatLog
             Log.LogInfo($"{ModName} loaded.");
         }
 
-        private void InitializeChatLog()
-        {
-            string chatLogPath = GetChatLogPath();
-            string chatLogDirPath = Path.GetDirectoryName(chatLogPath) ?? string.Empty;
-            Log.LogInfo("Creating chat log directory if it doesn't exist: " + chatLogDirPath);
-            Directory.CreateDirectory(chatLogDirPath);
-
-            // Clear the log file if it was created on a previous day
-            if (EnableFeature?.Value == true && File.Exists(chatLogPath))
-            {
-                if (File.GetCreationTime(chatLogPath).Date < DateTime.Now.Date)
-                {
-                    Log.LogInfo("Clearing chat log file from previous day: " + chatLogPath);
-                    File.Delete(chatLogPath);
-                }
-            }
-        }
-
-        // -- Public API --------------------------------------------------------
-
-        public static string GetChatLogPath()
-        {
-            string raw = ChatLogPathRaw?.Value ?? DefaultChatLogPathRaw;
-            raw = Environment.ExpandEnvironmentVariables(raw);
-            if (raw.StartsWith("~"))
-                raw = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), raw[1..]);
-            return raw;
-        }
-
-        public static void SetChatLogPath(string newPath)
-        {
-            if (ChatLogPathRaw != null)
-                ChatLogPathRaw.Value = newPath;
-        }
-
         // -- Config ------------------------------------------------------------
 
         private void InitConfig()
@@ -99,7 +71,12 @@ namespace FomoChatLog
             ChatLogPathRaw = Config.Bind(
                 "General", "ChatLogPath",
                 DefaultChatLogPathRaw,
-                "Path to the chat log file. Supports ~ and environment variables.");
+                "Base path for chat log files. Supports ~ and environment variables.\n" +
+                "The date (yyyy-MM-dd) is appended automatically before the file extension.");
+            MaxLogDays = Config.Bind(
+                "General", "MaxLogDays",
+                5,
+                "Number of daily log files to retain. Older files are deleted on startup.");
             MessageFormat = Config.Bind(
                 "Formatting", "MessageFormat",
                 "[{timestamp:yyyy-MM-dd HH:mm:ss}] [{channel}] {username}: {message}",
