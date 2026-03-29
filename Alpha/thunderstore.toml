@@ -6,7 +6,7 @@ namespace = "AndrewLin"
 name = "Alpha"
 # Version is controlled by $(Version) in Directory.Build.props.
 # The MSBuild Publish target injects the correct value via --package-version at build time.
-# Do not edit this field manually — bump $(Version) in Directory.Build.props instead.
+# Do not edit this field manually bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
 description = "Alpha: A mod for On-Together to provide common utilities and features."
 websiteUrl = "https://github.com/andrewlimforfun/ot-mods/tree/main/Alpha"
