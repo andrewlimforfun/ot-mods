@@ -42,8 +42,8 @@ namespace Alpha.Core.Commands
             {
                 string cleanName = ChatUtils.CleanTMPTags(p.UserName).Trim();
                 string persona = p.SteamPersonaName ?? "?";
-                var myPosition = PlayerUtils.GetPlayerDetail()?.PlayerTransform.position ?? Vector3.zero;
-                var distance = (int)Vector3.Distance(p.PlayerTransform.position, myPosition);
+                var myPosition = PlayerUtils.GetPlayerDetail()?.Position ?? Vector3.zero;
+                var distance = (int)Vector3.Distance(p.Position, myPosition);
 
                 string msg = $"{cleanName} | {persona} | {p.SteamID}  | {p.Position} ({distance})";
                 _log.LogInfo(msg);
