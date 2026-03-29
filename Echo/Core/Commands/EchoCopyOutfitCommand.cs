@@ -61,7 +61,14 @@ namespace Echo.Core.Commands
                 return;
             }
 
+            // ApplyCustomization broadcasts DataManager.CustomizationData (not its argument) via
+            // ObserversRpc, so we must update DataManager first or other players see the old outfit.
+            MonoSingleton<DataManager>.I.CustomizationData = new CustomizationData(data);
+            // MonoSingleton<DataManager>.I.PlayerDataZip.CurrentCustomizationDataIDs =
+            //     new CustomizationDataIDs(MonoSingleton<DataManager>.I.CustomizationData);
+
             localCtrl.ApplyCustomization(data);
+            //MonoSingleton<DataManager>.I.SavePlayerZipData();
 
             string cleanName = ChatUtils.CleanTMPTags(target.UserName).Trim();
             Logger.LogInfo($"Copied outfit from {cleanName}.");
