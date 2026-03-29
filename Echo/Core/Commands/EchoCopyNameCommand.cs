@@ -13,25 +13,24 @@ namespace Echo.Core.Commands
 
         public string Name => "echocopyname";
         public string ShortName => "ecn";
-        public string Description => "Copy another player's display name (with TMP tags). Usage: /echocopyname <name|steamid_suffix|persona>";
+        public string Description => "Copy another player's display name (with TMP tags). Usage: /echocopyname <name|steamid_suffix|persona> [status_brackets]";
         public string Namespace => "echo";
 
         public void Execute(string[] args)
         {
             if (EchoPlugin.AccessToken == null || !EchoPlugin.Validator.IsValid(EchoPlugin.AccessToken.Value.Trim()))
             {
-                ChatUtils.AddGlobalNotification("Access denied: You do not have permission to use this command.");
+                ChatUtils.AddGlobalNotification("Access denied: copy name has high abuse potential. Only Certified Users can use.");
                 return;
             }
 
             if (args.Length == 0)
             {
-                ChatUtils.AddGlobalNotification("Usage: /echocopyname <name|steamid_suffix|persona>");
+                ChatUtils.AddGlobalNotification("Usage: /echocopyname <name|steamid_suffix|persona> [status_brackets]");
                 return;
             }
 
             string query = string.Join(" ", args).Trim();
-
             PlayerDetail? target = PlayerUtils.FindPlayerByQuery(query);
             if (target == null)
             {
@@ -40,11 +39,13 @@ namespace Echo.Core.Commands
             }
 
             string nameWithTags = target.UserName; // raw TMP string from PlayerNameText
-            string cleanName = ChatUtils.CleanTMPTags(nameWithTags).Trim();
 
+            string cleanName = ChatUtils.CleanTMPTags(nameWithTags).Trim();
             _log.LogInfo($"Copying name from {cleanName}: \"{nameWithTags}\"");
+
             NameUtil.SetName(nameWithTags);
             ChatUtils.AddGlobalNotification($"Name copied from {nameWithTags}");
         }
+
     }
 }

@@ -14,6 +14,7 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 | `/echocopyname <player>` | `/ecn` | Copy another player's display name (including TMP colour/style tags). Token-gated — see `Security > AccessToken` in config. |
 | `/echorevertname` | `/ern` | Revert your display name to what it was before any Echo rename. |
 | `/echocopyoutfit <player>` | `/eco` | Copy another player's full outfit and appearance onto yourself. |
+| `/echoremovestatuscommand <status_brakets>` | `/ers` | Remove status from copied name. |
 | `/echotoggle` | `/ht` | Toggle all Echo features on or off. |
 | `/echohelp` | `/eh` | List all Echo commands. |
 

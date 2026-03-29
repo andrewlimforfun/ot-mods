@@ -26,7 +26,7 @@
         <FomoVersion>1.2.3</FomoVersion>
         <RemindVersion>1.1.7</RemindVersion>
         <HushVersion>0.1.1</HushVersion>
-        <EchoVersion>0.1.0</EchoVersion>
+        <EchoVersion>0.1.1</EchoVersion>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>

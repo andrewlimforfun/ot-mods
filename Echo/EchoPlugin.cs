@@ -62,6 +62,7 @@ namespace Echo
             AlphaPlugin.CommandManager?.Register(new EchoCopyNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoRevertNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoRemoveStatusCommand());
         }
 
         void InitConfig()
