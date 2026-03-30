@@ -99,7 +99,7 @@ namespace Remind.Core
         }
 
         /// <summary>
-        /// Fires all due (or cancelled) tasks. Must be called on the Unity main thread — typically from <c>Plugin.Update()</c>.
+        /// Fires all due (or cancelled) tasks. Must be called on the Unity main thread - typically from <c>Plugin.Update()</c>.
         /// </summary>
         public void Tick()
         {

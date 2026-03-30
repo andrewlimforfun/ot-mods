@@ -10,16 +10,28 @@ When installed on the host, the filter and mute system are enforced server-side 
 
 Type any command into the in-game chat. Commands start with `/` and are **not sent** to other players.
 
-### Player muting (host only)
+### Player muting
 
 | Command | Short | Description |
 |---|---|---|
-| `/hushmute <player>` | `/hmu` | Permanently mute a player |
-| `/hushtmute <player> <duration>` | `/htm` | Temporarily mute a player (e.g. `10m`, `1h30m`, `30s`) |
-| `/hushunmute <player>` | `/humu` | Unmute a player (accepts Steam ID for offline players) |
-| `/hushgetmutes` | `/hgmu` | List all currently muted players with expiry |
+| `/hushmute <player>` | `/hmu` | Permanently mute a player (host only) |
+| `/hushtmute <player> <duration>` | `/htm` | Temporarily mute a player (host or delegate; e.g. `10m`, `1h30m`, `30s`) |
+| `/hushunmute <player>` | `/humu` | Unmute a player (accepts Steam ID for offline players; host only) |
+| `/hushgetmutes` | `/hgmu` | List all currently muted players with expiry (host only) |
 
 **Player query formats** — name (partial match), Steam ID suffix (digits only), or `_host`.
+
+### Mute delegates
+
+The host can whitelist trusted non-host players to use `/hushtmute`. When a delegate issues the command, a hidden sentinel message is sent to the host; the host validates the whitelist and executes the mute server-side. The sentinel is never visible to other clients.
+
+| Command | Short | Description |
+|---|---|---|
+| `/hushdelegateadd <player>` | `/hdda` | Add a player to the mute-delegate whitelist (host only) |
+| `/hushdelegateremove <player>` | `/hddr` | Remove a player from the whitelist; accepts raw Steam ID for offline players (host only) |
+| `/hushdelegatelist` | `/hddl` | List all current mute delegates (host only) |
+
+The delegate list is saved alongside the mute list in `BepInEx/config/com.andrewlin.ontogether.hush.mutes.json`.
 
 ### Word management
 

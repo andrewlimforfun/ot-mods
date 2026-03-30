@@ -25,7 +25,7 @@ namespace Alpha.Core.Util
 
         /// <param name="secretHash">
         /// Lowercase hex SHA-256 of the accepted token.
-        /// Pass an empty string to disable the guard — all tokens are accepted.
+        /// Pass an empty string to disable the guard - all tokens are accepted.
         /// </param>
         public TokenValidator(string secretHash)
         {

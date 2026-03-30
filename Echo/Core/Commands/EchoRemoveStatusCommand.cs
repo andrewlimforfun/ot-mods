@@ -5,7 +5,7 @@ using BepInEx.Logging;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echoremovestatus <status brackets> — remove status from my player's display name.
+    /// /echoremovestatus <status brackets> - remove status from my player's display name.
     /// </summary>
     public class EchoRemoveStatusCommand : IChatCommand
     {

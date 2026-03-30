@@ -36,14 +36,14 @@ namespace Echo.Core.Commands
 
             if (targetIndex == currentIndex)
             {
-                ChatUtils.AddGlobalNotification($"Slot {targetSlot1} is already your active slot — nothing to copy.");
+                ChatUtils.AddGlobalNotification($"Slot {targetSlot1} is already your active slot - nothing to copy.");
                 return;
             }
 
             var sourceData = pdz.CurrentCustomizationDataIDs;
 
             // Temporarily switch to the target slot to use the CurrentCustomizationDataIDs setter,
-            // then restore the original slot — avoids depending on individual slot field names
+            // then restore the original slot - avoids depending on individual slot field names
             // which differ between NuGet stub and decompiled game source.
             pdz.SelectedStyleIndex = targetIndex;
             pdz.CurrentCustomizationDataIDs = sourceData;

@@ -7,7 +7,7 @@ using PurrNet;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echocopyoutfit <player> — copy another player's current outfit/appearance.
+    /// /echocopyoutfit <player> - copy another player's current outfit/appearance.
     /// </summary>
     public class EchoCopyOutfitCommand : IChatCommand
     {

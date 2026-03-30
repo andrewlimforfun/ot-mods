@@ -35,7 +35,7 @@ namespace Alpha.Core.Command
 
             if (args.Length == 0 || verbose)
             {
-                var sb = new StringBuilder($"/{_namespace}help — available commands:");
+                var sb = new StringBuilder($"/{_namespace}help - available commands:");
                 foreach (var cmd in sorted)
                 {
                     if (cmd.IsHidden) continue; // skip hidden commands in general listing

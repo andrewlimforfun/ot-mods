@@ -4,7 +4,7 @@ using Alpha.Core.Util;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echorevertname — revert to your original name saved before any /echocopyname.
+    /// /echorevertname - revert to your original name saved before any /echocopyname.
     /// </summary>
     public class EchoRevertNameCommand : IChatCommand
     {

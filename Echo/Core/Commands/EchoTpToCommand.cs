@@ -30,7 +30,7 @@ namespace Echo.Core.Commands
                 return;
             }
 
-            // Parse optional offset — last 3 args are floats if we have 4 args total
+            // Parse optional offset - last 3 args are floats if we have 4 args total
             Vector3 offset = Vector3.zero;
             string query;
 

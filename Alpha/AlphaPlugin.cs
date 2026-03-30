@@ -45,7 +45,7 @@ namespace Alpha
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(TextChannelManagerPatch));
 
-            // Shared command manager — consuming mods register their commands in their own Awake()
+            // Shared command manager - consuming mods register their commands in their own Awake()
             CommandManager = new ChatCommandManager();
             CommandManager.Register(new AlphaMyPositionCommand());
             CommandManager.Register(new AlphaWhoIsCommand());

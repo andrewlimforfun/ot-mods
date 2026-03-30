@@ -57,7 +57,7 @@ namespace Hush.Core
             return false;
         }
 
-        // ── Delegate management ──────────────────────────────────────────────────
+        // -- Delegate management --------------------------------------------------
 
         /// <summary>Returns true if the Steam ID is on the mute-delegate whitelist.</summary>
         public bool IsDelegate(string steamId) => _delegates.Contains(steamId);
@@ -81,7 +81,7 @@ namespace Hush.Core
         /// <summary>Returns a snapshot of the current delegate Steam IDs.</summary>
         public IReadOnlyCollection<string> GetDelegates() => _delegates;
 
-        // ── Expiry / tick ─────────────────────────────────────────────────────────
+        // -- Expiry / tick ---------------------------------------------------------
 
         /// <summary>Prunes expired timed mutes. Must be called from <c>Plugin.Update()</c>.</summary>
         public void Tick()

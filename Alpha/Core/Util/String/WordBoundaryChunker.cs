@@ -28,7 +28,7 @@ namespace Alpha.Core.Util
                 int cut = text.LastIndexOf(' ', start + maxLength - 1, maxLength);
                 if (cut <= start)
                 {
-                    // single word longer than limit — hard cut, no char to skip
+                    // single word longer than limit - hard cut, no char to skip
                     yield return text[start..(start + maxLength)];
                     start += maxLength;
                 }

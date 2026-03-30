@@ -112,7 +112,7 @@ namespace Hush.Patches
             return true;
         }
 
-        // ── Relay helpers ──────────────────────────────────────────────────────────────
+        // -- Relay helpers --------------------------------------------------------------
 
         /// <summary>
         /// Parses and executes a relay payload sent by a whitelisted delegate.
@@ -172,7 +172,7 @@ namespace Hush.Patches
         }
 #pragma warning restore Harmony003
 
-        // ── Client-side patches ──────────────────────────────────────────────────────
+        // -- Client-side patches ------------------------------------------------------
 
         /// <summary>
         /// Client-side: intercepts all incoming messages from others before display.

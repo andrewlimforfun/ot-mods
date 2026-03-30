@@ -5,7 +5,7 @@ using BepInEx.Logging;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echocopyname <name|steamid_suffix|persona> — copy another player's full display name (with TMP tags).
+    /// /echocopyname <name|steamid_suffix|persona> - copy another player's full display name (with TMP tags).
     /// </summary>
     public class EchoCopyNameCommand : IChatCommand
     {

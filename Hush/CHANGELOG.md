@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2026-03-30
+
+### Added
+
+- Mute-delegate relay system: the host can whitelist trusted non-host players to use `/hushtmute`. Delegates send a hidden sentinel message; the host validates and executes the mute server-side — the sentinel is never visible to other clients.
+- `/hushdelegateadd <player>` (`/hdda`) — add a player to the mute-delegate whitelist (host only).
+- `/hushdelegateremove <player>` (`/hddr`) — remove a player from the whitelist; accepts a raw Steam ID for offline players (host only).
+- `/hushdelegatelist` (`/hddl`) — list all current delegates (host only).
+- Delegate list persisted to the mutes JSON file and restored on load.
+
+### Changed
+
+- `/hushtmute` is no longer host-only: whitelisted delegates may use it and their request is relayed to the host for execution.
+
+
 ## [0.1.1] - 2026-03-29
 
 ### Changed

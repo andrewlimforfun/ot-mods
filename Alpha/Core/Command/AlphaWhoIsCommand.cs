@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Alpha.Core.Commands
 {
     /// <summary>
-    /// /alphawhois — shows information about a player.
+    /// /alphawhois - shows information about a player.
     /// </summary>
     public class AlphaWhoIsCommand : IChatCommand
     {

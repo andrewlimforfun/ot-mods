@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Alpha.Core.Commands
 {
     /// <summary>
-    /// /alphamyposition — shows your current position in the game world.
+    /// /alphamyposition - shows your current position in the game world.
     /// </summary>
     public class AlphaAddNotificationCommand : IChatCommand
     {

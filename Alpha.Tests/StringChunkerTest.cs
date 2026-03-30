@@ -58,7 +58,7 @@ public class StringChunkerTest
     {
         var chunker = new WordBoundaryChunker();
         var chunks = chunker.Chunk(MediumParagraph, 50).ToList();
-        // Rejoin with a space — each split removed exactly one space
+        // Rejoin with a space - each split removed exactly one space
         string rejoined = string.Join(" ", chunks);
         Assert.That(rejoined, Is.EqualTo(MediumParagraph));
     }
@@ -77,7 +77,7 @@ public class StringChunkerTest
     [Test]
     public void WordBoundary_SingleLongWordFallsBackToHardCut()
     {
-        // Word is 45 chars; limit is 20 — must still produce chunks ≤ 20
+        // Word is 45 chars; limit is 20 - must still produce chunks ≤ 20
         var chunker = new WordBoundaryChunker();
         var chunks = chunker.Chunk(LongWord, 20).ToList();
         Assert.That(chunks, Has.Count.GreaterThan(1));
