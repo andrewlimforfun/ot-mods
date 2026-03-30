@@ -31,11 +31,7 @@ namespace Hush.Patches
         public static bool HandleRPCGenerated_0_Prefix(BitPacker stream, ref RPCPacket packet, RPCInfo info, bool asServer)
         {
             // Only intercept on the server relay path
-            if (!asServer || HushPlugin.FilterManager == null || !HushPlugin.FilterManager.Enabled)
-                return true;
-
-            ChatFilterManager? filter = HushPlugin.FilterManager;
-            if (filter == null || !filter.Enabled)
+            if (!asServer)
                 return true;
 
             // Read the arguments from the packet payload
@@ -65,9 +61,9 @@ namespace Hush.Patches
             // Decode the chat text
             string text = Encoding.Unicode.GetString(textBytes);
 
-            // Relay sentinel: whitelisted delegates can request a timed mute via a hidden message.
+            // Relay sentinel: whitelisted delegates can request a timed mute via a chat message.
             // Always suppressed - never relayed to clients regardless of whitelist outcome.
-            const string RelayPrefix = "\x01hush:";
+            const string RelayPrefix = "hush:";
             if (text.StartsWith(RelayPrefix, StringComparison.Ordinal))
             {
                 if (HushPlugin.MuteManager?.IsDelegate(playerID) == true)
@@ -77,7 +73,11 @@ namespace Hush.Patches
                 return false;
             }
 
-            // Apply word/pattern filter
+            // Apply word/pattern filter (only when filter is active)
+            ChatFilterManager? filter = HushPlugin.FilterManager;
+            if (filter == null || !filter.Enabled)
+                return true;
+
             FilterResult result = filter.Apply(text);
 
             if (result.WasBlocked)
@@ -182,6 +182,10 @@ namespace Hush.Patches
         [HarmonyPrefix]
         public static bool OnChannelMessageReceived_Prefix(string message)
         {
+            // Suppress relay sentinels that loop back to the host's local client
+            if (message != null && message.StartsWith("hush:", StringComparison.Ordinal))
+                return false;
+
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)
                 return true;
@@ -199,6 +203,10 @@ namespace Hush.Patches
         [HarmonyPrefix]
         public static bool AddMessageUI_Prefix(ref string text)
         {
+            // Suppress relay sentinels that loop back to the host's local client
+            if (text != null && text.StartsWith("hush:", StringComparison.Ordinal))
+                return false;
+
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)
                 return true;

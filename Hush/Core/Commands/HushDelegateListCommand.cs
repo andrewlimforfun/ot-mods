@@ -10,7 +10,7 @@ namespace Hush.Core.Commands
     public class HushDelegateListCommand : IChatCommand
     {
         public string Name => "hushdelegatelist";
-        public string ShortName => "hddl";
+        public string ShortName => "hdl";
         public string Description => "List all mute delegates (host only). Usage: /hushdelegatelist";
         public string Namespace => "hush";
 

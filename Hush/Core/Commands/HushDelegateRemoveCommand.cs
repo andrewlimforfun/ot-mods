@@ -9,7 +9,7 @@ namespace Hush.Core.Commands
     public class HushDelegateRemoveCommand : IChatCommand
     {
         public string Name => "hushdelegateremove";
-        public string ShortName => "hddr";
+        public string ShortName => "hdr";
         public string Description => "Remove a player from the mute-delegate whitelist (host only). Usage: /hushdelegateremove <player>";
         public string Namespace => "hush";
 

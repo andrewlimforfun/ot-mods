@@ -9,7 +9,7 @@ namespace Hush.Core.Commands
     public class HushDelegateAddCommand : IChatCommand
     {
         public string Name => "hushdelegateadd";
-        public string ShortName => "hdda";
+        public string ShortName => "hda";
         public string Description => "Add a player to the mute-delegate whitelist (host only). Usage: /hushdelegateadd <player>";
         public string Namespace => "hush";
 

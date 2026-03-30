@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] - 2026-03-31
+
+## Changed
+
+- Attempt 1 at fixing the host-side of the `hush:tmute:` relay
+
 ## [0.1.2] - 2026-03-30
 
 ### Added

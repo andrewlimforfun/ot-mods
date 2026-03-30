@@ -11,13 +11,13 @@ namespace Hush.Core.Commands
 {
     /// <summary>
     /// Temporarily mutes a player for a given duration. The host executes locally;
-    /// whitelisted delegates relay the request to the host via a hidden sentinel message.
+    /// whitelisted delegates relay the request to the host via a sentinel message.
     /// </summary>
     public class HushTempMuteCommand : IChatCommand
     {
-        public string Name => "hushtmute";
+        public string Name => "hushtempmute";
         public string ShortName => "htm";
-        public string Description => "Temporarily mute a player. Host executes immediately; delegates relay to host. Usage: /hushtmute <player> <duration>  e.g. /hushtmute bob 10m";
+        public string Description => "Temporarily mute a player. Host executes immediately; delegates relay to host. Usage: /hushtempmute <player> <duration>  e.g. /hushtempmute bob 10m";
         public string Namespace => "hush";
 
         public void Execute(string[] args)
@@ -65,7 +65,7 @@ namespace Hush.Core.Commands
                 return;
             }
 
-            string sentinel = $"\x01hush:tmute:{player.SteamID}:{(int)duration.TotalSeconds}";
+            string sentinel = $"hush:tmute:{player.SteamID}:{(int)duration.TotalSeconds}";
             Vector3 pos = tcm.MainPlayer != null ? tcm.MainPlayer.position : Vector3.zero;
             tcm.SendMessageAsync(
                 Encoding.Unicode.GetBytes(sentinel),
