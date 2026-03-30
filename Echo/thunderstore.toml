@@ -8,7 +8,7 @@ name = "Echo"
 # The MSBuild Publish target injects the correct value via --package-version at build time.
 # Do not edit this field manually bump $(Version) in Directory.Build.props instead.
 versionNumber = "0.0.0"
-description = "Echo: allows hosts and clients to filter and censor chat. Use /echohelp"
+description = "Echo: temporarily copy other players outfit and accessories, names (requires token), and chat teleport to players with offset. Use /echohelp"
 websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
 containsNsfwContent = false
 
