@@ -116,6 +116,9 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushUnmuteCommand());
             AlphaPlugin.CommandManager?.Register(new HushTempMuteCommand());
             AlphaPlugin.CommandManager?.Register(new HushGetMutesCommand());
+            AlphaPlugin.CommandManager?.Register(new HushDelegateAddCommand());
+            AlphaPlugin.CommandManager?.Register(new HushDelegateRemoveCommand());
+            AlphaPlugin.CommandManager?.Register(new HushDelegateListCommand());
         }
 
         void InitConfig()

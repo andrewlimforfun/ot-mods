@@ -37,7 +37,7 @@ namespace Hush.Core.Commands
                 string expiryStr = expiry == null
                     ? "permanent"
                     : $"until {expiry.Value.ToLocalTime():HH:mm:ss}";
-                sb.Append($"\n  {name} — {expiryStr}");
+                sb.Append($"\n  {name} - {expiryStr}");
             }
             ChatUtils.AddGlobalNotification(sb.ToString());
         }

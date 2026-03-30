@@ -84,9 +84,9 @@ namespace Hush.Core
         /// <summary>
         /// Adds a raw regex pattern. Use inline flags for control:
         /// <list type="bullet">
-        /// <item><c>(?i)pattern</c> — case-insensitive</item>
-        /// <item><c>\bword\b</c> — word boundary</item>
-        /// <item><c>f+u+c+k</c> — substring (no boundary = matches inside words)</item>
+        /// <item><c>(?i)pattern</c> - case-insensitive</item>
+        /// <item><c>\bword\b</c> - word boundary</item>
+        /// <item><c>f+u+c+k</c> - substring (no boundary = matches inside words)</item>
         /// </list>
         /// Returns false if the pattern is invalid regex.
         /// </summary>

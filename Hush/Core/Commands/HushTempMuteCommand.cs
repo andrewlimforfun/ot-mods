@@ -1,22 +1,27 @@
 using System;
+using System.Text;
 using Alpha.Core.Command;
 using Alpha.Core.Util;
 using Hush;
 using Hush.Core;
+using PurrNet;
+using UnityEngine;
 
 namespace Hush.Core.Commands
 {
-    /// <summary>Host-only command to temporarily mute a player for a given duration.</summary>
+    /// <summary>
+    /// Temporarily mutes a player for a given duration. The host executes locally;
+    /// whitelisted delegates relay the request to the host via a hidden sentinel message.
+    /// </summary>
     public class HushTempMuteCommand : IChatCommand
     {
         public string Name => "hushtmute";
         public string ShortName => "htm";
-        public string Description => "Temporarily mute a player (host only). Usage: /hushtmute <player> <duration>  e.g. /hushtmute bob 10m";
+        public string Description => "Temporarily mute a player. Host executes immediately; delegates relay to host. Usage: /hushtmute <player> <duration>  e.g. /hushtmute bob 10m";
         public string Namespace => "hush";
 
         public void Execute(string[] args)
         {
-            if (!HushMuteCommand.HostGuard()) return;
             if (args.Length < 2)
             {
                 ChatUtils.AddGlobalNotification("Usage: /hushtmute <player> <duration>  e.g. /hushtmute bob 10m");
@@ -43,9 +48,33 @@ namespace Hush.Core.Commands
             PlayerMuteManager? mutes = HushPlugin.MuteManager;
             if (mutes == null) return;
 
-            mutes.MuteFor(player.SteamID, duration);
-            HushPlugin.SaveMutes();
-            ChatUtils.AddGlobalNotification($"Hush: muted {player.UserNameClean} for {FormatDuration(duration)}.");
+            // Host: execute directly
+            if (PlayerUtils.GetHost()?.SteamID == SteamUtils.GetPlayerSteamID())
+            {
+                mutes.MuteFor(player.SteamID, duration);
+                HushPlugin.SaveMutes();
+                ChatUtils.AddGlobalNotification($"Hush: muted {player.UserNameClean} for {FormatDuration(duration)}.");
+                return;
+            }
+
+            // Non-host: send a hidden sentinel to the host which will validate the whitelist and act.
+            var tcm = NetworkSingleton<TextChannelManager>.I;
+            if (tcm == null)
+            {
+                ChatUtils.AddGlobalNotification("Hush: not connected - cannot relay mute request.");
+                return;
+            }
+
+            string sentinel = $"\x01hush:tmute:{player.SteamID}:{(int)duration.TotalSeconds}";
+            Vector3 pos = tcm.MainPlayer != null ? tcm.MainPlayer.position : Vector3.zero;
+            tcm.SendMessageAsync(
+                Encoding.Unicode.GetBytes(sentinel),
+                Encoding.Unicode.GetBytes(tcm.UserName ?? string.Empty),
+                false,
+                pos,
+                SteamUtils.GetPlayerSteamID()
+            );
+            ChatUtils.AddGlobalNotification($"Hush: mute request sent for {player.UserNameClean}.");
         }
 
         private static string FormatDuration(TimeSpan ts)

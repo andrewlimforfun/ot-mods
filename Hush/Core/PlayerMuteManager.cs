@@ -19,6 +19,7 @@ namespace Hush.Core
         private readonly ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{HushPlugin.ModName}.PMM");
         private readonly HashSet<string> _permaMuted = new HashSet<string>(StringComparer.Ordinal);
         private readonly Dictionary<string, DateTime> _timedMutes = new Dictionary<string, DateTime>(StringComparer.Ordinal);
+        private readonly HashSet<string> _delegates = new HashSet<string>(StringComparer.Ordinal);
 
         /// <summary>Permanently mutes a player. Removes any existing timed mute. Returns true if newly muted.</summary>
         public bool Mute(string steamId)
@@ -55,6 +56,32 @@ namespace Hush.Core
                 return expiry > DateTime.UtcNow;
             return false;
         }
+
+        // ── Delegate management ──────────────────────────────────────────────────
+
+        /// <summary>Returns true if the Steam ID is on the mute-delegate whitelist.</summary>
+        public bool IsDelegate(string steamId) => _delegates.Contains(steamId);
+
+        /// <summary>Adds a Steam ID to the delegate whitelist. Returns true if newly added.</summary>
+        public bool AddDelegate(string steamId)
+        {
+            if (!_delegates.Add(steamId)) return false;
+            _log.LogInfo($"Added mute delegate: {steamId}");
+            return true;
+        }
+
+        /// <summary>Removes a Steam ID from the delegate whitelist. Returns true if it was present.</summary>
+        public bool RemoveDelegate(string steamId)
+        {
+            if (!_delegates.Remove(steamId)) return false;
+            _log.LogInfo($"Removed mute delegate: {steamId}");
+            return true;
+        }
+
+        /// <summary>Returns a snapshot of the current delegate Steam IDs.</summary>
+        public IReadOnlyCollection<string> GetDelegates() => _delegates;
+
+        // ── Expiry / tick ─────────────────────────────────────────────────────────
 
         /// <summary>Prunes expired timed mutes. Must be called from <c>Plugin.Update()</c>.</summary>
         public void Tick()
@@ -96,6 +123,7 @@ namespace Hush.Core
                 TimedMutes = _timedMutes
                     .Where(kv => kv.Value > DateTime.UtcNow)
                     .ToDictionary(kv => kv.Key, kv => kv.Value.ToString("o")),
+                Delegates = new List<string>(_delegates),
             };
             string json = JsonConvert.SerializeObject(dto, Formatting.Indented);
             File.WriteAllText(filePath, json, Encoding.UTF8);
@@ -121,6 +149,7 @@ namespace Hush.Core
 
             _permaMuted.Clear();
             _timedMutes.Clear();
+            _delegates.Clear();
 
             if (dto.PermaMuted != null)
                 foreach (string id in dto.PermaMuted)
@@ -135,13 +164,19 @@ namespace Hush.Core
                         _timedMutes[kv.Key] = expiry;
             }
 
-            _log.LogInfo($"Loaded mute config: {_permaMuted.Count} permanent, {_timedMutes.Count} timed.");
+            if (dto.Delegates != null)
+                foreach (string id in dto.Delegates)
+                    if (!string.IsNullOrWhiteSpace(id))
+                        _delegates.Add(id.Trim());
+
+            _log.LogInfo($"Loaded mute config: {_permaMuted.Count} permanent, {_timedMutes.Count} timed, {_delegates.Count} delegates.");
         }
 
         private class MuteConfig
         {
             public List<string>? PermaMuted { get; set; }
             public Dictionary<string, string>? TimedMutes { get; set; }
+            public List<string>? Delegates { get; set; }
         }
     }
 }
