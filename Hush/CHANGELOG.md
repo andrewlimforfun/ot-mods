@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1.3] - 2026-03-31
 
+## Added
+
+- `/hushversion` (`/hv`) command
+
 ## Changed
 
 - Attempt 1 at fixing the host-side of the `hush:tmute:` relay
