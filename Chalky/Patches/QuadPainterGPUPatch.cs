@@ -17,7 +17,7 @@ namespace Chalky.Patches
 
     public class QuadPainterGPUPatch
     {
-        static ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("Chalky.QuadPainterGPUPatch");
+        static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource("Chalky.QPGPUP");
 
         // cached once at startup - avoids repeated reflection lookups per paint call
         private static readonly System.Reflection.FieldInfo _pixelsField =
@@ -147,7 +147,7 @@ namespace Chalky.Patches
                 count++;
             }
 
-            Logger.LogInfo($"[BoardIO relay] Host relayed board state to {count} other player(s).");
+            _log.LogInfo($"[BoardIO relay] Host relayed board state to {count} other player(s).");
         }
 
     }
