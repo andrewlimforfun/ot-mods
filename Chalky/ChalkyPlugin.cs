@@ -20,7 +20,6 @@ namespace Chalky
         public static Color? chalkyColor = null;
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
-        public static ConfigEntry<bool>? SpoofHost { get; private set; }
         public static ConfigEntry<string>? BoardSaveDirectory { get; private set; }
 
         /// <summary>Resolved absolute path to the board save directory.</summary>
@@ -43,14 +42,12 @@ namespace Chalky
 
             // Apply Harmony patches
             var harmony = new Harmony(ModGUID);
-            harmony.PatchAll(typeof(TextChannelManagerPatch));
             harmony.PatchAll(typeof(QuadPainterGPUPatch));
 
             // Register commands with the shared Alpha command manager
             AlphaPlugin.CommandManager?.Register(new ChalkyGetBoardsCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkyLoadBoardCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkySaveBoardCommand());
-            AlphaPlugin.CommandManager?.Register(new ChalkySpoofHostCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkySetSize());
             AlphaPlugin.CommandManager?.Register(new ChalkyToggleCommand());
         }
@@ -61,7 +58,6 @@ namespace Chalky
             // Initialize config entries
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
-            SpoofHost = Config.Bind("General", "SpoofHost", false, "If true, spoof rpcInfo in GetQuadImage so sender appears as the host and asServer is true.");
             BoardSaveDirectory = Config.Bind(
                 "Boards",
                 "BoardSaveDirectory",

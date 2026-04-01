@@ -226,12 +226,8 @@ namespace Chalky.Core
         {
             var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
 
-            if (board.isServer || ChalkyPlugin.SpoofHost?.Value == true)
+            if (board.isServer)
             {
-                if (ChalkyPlugin.SpoofHost?.Value == true)
-                {
-                    _log.LogInfo("Broadcasting to all players with spoofed host RPCInfo.");
-                }
                 BroadcastToAllPlayers(board);
             }
             else

@@ -109,22 +109,6 @@ namespace Chalky.Patches
             return false; // skip original Update
         }
 
-        [HarmonyPatch("GetQuadImage_Original_1")]
-        [HarmonyPrefix]
-        public static void SpoofHostPrefix(QuadPainterGPU __instance, ref RPCInfo rpcInfo)
-        {
-            if (ChalkyPlugin.SpoofHost?.Value != true) return;
-            rpcInfo.asServer = true;
-            
-            var host = PlayerUtils.GetHost();
-            if (host == null)
-            {
-                Logger.LogWarning("SpoofHost is enabled but no host player found. GetQuadImage RPC will not be spoofed.");
-                return;
-            }
-            rpcInfo.sender = host.PlayerID;
-        }
-
         /// <summary>
         /// When the host receives board PaintColors from a non-host client via
         /// GetQuadImage, relay the update to all other connected players.

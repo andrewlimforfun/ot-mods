@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2026-04-01
+
+### Removed
+- Spoofing host feature and `/chalkyspoofhost` (`/csh`) command
+
+## [1.2.0] - 2026-03-28
+
+### Added
+- `/chalkyspoofhost` (`/csh`) — toggle spoof host on/off at runtime (hidden from help listing)
+
 ## [1.1.0] - 2026-03-27
 
 ### Added
@@ -20,6 +30,11 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - `/chalkyloadboard` no longer requires being the session host
 - Updated user-facing messages for non-host board loading
+
+## [1.0.0] - 2026-03-20
+
+### Removed
+- `/chalkyshowcommand` (`/cshc`) — use the `ShowCommand` config entry instead
 
 ## [0.0.4] - 2026-02-22
 
