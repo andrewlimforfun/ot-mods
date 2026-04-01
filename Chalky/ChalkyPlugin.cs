@@ -20,6 +20,7 @@ namespace Chalky
         public static Color? chalkyColor = null;
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
+        public static ConfigEntry<bool>? EnableHostRelay { get; private set; }
         public static ConfigEntry<string>? BoardSaveDirectory { get; private set; }
 
         /// <summary>Resolved absolute path to the board save directory.</summary>
@@ -50,6 +51,7 @@ namespace Chalky
             AlphaPlugin.CommandManager?.Register(new ChalkySaveBoardCommand());
             AlphaPlugin.CommandManager?.Register(new ChalkySetSize());
             AlphaPlugin.CommandManager?.Register(new ChalkyToggleCommand());
+            AlphaPlugin.CommandManager?.Register(new ChalkyHostRelayCommand());
         }
 
 
@@ -58,6 +60,7 @@ namespace Chalky
             // Initialize config entries
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
+            EnableHostRelay = Config.Bind("General", "EnableHostRelay", true, "If true, the host will relay board state received from a non-host client to all other connected players.");
             BoardSaveDirectory = Config.Bind(
                 "Boards",
                 "BoardSaveDirectory",

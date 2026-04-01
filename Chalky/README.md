@@ -28,6 +28,7 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 - `/chalkygetboards` (`/cgb`) - List all saved chalkboards
 - `/chalkysaveboard [name] [index]` (`/csb [name] [index]`) - Save a board to disk. Omit `[index]` to use the active board
 - `/chalkyloadboard [name] [index]` (`/clb [name] [index]`) - Load a board from disk and sync to all players. Works for both host and non-host clients (non-host relay requires Chalky on the host)
+- `/chalkyhostRelay` (`/chr`) - Toggle host relay on or off
 
 > **Note:** Size changes are not persistent and reset to the default of `2` on game restart.
 
@@ -71,6 +72,7 @@ Settings are saved to the BepInEx config file and can also be changed at runtime
 - `General`
   - `EnableFeature` (default: `true`) - Enable or disable all mod features
   - `ShowCommand` (default: `false`) - Show commands in chat when typed (config file only)
+  - `EnableHostRelay` (default: `true`) - When enabled, the host relays board state received from a non-host client to all other connected players. Disable if you don't want the host to relay
 - `Boards`
   - `BoardSaveDirectory` (default: `~/on-together/chalkboard`) - Directory where board saves are stored. `~` expands to your home folder
 

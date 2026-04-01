@@ -119,6 +119,12 @@ namespace Chalky.Patches
         [HarmonyPostfix]
         public static void RelayGetQuadImage(QuadPainterGPU __instance, RPCInfo rpcInfo)
         {
+            // Only relay if the feature and host relay are enabled
+            if (ChalkyPlugin.EnableFeature == null || ChalkyPlugin.EnableFeature.Value == false)
+                return;
+            if (ChalkyPlugin.EnableHostRelay == null || ChalkyPlugin.EnableHostRelay.Value == false)
+                return;
+
             // Only relay from the host/server
             if (!__instance.isServer) return;
 
