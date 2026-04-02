@@ -53,8 +53,9 @@ namespace Hush.Patches
             // Drop messages from muted players before any further processing
             if (HushPlugin.MuteManager?.IsMuted(playerID) == true)
             {
-                ChatUtils.AddGlobalNotification($"Muted message from {playerID}.");
-                _log.LogInfo($"[Server] Blocked message from muted player {playerID}.");
+                PlayerDetail? playerDetail = PlayerUtils.FindPlayerBySteamID(playerID);
+                ChatUtils.AddGlobalNotification($"Muted message from {playerDetail?.UserName ?? "Unknown"} ({playerID}).");
+                _log.LogInfo($"[Server] Blocked message from muted player {playerDetail?.UserNameClean ?? "Unknown"} ({playerID}).");
                 return false;
             }
 
@@ -67,7 +68,10 @@ namespace Hush.Patches
             if (text.StartsWith(RelayPrefix, StringComparison.Ordinal))
             {
                 if (HushPlugin.MuteManager?.IsDelegate(playerID) == true)
+                {
+                    _log.LogInfo($"[Server] Relay accepted from delegate {playerID}.");
                     ExecuteRelay(text.Substring(RelayPrefix.Length), playerID);
+                }
                 else
                     _log.LogWarning($"[Server] Relay rejected from non-delegate {playerID}.");
                 return false;
@@ -182,14 +186,20 @@ namespace Hush.Patches
         [HarmonyPrefix]
         public static bool OnChannelMessageReceived_Prefix(string message)
         {
+            if (string.IsNullOrEmpty(message))
+                return true;
+                
             // Suppress relay sentinels that loop back to the host's local client
-            if (message != null && message.StartsWith("hush:", StringComparison.Ordinal))
+            if (message.StartsWith("hush:", StringComparison.Ordinal))
+            {
+                _log.LogDebug("[Client] Suppressed relay sentinel in notification.");
                 return false;
+            }
 
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)
                 return true;
-
+            
             FilterResult result = filter.Apply(message);
             if (result.WasBlocked) _log.LogDebug("[Client] Suppressed notification for blocked message.");
             return !result.WasBlocked;
@@ -203,9 +213,15 @@ namespace Hush.Patches
         [HarmonyPrefix]
         public static bool AddMessageUI_Prefix(ref string text)
         {
+            if (string.IsNullOrEmpty(text))
+                return true;
+
             // Suppress relay sentinels that loop back to the host's local client
-            if (text != null && text.StartsWith("hush:", StringComparison.Ordinal))
+            if (text.StartsWith("hush:", StringComparison.Ordinal))
+            {
+                _log.LogDebug("[Client] Suppressed relay sentinel in UI.");
                 return false;
+            }
 
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)
