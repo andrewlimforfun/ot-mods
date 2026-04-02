@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2026-04-01
+
+### Added
+- Somehow 1.2.3 got removed from thunderstore
+
 ## [1.2.3] - 2026-04-01
 
 ### Added
