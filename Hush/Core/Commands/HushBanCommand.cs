@@ -42,25 +42,16 @@ namespace Hush.Core.Commands
             {
                 BanManager? bans = HushPlugin.BanManager;
                 if (bans == null) return;
-                if (bans.Ban(player.SteamID, player.UserNameClean))
-                    ChatUtils.AddGlobalNotification($"Hush: banned {player.UserNameClean}.");
+                if (bans.Ban(player.SteamID, player.UserName))
+                    ChatUtils.AddGlobalNotification($"Hush: banned {player.UserName}.");
                 else
-                    ChatUtils.AddGlobalNotification($"Hush: {player.UserNameClean} is already banned.");
+                    ChatUtils.AddGlobalNotification($"Hush: {player.UserName} is already banned.");
                 return;
             }
 
-            // Non-host: must be a delegate
-            PlayerMuteManager? mutes = HushPlugin.MuteManager;
-            if (mutes == null) return;
-
-            if (!mutes.IsDelegate(mySteamId))
-            {
-                ChatUtils.AddGlobalNotification("Hush: only the host or a designated delegate can ban players.");
-                return;
-            }
-
-            // Add to own local ban list
-            HushPlugin.BanManager?.BanOffline(player.SteamID, player.UserNameClean);
+            // Non-host: relay to the host; the host validates delegate status server-side.
+            // Add to own local ban list optimistically
+            HushPlugin.BanManager?.BanOffline(player.SteamID, player.UserName);
 
             // Relay to host via sentinel
             TextChannelManager? tcm = NetworkSingleton<TextChannelManager>.I;
@@ -79,7 +70,7 @@ namespace Hush.Core.Commands
                 pos,
                 mySteamId
             );
-            ChatUtils.AddGlobalNotification($"Hush: ban request relayed for {player.UserNameClean}.");
+            ChatUtils.AddGlobalNotification($"Hush: ban request relayed for {player.UserName}.");
         }
 
     }
