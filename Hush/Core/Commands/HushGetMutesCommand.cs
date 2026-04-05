@@ -11,7 +11,7 @@ namespace Hush.Core.Commands
     public class HushGetMutesCommand : IChatCommand
     {
         public string Name => "hushgetmutes";
-        public string ShortName => "hgmu";
+        public string ShortName => "hgm";
         public string Description => "List all currently muted players (host only). Usage: /hushgetmutes";
         public string Namespace => "hush";
 

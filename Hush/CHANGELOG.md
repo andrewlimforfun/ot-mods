@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] - 2026-04-05
+
+### Added
+
+- `BanManager` class: centralises all ban operations (add, add offline, remove, list) on top of the game's `DataManager.BanData`.
+- `/hushban <player>` (`/hb`) — ban an online player. Host executes directly; whitelisted delegates relay the request to the host and also add the player to their own local ban list.
+- `/hushbanoffline <steamid> <nickname>` (`/hbo`) — ban a player by Steam ID without them being online (host only).
+- `/hushunban <player|steamid>` (`/hub`) — remove a ban; accepts player query or raw Steam ID for offline removal (host only).
+- `/hushgetbans` (`/hgb`) — list all banned players (host only).
+- Ban commands share the existing delegate whitelist: delegates may relay `/hushban` to the host in the same way as timed mutes.
+
 ## [0.1.4] - 2026-04-02
 
 ## Added

@@ -17,19 +17,30 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 | `/hushmute <player>` | `/hmu` | Permanently mute a player (host only) |
 | `/hushtmute <player> <duration>` | `/htm` | Temporarily mute a player (host or delegate; e.g. `10m`, `1h30m`, `30s`) |
 | `/hushunmute <player>` | `/humu` | Unmute a player (accepts Steam ID for offline players; host only) |
-| `/hushgetmutes` | `/hgmu` | List all currently muted players with expiry (host only) |
+| `/hushgetmutes` | `/hgm` | List all currently muted players with expiry (host only) |
 
 **Player query formats** — name (partial match), Steam ID suffix (digits only), or `_host`.
 
-### Mute delegates
+### Player banning
 
-The host can whitelist trusted non-host players to use `/hushtmute`. When a delegate issues the command, a hidden sentinel message is sent to the host; the host validates the whitelist and executes the mute server-side. The sentinel is never visible to other clients.
+Ban commands write to the game's own ban list (`DataManager.BanData`), so bans persist and are enforced natively on every session start.
 
 | Command | Short | Description |
 |---|---|---|
-| `/hushdelegateadd <player>` | `/hdda` | Add a player to the mute-delegate whitelist (host only) |
-| `/hushdelegateremove <player>` | `/hddr` | Remove a player from the whitelist; accepts raw Steam ID for offline players (host only) |
-| `/hushdelegatelist` | `/hddl` | List all current mute delegates (host only) |
+| `/hushban <player>` | `/hb` | Ban an online player (host or delegate) |
+| `/hushbanoffline <steamid> <nick>` | `/hbo` | Ban a player by Steam ID without them being online (host only) |
+| `/hushunban <player\|steamid>` | `/hub` | Remove a ban; accepts Steam ID for offline removal (host only) |
+| `/hushgetbans` | `/hgb` | List all banned players (host only) |
+
+### Mute & ban delegates
+
+The host can whitelist trusted non-host players to use `/hushtmute` and `/hushban`. When a delegate issues either command, a hidden sentinel message is sent to the host; the host validates the whitelist and executes the action server-side. The sentinel is never visible to other clients. Delegates also add the ban to their own local ban list.
+
+| Command | Short | Description |
+|---|---|---|
+| `/hushdelegateadd <player>` | `/hda` | Add a player to the delegate whitelist (host only) |
+| `/hushdelegateremove <player>` | `/hdr` | Remove a player from the whitelist; accepts raw Steam ID for offline players (host only) |
+| `/hushdelegatelist` | `/hdl` | List all current delegates (host only) |
 
 The delegate list is saved alongside the mute list in `BepInEx/config/com.andrewlin.ontogether.hush.mutes.json`.
 

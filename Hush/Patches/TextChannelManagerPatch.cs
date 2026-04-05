@@ -153,6 +153,17 @@ namespace Hush.Patches
                     _log.LogInfo($"[Relay] {senderSteamId} muted {targetId} for {secs}s.");
                     break;
                 }
+                case "ban":
+                {
+                    string targetId = rest;
+                    string displayName = PlayerUtils.FindPlayerBySteamID(targetId)?.UserNameClean ?? targetId;
+                    if (HushPlugin.BanManager?.Ban(targetId, displayName) == true)
+                    {
+                        ChatUtils.AddGlobalNotification($"Hush: {senderName} banned {displayName} (delegated).");
+                        _log.LogInfo($"[Relay] {senderSteamId} banned {targetId}.");
+                    }
+                    break;
+                }
                 default:
                     _log.LogWarning($"[Relay] Unknown command '{cmd}' from {senderSteamId}.");
                     break;

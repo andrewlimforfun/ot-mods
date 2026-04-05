@@ -9,7 +9,7 @@ namespace Hush.Core.Commands
     public class HushUnmuteCommand : IChatCommand
     {
         public string Name => "hushunmute";
-        public string ShortName => "humu";
+        public string ShortName => "hum";
         public string Description => "Unmute a player (host only). Usage: /hushunmute <player>";
         public string Namespace => "hush";
 

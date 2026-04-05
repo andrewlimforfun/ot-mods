@@ -27,6 +27,7 @@ namespace Hush
         public static ConfigEntry<string>? FilterConfigPathConfig { get; private set; }
         public static ChatFilterManager? FilterManager { get; private set; }
         public static PlayerMuteManager? MuteManager { get; private set; }
+        public static BanManager? BanManager { get; private set; }
 
         public static string FilterConfigPath =>
             FilterConfigPathConfig?.Value ?? Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json");
@@ -99,6 +100,8 @@ namespace Hush
             MuteManager = new PlayerMuteManager();
             MuteManager.Load(MutesConfigPath);
 
+            BanManager = new BanManager();
+
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(TextChannelManagerPatch));
 
@@ -120,6 +123,10 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushDelegateRemoveCommand());
             AlphaPlugin.CommandManager?.Register(new HushDelegateListCommand());
             AlphaPlugin.CommandManager?.Register(new HushVersionCommand());
+            AlphaPlugin.CommandManager?.Register(new HushBanCommand());
+            AlphaPlugin.CommandManager?.Register(new HushBanOfflineCommand());
+            AlphaPlugin.CommandManager?.Register(new HushUnbanCommand());
+            AlphaPlugin.CommandManager?.Register(new HushGetBansCommand());
         }
 
         void InitConfig()
