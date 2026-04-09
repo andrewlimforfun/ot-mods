@@ -24,8 +24,13 @@ namespace Hush.Core
         /// <summary>Permanently mutes a player. Removes any existing timed mute. Returns true if newly muted.</summary>
         public bool Mute(string steamId)
         {
-            _timedMutes.Remove(steamId);
-            if (!_permaMuted.Add(steamId)) return false;
+            bool hadTimed = _timedMutes.Remove(steamId);
+            if (hadTimed) _log.LogDebug($"Mute: removed existing timed mute for {steamId}");
+            if (!_permaMuted.Add(steamId))
+            {
+                _log.LogDebug($"Mute: {steamId} was already permanently muted (no-op)");
+                return false;
+            }
             _log.LogInfo($"Permanently muted: {steamId}");
             return true;
         }
@@ -33,27 +38,49 @@ namespace Hush.Core
         /// <summary>Temporarily mutes a player for <paramref name="duration"/>. Removes any existing permanent mute. Returns true if applied.</summary>
         public bool MuteFor(string steamId, TimeSpan duration)
         {
-            if (duration <= TimeSpan.Zero) return false;
-            _permaMuted.Remove(steamId);
+            if (duration <= TimeSpan.Zero)
+            {
+                _log.LogWarning($"MuteFor: invalid duration {duration} for {steamId} — ignored");
+                return false;
+            }
+            bool hadPerma = _permaMuted.Remove(steamId);
+            if (hadPerma) _log.LogDebug($"MuteFor: removed existing permanent mute for {steamId}");
+            bool hadTimed = _timedMutes.ContainsKey(steamId);
             _timedMutes[steamId] = DateTime.UtcNow + duration;
-            _log.LogInfo($"Timed muted: {steamId} until {_timedMutes[steamId]:u}");
+            if (hadTimed) _log.LogDebug($"MuteFor: extended/replaced existing timed mute for {steamId}");
+            _log.LogInfo($"Timed muted: {steamId} until {_timedMutes[steamId]:u} ({duration.TotalSeconds:0}s)");
             return true;
         }
 
         /// <summary>Unmutes a player (permanent or timed). Returns true if they were previously muted.</summary>
         public bool Unmute(string steamId)
         {
-            bool removed = _permaMuted.Remove(steamId) | _timedMutes.Remove(steamId);
-            if (removed) _log.LogInfo($"Unmuted: {steamId}");
-            return removed;
+            bool removedPerma = _permaMuted.Remove(steamId);
+            bool removedTimed = _timedMutes.Remove(steamId);
+            if (removedPerma || removedTimed)
+            {
+                _log.LogInfo($"Unmuted: {steamId} (wasPerma={removedPerma}, wasTimed={removedTimed})");
+                return true;
+            }
+            _log.LogDebug($"Unmute: {steamId} was not muted (no-op)");
+            return false;
         }
 
         /// <summary>Returns true if the player is currently muted (permanent or active timed mute).</summary>
         public bool IsMuted(string steamId)
         {
-            if (_permaMuted.Contains(steamId)) return true;
+            if (_permaMuted.Contains(steamId))
+            {
+                _log.LogDebug($"IsMuted: {steamId} → true (permanent)");
+                return true;
+            }
             if (_timedMutes.TryGetValue(steamId, out DateTime expiry))
-                return expiry > DateTime.UtcNow;
+            {
+                bool active = expiry > DateTime.UtcNow;
+                _log.LogDebug($"IsMuted: {steamId} → {active} (timed, expires {expiry:u}, remaining {(expiry - DateTime.UtcNow).TotalSeconds:0}s)");
+                return active;
+            }
+            _log.LogDebug($"IsMuted: {steamId} → false (not in either list)");
             return false;
         }
 
@@ -87,6 +114,7 @@ namespace Hush.Core
         public void Tick()
         {
             if (_timedMutes.Count == 0) return;
+            _log.LogDebug($"Tick: checking {_timedMutes.Count} timed mute(s), {_permaMuted.Count} permanent");
             DateTime now = DateTime.UtcNow;
             var expired = _timedMutes.Where(kv => kv.Value <= now).Select(kv => kv.Key).ToList();
             foreach (string id in expired)

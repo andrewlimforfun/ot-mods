@@ -34,6 +34,8 @@ namespace Hush.Patches
             if (!asServer)
                 return true;
 
+            _log.LogDebug($"[Server] HandleRPCGenerated_0: intercepted packet (asServer={asServer})");
+
             // Read the arguments from the packet payload
             var reader = BitPackerPool.Get(packet.data);
 
@@ -50,14 +52,20 @@ namespace Hush.Patches
 
             reader.Dispose();
 
+            _log.LogDebug($"[Server] Message from playerID={playerID}, isLocal={isLocal}");
+
             // Drop messages from muted players before any further processing
-            if (HushPlugin.MuteManager?.IsMuted(playerID) == true)
+            if (HushPlugin.MuteManager == null)
+                _log.LogWarning("[Server] MuteManager is null - mute check skipped");
+            else if (HushPlugin.MuteManager.IsMuted(playerID))
             {
                 PlayerDetail? playerDetail = PlayerUtils.FindPlayerBySteamID(playerID);
                 ChatUtils.AddGlobalNotification($"Muted message from {playerDetail?.UserName ?? "Unknown"} ({playerID}).");
                 _log.LogInfo($"[Server] Blocked message from muted player {playerDetail?.UserNameClean ?? "Unknown"} ({playerID}).");
                 return false;
             }
+            else
+                _log.LogDebug($"[Server] {playerID} is not muted, proceeding");
 
             // Decode the chat text
             string text = Encoding.Unicode.GetString(textBytes);
