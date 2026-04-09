@@ -18,6 +18,7 @@
 
         <!-- External dependency versions — update here to sync all thunderstore.toml files -->
         <BepInExVersion>5.4.2305</BepInExVersion>
+        <OnTogetherGameLibsVersion>2.0.0</OnTogetherGameLibsVersion>
 
         <!-- Mods Versions -->
         <AlphaVersion>0.0.6</AlphaVersion>

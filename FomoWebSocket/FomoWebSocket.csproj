@@ -14,7 +14,7 @@
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="OnTogether.GameLibs" Version="1.1.0" />
+    <PackageReference Include="OnTogether.GameLibs" Version="$(OnTogetherGameLibsVersion)" />
     <PackageReference Include="UnityEngine.Modules" Version="6000.0.61" IncludeAssets="compile" />
     <PackageReference Include="HarmonyX" Version="2.10.1" />
     <PackageReference Include="Fleck" Version="1.2.0" />
