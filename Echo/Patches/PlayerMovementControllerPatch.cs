@@ -31,7 +31,7 @@ namespace Echo.Patches
                 return true;
 
             ____characterController.transform.position = WarpPosition;
-            Logger.LogDebug($"Teleported to {WarpPosition}");
+            Logger.LogInfo($"Teleported to {WarpPosition}");
             WarpPosition = Vector3.zero;
             return false; // skip original MovePlayer this tick
         }

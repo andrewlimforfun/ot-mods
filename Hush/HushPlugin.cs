@@ -29,6 +29,8 @@ namespace Hush
         public static PlayerMuteManager? MuteManager { get; private set; }
         public static BanManager? BanManager { get; private set; }
 
+        public static bool VerboseLogging { get; set; } = false;
+
         public static string FilterConfigPath =>
             FilterConfigPathConfig?.Value ?? Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json");
 
@@ -123,6 +125,7 @@ namespace Hush
             AlphaPlugin.CommandManager?.Register(new HushDelegateRemoveCommand());
             AlphaPlugin.CommandManager?.Register(new HushDelegateListCommand());
             AlphaPlugin.CommandManager?.Register(new HushVersionCommand());
+            AlphaPlugin.CommandManager?.Register(new HushLogVerboseCommand());
             AlphaPlugin.CommandManager?.Register(new HushBanCommand());
             AlphaPlugin.CommandManager?.Register(new HushBanOfflineCommand());
             AlphaPlugin.CommandManager?.Register(new HushUnbanCommand());

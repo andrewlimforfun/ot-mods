@@ -34,7 +34,6 @@ namespace Hush.Patches
             if (!asServer)
                 return true;
 
-            _log.LogDebug($"[Server] HandleRPCGenerated_0: intercepted packet (asServer={asServer})");
 
             // Read the arguments from the packet payload
             var reader = BitPackerPool.Get(packet.data);
@@ -52,7 +51,7 @@ namespace Hush.Patches
 
             reader.Dispose();
 
-            _log.LogDebug($"[Server] Message from playerID={playerID}, isLocal={isLocal}");
+            _log.LogDebug($"[Server] HandleRPCGenerated_0: intercept {playerID}");
 
             // Drop messages from muted players before any further processing
             if (HushPlugin.MuteManager == null)
@@ -211,7 +210,7 @@ namespace Hush.Patches
             // Suppress relay sentinels that loop back to the host's local client
             if (message.StartsWith("hush:", StringComparison.Ordinal))
             {
-                _log.LogDebug("[Client] Suppressed relay sentinel in notification.");
+                _log.LogInfo("Suppressed relay sentinel in notification: " + message);
                 return false;
             }
 
@@ -220,7 +219,7 @@ namespace Hush.Patches
                 return true;
             
             FilterResult result = filter.Apply(message);
-            if (result.WasBlocked) _log.LogDebug("[Client] Suppressed notification for blocked message.");
+            if (result.WasBlocked) _log.LogInfo("Suppressed notification for blocked message: " + message);
             return !result.WasBlocked;
         }
 
@@ -238,7 +237,7 @@ namespace Hush.Patches
             // Suppress relay sentinels that loop back to the host's local client
             if (text.StartsWith("hush:", StringComparison.Ordinal))
             {
-                _log.LogDebug("[Client] Suppressed relay sentinel in UI.");
+                _log.LogInfo("Suppressed relay sentinel in UI: " + text);
                 return false;
             }
 
@@ -249,12 +248,12 @@ namespace Hush.Patches
             FilterResult result = filter.Apply(text);
             if (result.WasBlocked)
             {
-                _log.LogDebug("[Client] Blocked message in UI.");
+                _log.LogInfo("Blocked message in UI: " + result.Text);
                 return false;
             }
             if (result.WasModified)
             {
-                _log.LogDebug("[Client] Censored message in UI.");
+                _log.LogInfo("Censored message in UI: " + result.Text);
                 text = result.Text;
             }
             return true;

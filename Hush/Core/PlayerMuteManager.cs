@@ -25,10 +25,10 @@ namespace Hush.Core
         public bool Mute(string steamId)
         {
             bool hadTimed = _timedMutes.Remove(steamId);
-            if (hadTimed) _log.LogDebug($"Mute: removed existing timed mute for {steamId}");
+            if (hadTimed && HushPlugin.VerboseLogging) _log.LogDebug($"Mute: removed existing timed mute for {steamId}");
             if (!_permaMuted.Add(steamId))
             {
-                _log.LogDebug($"Mute: {steamId} was already permanently muted (no-op)");
+                if (HushPlugin.VerboseLogging) _log.LogDebug($"Mute: {steamId} was already permanently muted (no-op)");
                 return false;
             }
             _log.LogInfo($"Permanently muted: {steamId}");
@@ -44,10 +44,10 @@ namespace Hush.Core
                 return false;
             }
             bool hadPerma = _permaMuted.Remove(steamId);
-            if (hadPerma) _log.LogDebug($"MuteFor: removed existing permanent mute for {steamId}");
+            if (hadPerma && HushPlugin.VerboseLogging) _log.LogDebug($"MuteFor: removed existing permanent mute for {steamId}");
             bool hadTimed = _timedMutes.ContainsKey(steamId);
             _timedMutes[steamId] = DateTime.UtcNow + duration;
-            if (hadTimed) _log.LogDebug($"MuteFor: extended/replaced existing timed mute for {steamId}");
+            if (hadTimed && HushPlugin.VerboseLogging) _log.LogDebug($"MuteFor: extended/replaced existing timed mute for {steamId}");
             _log.LogInfo($"Timed muted: {steamId} until {_timedMutes[steamId]:u} ({duration.TotalSeconds:0}s)");
             return true;
         }
@@ -62,7 +62,7 @@ namespace Hush.Core
                 _log.LogInfo($"Unmuted: {steamId} (wasPerma={removedPerma}, wasTimed={removedTimed})");
                 return true;
             }
-            _log.LogDebug($"Unmute: {steamId} was not muted (no-op)");
+            if (HushPlugin.VerboseLogging) _log.LogDebug($"Unmute: {steamId} was not muted (no-op)");
             return false;
         }
 
@@ -71,16 +71,16 @@ namespace Hush.Core
         {
             if (_permaMuted.Contains(steamId))
             {
-                _log.LogDebug($"IsMuted: {steamId} → true (permanent)");
+                if (HushPlugin.VerboseLogging) _log.LogDebug($"IsMuted: {steamId} → true (permanent)");
                 return true;
             }
-            if (_timedMutes.TryGetValue(steamId, out DateTime expiry))
+            else if (_timedMutes.TryGetValue(steamId, out DateTime expiry))
             {
                 bool active = expiry > DateTime.UtcNow;
-                _log.LogDebug($"IsMuted: {steamId} → {active} (timed, expires {expiry:u}, remaining {(expiry - DateTime.UtcNow).TotalSeconds:0}s)");
+                if (HushPlugin.VerboseLogging) _log.LogDebug($"IsMuted: {steamId} → {active} (timed, expires {expiry:u}, remaining {(expiry - DateTime.UtcNow).TotalSeconds:0}s)");
                 return active;
-            }
-            _log.LogDebug($"IsMuted: {steamId} → false (not in either list)");
+            } 
+            if (HushPlugin.VerboseLogging) _log.LogDebug($"IsMuted: {steamId} → false (not in either list)");
             return false;
         }
 
@@ -114,7 +114,6 @@ namespace Hush.Core
         public void Tick()
         {
             if (_timedMutes.Count == 0) return;
-            _log.LogDebug($"Tick: checking {_timedMutes.Count} timed mute(s), {_permaMuted.Count} permanent");
             DateTime now = DateTime.UtcNow;
             var expired = _timedMutes.Where(kv => kv.Value <= now).Select(kv => kv.Key).ToList();
             foreach (string id in expired)
@@ -155,7 +154,7 @@ namespace Hush.Core
             };
             string json = JsonConvert.SerializeObject(dto, Formatting.Indented);
             File.WriteAllText(filePath, json, Encoding.UTF8);
-            _log.LogInfo($"Saved mute config to: {filePath}");
+            if (HushPlugin.VerboseLogging) _log.LogInfo($"Saved mute config to: {filePath}");
         }
 
         /// <summary>Loads mutes from a JSON file. Silently no-ops if the file is missing or corrupt.</summary>
@@ -163,7 +162,7 @@ namespace Hush.Core
         {
             if (!File.Exists(filePath))
             {
-                _log.LogInfo("No mute config found, starting fresh.");
+                if (HushPlugin.VerboseLogging) _log.LogInfo("No mute config found, starting fresh.");
                 return;
             }
             MuteConfig? dto;
@@ -197,7 +196,7 @@ namespace Hush.Core
                     if (!string.IsNullOrWhiteSpace(id))
                         _delegates.Add(id.Trim());
 
-            _log.LogInfo($"Loaded mute config: {_permaMuted.Count} permanent, {_timedMutes.Count} timed, {_delegates.Count} delegates.");
+            if (HushPlugin.VerboseLogging) _log.LogInfo($"Loaded mute config: {_permaMuted.Count} permanent, {_timedMutes.Count} timed, {_delegates.Count} delegates.");
         }
 
         private class MuteConfig
