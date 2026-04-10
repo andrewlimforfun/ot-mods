@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6] - 2026-04-10
+
+### Added
+
+- `/hushlogverbose` (`/hlv`) — toggle verbose BepInEx logging for Hush at runtime. Off by default; when enabled, debug-level traces (mute checks, relay paths, save/load messages) are emitted to the log.
+- `Hush.Tests` project with 81 unit tests covering `ChatFilterManager`, `PlayerMuteManager`, `RelayParser`, and `DurationFormatter`.
+
+### Changed
+
+- Removed client-side suppression of `hush:` sentinel messages. If a sentinel leaks to a client it will now display in chat as a visible indicator that the server-side intercept failed.
+- Relay parsing and duration formatting extracted into standalone `RelayParser` / `DurationFormatter` classes (no behaviour change).
+
 ## [0.1.5] - 2026-04-05
 
 ### Added
