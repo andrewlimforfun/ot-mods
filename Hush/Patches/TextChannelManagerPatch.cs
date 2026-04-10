@@ -206,13 +206,6 @@ namespace Hush.Patches
         {
             if (string.IsNullOrEmpty(message))
                 return true;
-                
-            // Suppress relay sentinels that loop back to the host's local client
-            if (message.StartsWith("hush:", StringComparison.Ordinal))
-            {
-                _log.LogInfo("Suppressed relay sentinel in notification: " + message);
-                return false;
-            }
 
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)
@@ -233,13 +226,6 @@ namespace Hush.Patches
         {
             if (string.IsNullOrEmpty(text))
                 return true;
-
-            // Suppress relay sentinels that loop back to the host's local client
-            if (text.StartsWith("hush:", StringComparison.Ordinal))
-            {
-                _log.LogInfo("Suppressed relay sentinel in UI: " + text);
-                return false;
-            }
 
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)
