@@ -127,71 +127,51 @@ namespace Hush.Patches
 
         /// <summary>
         /// Parses and executes a relay payload sent by a whitelisted delegate.
-        /// Payload format: <c>tmute:&lt;targetSteamId&gt;:&lt;seconds&gt;</c>
         /// </summary>
         private static void ExecuteRelay(string payload, string senderSteamId)
         {
             PlayerMuteManager? mutes = HushPlugin.MuteManager;
             if (mutes == null) return;
 
-            int cmdEnd = payload.IndexOf(':');
-            if (cmdEnd < 0) { _log.LogWarning($"[Relay] Malformed payload from {senderSteamId}: {payload}"); return; }
-
-            string cmd = payload.Substring(0, cmdEnd);
-            string rest = payload.Substring(cmdEnd + 1);
+            var cmd = RelayParser.Parse(payload);
+            if (!cmd.IsValid)
+            {
+                _log.LogWarning($"[Relay] {cmd.Error} from {senderSteamId}");
+                return;
+            }
 
             string senderName = PlayerUtils.FindPlayerBySteamID(senderSteamId)?.UserNameClean ?? senderSteamId;
 
-            switch (cmd)
+            switch (cmd.Type)
             {
-                case "tmute":
+                case RelayCommandType.TimedMute:
                 {
-                    int lastColon = rest.LastIndexOf(':');
-                    if (lastColon < 0) { _log.LogWarning($"[Relay] Bad tmute args from {senderSteamId}: {rest}"); return; }
-                    string targetId = rest.Substring(0, lastColon);
-                    if (!int.TryParse(rest.Substring(lastColon + 1), out int secs) || secs <= 0)
-                    { _log.LogWarning($"[Relay] Bad duration from {senderSteamId}: {rest}"); return; }
-
-                    string displayName = PlayerUtils.FindPlayerBySteamID(targetId)?.UserNameClean ?? targetId;
-                    mutes.MuteFor(targetId, TimeSpan.FromSeconds(secs));
+                    string displayName = PlayerUtils.FindPlayerBySteamID(cmd.TargetSteamId)?.UserNameClean ?? cmd.TargetSteamId;
+                    mutes.MuteFor(cmd.TargetSteamId, TimeSpan.FromSeconds(cmd.DurationSeconds));
                     HushPlugin.SaveMutes();
-                    string dur = FormatDuration(TimeSpan.FromSeconds(secs));
+                    string dur = DurationFormatter.Format(TimeSpan.FromSeconds(cmd.DurationSeconds));
                     ChatUtils.AddGlobalNotification($"Hush: {senderName} muted {displayName} for {dur} (delegated).");
-                    _log.LogInfo($"[Relay] {senderSteamId} muted {targetId} for {secs}s.");
+                    _log.LogInfo($"[Relay] {senderSteamId} muted {cmd.TargetSteamId} for {cmd.DurationSeconds}s.");
                     break;
                 }
-                case "ban":
+                case RelayCommandType.Ban:
                 {
-                    string targetId = rest;
-                    string displayName = PlayerUtils.FindPlayerBySteamID(targetId)?.UserNameClean ?? targetId;
-                    if (HushPlugin.BanManager?.Ban(targetId, displayName) == true)
+                    string displayName = PlayerUtils.FindPlayerBySteamID(cmd.TargetSteamId)?.UserNameClean ?? cmd.TargetSteamId;
+                    if (HushPlugin.BanManager?.Ban(cmd.TargetSteamId, displayName) == true)
                     {
                         ChatUtils.AddGlobalNotification($"Hush: {senderName} banned {displayName} (delegated).");
-                        _log.LogInfo($"[Relay] {senderSteamId} banned {targetId}.");
+                        _log.LogInfo($"[Relay] {senderSteamId} banned {cmd.TargetSteamId}.");
                     }
                     break;
                 }
                 default:
-                    _log.LogWarning($"[Relay] Unknown command '{cmd}' from {senderSteamId}.");
+                    _log.LogWarning($"[Relay] Unhandled command type from {senderSteamId}.");
                     break;
             }
         }
 
-        // Harmony003 is a false positive here: the analyzer treats every method inside a
-        // [HarmonyPatch] class as a patch method and raises false "parameter modified" warnings
-        // for value-type property reads.
 #pragma warning disable Harmony003
-        private static string FormatDuration(TimeSpan ts)
-        {
-            if (ts.TotalSeconds < 60) return $"{(int)ts.TotalSeconds}s";
-            if (ts.TotalMinutes < 60) return $"{(int)ts.TotalMinutes}m";
-            if (ts.TotalHours < 24)
-            {
-                string h = $"{ts.Hours}h";
-                return ts.Minutes > 0 ? $"{h} {ts.Minutes}m" : h;
-            }
-            return $"{(int)ts.TotalDays}d";
-        }
+        private static string FormatDuration(TimeSpan ts) => DurationFormatter.Format(ts);
 #pragma warning restore Harmony003
 
         // -- Client-side patches ------------------------------------------------------

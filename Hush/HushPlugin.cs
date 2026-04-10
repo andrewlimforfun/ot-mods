@@ -29,7 +29,12 @@ namespace Hush
         public static PlayerMuteManager? MuteManager { get; private set; }
         public static BanManager? BanManager { get; private set; }
 
-        public static bool VerboseLogging { get; set; } = false;
+        /// <summary>Shortcut for <see cref="HushSettings.VerboseLogging"/>.</summary>
+        public static bool VerboseLogging
+        {
+            get => HushSettings.VerboseLogging;
+            set => HushSettings.VerboseLogging = value;
+        }
 
         public static string FilterConfigPath =>
             FilterConfigPathConfig?.Value ?? Path.Combine(Paths.ConfigPath, $"{ModGUID}.filter.json");

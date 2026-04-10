@@ -184,7 +184,7 @@ namespace Hush.Core
             };
             string json = JsonConvert.SerializeObject(dto, Formatting.Indented);
             File.WriteAllText(filePath, json, Encoding.UTF8);
-            if (HushPlugin.VerboseLogging) _log.LogInfo($"Saved filter config ({_blockedWords.Count} words, {_rawPatterns.Count} patterns) to: {filePath}");
+            if (HushSettings.VerboseLogging) _log.LogInfo($"Saved filter config ({_blockedWords.Count} words, {_rawPatterns.Count} patterns) to: {filePath}");
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Hush.Core
         {
             if (!File.Exists(filePath))
             {
-                if (HushPlugin.VerboseLogging) _log.LogInfo("No filter config file found, starting fresh.");
+                if (HushSettings.VerboseLogging) _log.LogInfo("No filter config file found, starting fresh.");
                 return;
             }
             FilterConfig? dto;
@@ -221,7 +221,7 @@ namespace Hush.Core
                     catch (ArgumentException) { _log.LogWarning($"Skipped invalid regex in config: \"{trimmed}\""); }
                 }
             RebuildPattern();
-            if (HushPlugin.VerboseLogging) _log.LogInfo($"Loaded filter config: {_blockedWords.Count} words, {_rawPatterns.Count} patterns.");
+            if (HushSettings.VerboseLogging) _log.LogInfo($"Loaded filter config: {_blockedWords.Count} words, {_rawPatterns.Count} patterns.");
         }
 
         private class FilterConfig
@@ -269,7 +269,7 @@ namespace Hush.Core
             // IgnoreCase only applies to the literal words section;
             // raw patterns use their own inline flags.
             _pattern = new Regex(sb.ToString(), RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            if (HushPlugin.VerboseLogging) _log.LogInfo($"Pattern rebuilt: {Count} active entries.");
+            if (HushSettings.VerboseLogging) _log.LogInfo($"Pattern rebuilt: {Count} active entries.");
         }
     }
 }

@@ -38,6 +38,7 @@
 
   <Folder Name="/hush/">
     <Project Name="Hush" Path="Hush\Hush.csproj" />
+    <Project Name="Hush.Tests" Path="Hush.Tests\Hush.Tests.csproj" />
   </Folder>
 
 </Solution>
