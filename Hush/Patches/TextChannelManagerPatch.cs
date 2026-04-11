@@ -40,8 +40,8 @@ namespace Hush.Patches
 
             byte[] textBytes = null!;
             Packer<byte[]>.Read(reader, ref textBytes);
-            byte[] userName = null!;
-            Packer<byte[]>.Read(reader, ref userName);
+            byte[] userNameBytes = null!;
+            Packer<byte[]>.Read(reader, ref userNameBytes);
             bool isLocal = default;
             Packer<bool>.Read(reader, ref isLocal);
             UnityEngine.Vector3 pos = default;
@@ -51,20 +51,22 @@ namespace Hush.Patches
 
             reader.Dispose();
 
-            _log.LogDebug($"[Server] HandleRPCGenerated_0: intercept {playerID}");
+            string userName = Encoding.Unicode.GetString(userNameBytes);
+            string userNameClean = ChatUtils.CleanTMPTags(userName);            
+
+            if (HushSettings.VerboseLogging) _log.LogDebug($"[Server] HandleRPCGenerated_0: intercept {userNameClean} ({playerID})");            
 
             // Drop messages from muted players before any further processing
             if (HushPlugin.MuteManager == null)
                 _log.LogWarning("[Server] MuteManager is null - mute check skipped");
             else if (HushPlugin.MuteManager.IsMuted(playerID))
             {
-                PlayerDetail? playerDetail = PlayerUtils.FindPlayerBySteamID(playerID);
-                ChatUtils.AddGlobalNotification($"Muted message from {playerDetail?.UserName ?? "Unknown"} ({playerID}).");
-                _log.LogInfo($"[Server] Blocked message from muted player {playerDetail?.UserNameClean ?? "Unknown"} ({playerID}).");
+                ChatUtils.AddGlobalNotification($"Muted message from {userName} ({playerID}).");
+                _log.LogInfo($"[Server] Blocked message from muted player {userNameClean} ({playerID}).");
                 return false;
             }
-            else
-                _log.LogDebug($"[Server] {playerID} is not muted, proceeding");
+            else if (HushSettings.VerboseLogging)
+                _log.LogDebug($"[Server] {userNameClean} ({playerID}) is not muted, proceeding");
 
             // Decode the chat text
             string text = Encoding.Unicode.GetString(textBytes);
@@ -76,11 +78,11 @@ namespace Hush.Patches
             {
                 if (HushPlugin.MuteManager?.IsDelegate(playerID) == true)
                 {
-                    _log.LogInfo($"[Server] Relay accepted from delegate {playerID}.");
+                    _log.LogInfo($"[Relay] Relay accepted from delegate {userNameClean} ({playerID}): {text}");
                     ExecuteRelay(text.Substring(RelayPrefix.Length), playerID);
                 }
                 else
-                    _log.LogWarning($"[Server] Relay rejected from non-delegate {playerID}.");
+                    _log.LogWarning($"[Relay] Relay rejected from non-delegate {userNameClean} ({playerID}): {text}");
                 return false;
             }
 
@@ -93,22 +95,22 @@ namespace Hush.Patches
 
             if (result.WasBlocked)
             {
-                ChatUtils.AddGlobalNotification($"Filter blocked message from {playerID}.");
-                _log.LogInfo($"[Server] Blocked message from {playerID}: \"{text}\"");
+                ChatUtils.AddGlobalNotification($"Filter blocked message from {userName} ({playerID}).");
+                _log.LogInfo($"[Server] Blocked message from {userNameClean} ({playerID}): \"{text}\"");
                 return false; // Skip entirely - message is never relayed
             }
 
             if (!result.WasModified)
                 return true; // Nothing to change
 
-            _log.LogInfo($"[Server] Censored message from {playerID}.");
+            _log.LogInfo($"[Server] Censored message from {userNameClean} ({playerID}).");
 
             // Rebuild the payload with censored text
             byte[] censoredBytes = Encoding.Unicode.GetBytes(result.Text);
 
             var writer = BitPackerPool.Get();
             Packer<byte[]>.Write(writer, censoredBytes);
-            Packer<byte[]>.Write(writer, userName);
+            Packer<byte[]>.Write(writer, userNameBytes);
             Packer<bool>.Write(writer, isLocal);
             Packer<UnityEngine.Vector3>.Write(writer, pos);
             Packer<string>.Write(writer, playerID);
@@ -141,26 +143,25 @@ namespace Hush.Patches
             }
 
             string senderName = PlayerUtils.FindPlayerBySteamID(senderSteamId)?.UserNameClean ?? senderSteamId;
+            string targetName = PlayerUtils.FindPlayerBySteamID(cmd.TargetSteamId)?.UserNameClean ?? cmd.TargetSteamId;
 
             switch (cmd.Type)
             {
                 case RelayCommandType.TimedMute:
                 {
-                    string displayName = PlayerUtils.FindPlayerBySteamID(cmd.TargetSteamId)?.UserNameClean ?? cmd.TargetSteamId;
                     mutes.MuteFor(cmd.TargetSteamId, TimeSpan.FromSeconds(cmd.DurationSeconds));
                     HushPlugin.SaveMutes();
                     string dur = DurationFormatter.Format(TimeSpan.FromSeconds(cmd.DurationSeconds));
-                    ChatUtils.AddGlobalNotification($"Hush: {senderName} muted {displayName} for {dur} (delegated).");
-                    _log.LogInfo($"[Relay] {senderSteamId} muted {cmd.TargetSteamId} for {cmd.DurationSeconds}s.");
+                    ChatUtils.AddGlobalNotification($"Hush: delegate {senderName} muted {targetName} ({cmd.TargetSteamId}) for {dur}.");
+                    _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) muted {targetName} ({cmd.TargetSteamId}) for {cmd.DurationSeconds}s.");
                     break;
                 }
                 case RelayCommandType.Ban:
                 {
-                    string displayName = PlayerUtils.FindPlayerBySteamID(cmd.TargetSteamId)?.UserNameClean ?? cmd.TargetSteamId;
-                    if (HushPlugin.BanManager?.Ban(cmd.TargetSteamId, displayName) == true)
+                    if (HushPlugin.BanManager?.Ban(cmd.TargetSteamId, targetName) == true)
                     {
-                        ChatUtils.AddGlobalNotification($"Hush: {senderName} banned {displayName} (delegated).");
-                        _log.LogInfo($"[Relay] {senderSteamId} banned {cmd.TargetSteamId}.");
+                        ChatUtils.AddGlobalNotification($"Hush: delegate {senderName} banned {targetName} ({cmd.TargetSteamId}).");
+                        _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) banned {targetName} ({cmd.TargetSteamId}).");
                     }
                     break;
                 }

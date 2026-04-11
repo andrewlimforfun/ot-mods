@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.7] - 2026-04-11
+
+### Added
+
+- improve relay and server side logging
+
 ## [0.1.6] - 2026-04-10
 
 ### Added
 
-- `/hushlogverbose` (`/hlv`) — toggle verbose BepInEx logging for Hush at runtime. Off by default; when enabled, debug-level traces (mute checks, relay paths, save/load messages) are emitted to the log.
+- `/hushlogverbose` (`/hlv`) - toggle verbose BepInEx logging for Hush at runtime. Off by default; when enabled, debug-level traces (mute checks, relay paths, save/load messages) are emitted to the log.
 - `Hush.Tests` project with 81 unit tests covering `ChatFilterManager`, `PlayerMuteManager`, `RelayParser`, and `DurationFormatter`.
 
 ### Changed
@@ -19,10 +25,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - `BanManager` class: centralises all ban operations (add, add offline, remove, list) on top of the game's `DataManager.BanData`.
-- `/hushban <player>` (`/hb`) — ban an online player. Host executes directly; whitelisted delegates relay the request to the host and also add the player to their own local ban list.
-- `/hushbanoffline <steamid> <nickname>` (`/hbo`) — ban a player by Steam ID without them being online (host only).
-- `/hushunban <player|steamid>` (`/hub`) — remove a ban; accepts player query or raw Steam ID for offline removal (host only).
-- `/hushgetbans` (`/hgb`) — list all banned players (host only).
+- `/hushban <player>` (`/hb`) - ban an online player. Host executes directly; whitelisted delegates relay the request to the host and also add the player to their own local ban list.
+- `/hushbanoffline <steamid> <nickname>` (`/hbo`) - ban a player by Steam ID without them being online (host only).
+- `/hushunban <player|steamid>` (`/hub`) - remove a ban; accepts player query or raw Steam ID for offline removal (host only).
+- `/hushgetbans` (`/hgb`) - list all banned players (host only).
 - Ban commands share the existing delegate whitelist: delegates may relay `/hushban` to the host in the same way as timed mutes.
 
 ## [0.1.4] - 2026-04-02
@@ -45,10 +51,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Mute-delegate relay system: the host can whitelist trusted non-host players to use `/hushtmute`. Delegates send a hidden sentinel message; the host validates and executes the mute server-side — the sentinel is never visible to other clients.
-- `/hushdelegateadd <player>` (`/hdda`) — add a player to the mute-delegate whitelist (host only).
-- `/hushdelegateremove <player>` (`/hddr`) — remove a player from the whitelist; accepts a raw Steam ID for offline players (host only).
-- `/hushdelegatelist` (`/hddl`) — list all current delegates (host only).
+- Mute-delegate relay system: the host can whitelist trusted non-host players to use `/hushtmute`. Delegates send a hidden sentinel message; the host validates and executes the mute server-side - the sentinel is never visible to other clients.
+- `/hushdelegateadd <player>` (`/hdda`) - add a player to the mute-delegate whitelist (host only).
+- `/hushdelegateremove <player>` (`/hddr`) - remove a player from the whitelist; accepts a raw Steam ID for offline players (host only).
+- `/hushdelegatelist` (`/hddl`) - list all current delegates (host only).
 - Delegate list persisted to the mutes JSON file and restored on load.
 
 ### Changed
@@ -68,10 +74,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Player mute system (host only): suppress all messages from specific players server-side.
-- `/hushmute <player>` — permanently mute a player by name or Steam ID suffix.
-- `/hushtmute <player> <duration>` — timed mute with ISO 8601 / `hh:mm:ss` duration (e.g. `10m`, `1h30m`, `30s`).
-- `/hushunmute <player>` — remove a permanent or timed mute. Accepts Steam ID for offline players.
-- `/hushgetmutes` — list all currently muted players with their expiry time.
+- `/hushmute <player>` - permanently mute a player by name or Steam ID suffix.
+- `/hushtmute <player> <duration>` - timed mute with ISO 8601 / `hh:mm:ss` duration (e.g. `10m`, `1h30m`, `30s`).
+- `/hushunmute <player>` - remove a permanent or timed mute. Accepts Steam ID for offline players.
+- `/hushgetmutes` - list all currently muted players with their expiry time.
 - Mute list persisted to `BepInEx/config/com.andrewlin.ontogether.hush.mutes.json`; timed mute expiry times are preserved across game restarts.
 
 ## [0.0.1] - 2026-03-20
