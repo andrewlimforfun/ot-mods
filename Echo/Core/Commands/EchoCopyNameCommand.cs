@@ -18,7 +18,8 @@ namespace Echo.Core.Commands
 
         public void Execute(string[] args)
         {
-            if (EchoPlugin.AccessToken == null || !EchoPlugin.Validator.IsValid(EchoPlugin.AccessToken.Value.Trim()))
+            bool isAdmin = PlayerLists.IsAdmin(SteamUtils.GetPlayerSteamID());
+            if (!isAdmin && (EchoPlugin.AccessToken == null || !EchoPlugin.Validator.IsValid(EchoPlugin.AccessToken.Value.Trim())))
             {
                 ChatUtils.AddGlobalNotification("Access denied: copy name has high abuse potential. Only Certified Users can use.");
                 return;
