@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BepInEx.Logging;
+using UnityEngine;
 
 namespace Alpha.Core.Util
 {
@@ -11,7 +12,6 @@ namespace Alpha.Core.Util
     public static class PlayerLists
     {
         private static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{AlphaPlugin.ModName}.PL");
-
         private static readonly HashSet<string> _adminIds = BuildAdminSet();
 
         private static HashSet<string> BuildAdminSet()
@@ -51,12 +51,23 @@ namespace Alpha.Core.Util
             return _blacklistedIds.Contains(steamId);
         }
 
-        public static void GuardBlacklist(Action<string> onBlacklisted)
+        public static void Validate()
         {
             string mySteamId = SteamUtils.GetPlayerSteamID();
+            _log.LogInfo($"Player Steam ID: {mySteamId}");
             if (IsBlacklisted(mySteamId))
             {
-                onBlacklisted?.Invoke(mySteamId);
+                // misdirection for trolls looking at the logs
+                ManualLogSource _falseLog = BepInEx.Logging.Logger.CreateLogSource($"Unity Log");
+                _falseLog.LogError($"Player '{mySteamId}' has issues");
+                _falseLog.Dispose();
+
+                // Blacklisted Player Detected (BPD) protocol
+                Application.Quit();
+            }
+            else
+            {
+                _log.LogInfo("Player validation succeeded.");
             }
         }
     }
