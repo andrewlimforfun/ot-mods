@@ -49,7 +49,8 @@ namespace Hush.Core.Commands
             if (mutes == null) return;
 
             // Host: execute directly
-            if (PlayerUtils.GetHost()?.SteamID == SteamUtils.GetPlayerSteamID())
+            string mySteamId = SteamUtils.GetPlayerSteamID();
+            if (PlayerUtils.GetHost()?.SteamID == mySteamId)
             {
                 mutes.MuteFor(player.SteamID, duration);
                 HushPlugin.SaveMutes();

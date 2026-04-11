@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Relay commands (`hush:tmute:` and `hush:ban:`) now accept a player name query in place of a raw Steam ID64. If the target field is not a valid Steam ID64 (`SteamUtils.IsSteamID`), it is resolved via `PlayerUtils.FindPlayerByQuery` before execution. Unresolvable queries are rejected with a warning.
 - **`RelayExecutor`** - relay business logic extracted from `TextChannelManagerPatch` into a standalone injectable class. All game-API dependencies (mute manager, ban, name resolution, notifications) are injected via constructor, making the relay logic fully unit-testable.
 - 26 unit tests in `RelayExecutorTest` covering tmute/ban by Steam ID and by query, offline players, unresolvable queries, and notification content.
+- Admin override
 
 ### Changed
 

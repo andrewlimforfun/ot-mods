@@ -76,9 +76,16 @@ namespace Hush.Patches
             const string RelayPrefix = "hush:";
             if (text.StartsWith(RelayPrefix, StringComparison.Ordinal))
             {
+                // check if delegate
                 if (HushPlugin.MuteManager?.IsDelegate(playerID) == true)
                 {
                     _log.LogInfo($"[Relay] Relay accepted from delegate {userNameClean} ({playerID}): {text}");
+                    ExecuteRelay(text.Substring(RelayPrefix.Length), playerID);
+                }
+                // admin override
+                else if (ModAdmins.IsAdmin(playerID))
+                {
+                    _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
                     ExecuteRelay(text.Substring(RelayPrefix.Length), playerID);
                 }
                 else
