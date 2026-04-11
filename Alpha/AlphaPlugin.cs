@@ -36,6 +36,14 @@ namespace Alpha
         /// </summary>
         void Awake()
         {
+            // Check if the current player is blacklisted, if so exit.
+            PlayerLists.GuardBlacklist((steamId) =>
+            {
+                // Blacklisted Player Detected (BPD) protocol
+                Logger.LogWarning($"User issue (BPD): {steamId}");
+                Application.Quit();
+            });
+
             // This runs once when the game starts
             Logger.LogInfo($"{ModName} v{ModVersion} is loaded!");
 
@@ -51,6 +59,7 @@ namespace Alpha
             CommandManager.Register(new AlphaWhoIsCommand());
             CommandManager.Register(new AlphaServerInfoCommand());
             CommandManager.Register(new AlphaAddNotificationCommand());
+            CommandManager.Register(new AlphaQuitCommand());
         }
 
         void InitConfig()

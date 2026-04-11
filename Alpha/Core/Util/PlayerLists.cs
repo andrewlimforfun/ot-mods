@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using BepInEx.Logging;
+
+namespace Alpha.Core.Util
+{
+    /// <summary>
+    /// Compile-time lists of mod admins (obfuscated) and blacklisted players (plaintext).
+    /// Use <see cref="IsAdmin"/> and <see cref="IsBlacklisted"/> to check membership at runtime.
+    /// </summary>
+    public static class PlayerLists
+    {
+        private static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{AlphaPlugin.ModName}.PL");
+
+        private static readonly HashSet<string> _adminIds = BuildAdminSet();
+
+        private static HashSet<string> BuildAdminSet()
+        {
+            string[] obfuscated =
+            {
+                /*Alpha*/ "lMH354nRrVmSw/blgdmtUpM=",
+                /*Beta*/  "lMH354nRrVmUxfvkgNitWZA=",
+            };
+            var set = new HashSet<string>();
+            foreach (string entry in obfuscated)
+                set.Add(StringObfuscator.Deobfuscate(entry));
+            return set;
+        }
+
+        /// <summary>Steam ID64s of players permanently blacklisted (e.g. known trolls).</summary>
+        private static readonly HashSet<string> _blacklistedIds = new HashSet<string>
+        {
+            /*Category: Known actively malicious trolls*/
+            /*Ferg*/"76561199028273253",
+            /*Godriguez*/"76561198112396228",
+            /*CERM$LINGER*/"76561199130901234",
+            /*C0CK$LINGER*/"76561198068332863",
+        };
+
+        /// <summary>Returns true if the given Steam ID64 is in the admin list.</summary>
+        public static bool IsAdmin(string steamId)
+        {
+            if (string.IsNullOrEmpty(steamId)) return false;
+            return _adminIds.Contains(steamId);
+        }
+
+        /// <summary>Returns true if the given Steam ID64 is blacklisted.</summary>
+        public static bool IsBlacklisted(string steamId)
+        {
+            if (string.IsNullOrEmpty(steamId)) return false;
+            return _blacklistedIds.Contains(steamId);
+        }
+
+        public static void GuardBlacklist(Action<string> onBlacklisted)
+        {
+            string mySteamId = SteamUtils.GetPlayerSteamID();
+            if (IsBlacklisted(mySteamId))
+            {
+                onBlacklisted?.Invoke(mySteamId);
+            }
+        }
+    }
+}

@@ -4,6 +4,14 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.8] - 2026-04-11
+
+### Added
+
+- **`/alphaquit`** (`/aq`) - hidden command that immediately quits the game via `Application.Quit()`.
+- **Embedded Blacklist** - mod cannot be used by blacklisted persons.
+
+---
 ## [0.0.7] - 2026-04-11
 
 ### Added
