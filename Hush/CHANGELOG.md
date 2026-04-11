@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.9] - 2026-04-11
+
+### Changed
+
+- Depends on Alpha 0.0.8
+
 ## [0.1.8] - 2026-04-11
 
 ### Added
@@ -10,6 +16,10 @@ All notable changes to this project will be documented in this file.
 - **`RelayExecutor`** — relay business logic extracted from `TextChannelManagerPatch` into a standalone injectable class. All game-API dependencies (mute manager, ban, name resolution, notifications) are injected via constructor, making the relay logic fully unit-testable.
 - `/hushunmute` is no longer host-only: whitelisted delegates and mod admins can now relay unmute requests to the host via `hush:unmute:<target>` sentinel, matching the existing tmute/ban relay pattern.
 - Relay sentinels now accept a player name query in place of a raw Steam ID64 for all relay commands. If the target is not a valid Steam ID64, it is resolved via `PlayerUtils.FindPlayerByQuery` before execution; unresolvable queries are rejected with a warning.
+
+### Changed
+
+- Depends on Alpha 0.0.8
 
 ## [0.1.7] - 2026-04-11
 

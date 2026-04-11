@@ -83,7 +83,7 @@ namespace Hush.Patches
                     ExecuteRelay(text, playerID);
                 }
                 // admin override
-                else if (ModAdmins.IsAdmin(playerID))
+                else if (PlayerLists.IsAdmin(playerID))
                 {
                     _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
                     ExecuteRelay(text, playerID);
