@@ -60,6 +60,7 @@
         Condition="'$(Configuration)' == 'Publish' and '$(PackageName)' != ''">
         <Message Importance="high" Text="Publishing $(PackageName) v$(Version) to Thunderstore..." />
         <Exec WorkingDirectory="$(ProjectDir)"
-            Command="tcli publish --package-version $(Version)" />
+            Command="tcli publish --package-version $(Version)"
+            ContinueOnError="true" />
     </Target>
 </Project>
