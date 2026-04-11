@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1.4] - 2026-04-11
 
+### Added
+
+- **`/echoteleportlocation`** (`/etl`) — save named locations and teleport to them by name, or teleport directly to world coordinates (`/etl <x> <y> <z>`). Locations are persisted to `BepInEx/config/Echo_locations.cfg` across sessions.
+
 ### Changed
 
 - Depends on Alpha 0.0.8

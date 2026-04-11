@@ -13,11 +13,11 @@ namespace Echo.Core.Commands
     ///   /echotpto alice 0 1 0
     ///   /echotpto 12345 5 0 -3
     /// </summary>
-    public class EchoTpToCommand : IChatCommand
+    public class EchoTeleportPersonCommand : IChatCommand
     {
         static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("Echo.EchoTpToCommand");
 
-        public string Name => "echotpto";
+        public string Name => "echoteleportperson";
         public string ShortName => "etp";
         public string Description => "Teleport to a player by name or Steam ID suffix. Usage: /echotpto <name|steamid_suffix|persona> [x y z]";
         public string Namespace => "echo";

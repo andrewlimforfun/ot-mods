@@ -22,6 +22,7 @@ namespace Echo
 
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<string>? AccessToken { get; private set; }
+        public static SavedLocationManager? Locations { get; private set; }
 
         // SHA-256 of the accepted token. Replace with the hash of your actual secret.
         // PowerShell: [System.BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes("yourtoken"))).Replace("-","").ToLower()
@@ -42,6 +43,7 @@ namespace Echo
         public const string ModGUID = "com.andrewlin.ontogether.echo";
         public const string ModName = "Echo";
         public const string ModVersion = BuildInfo.Version;
+        private const string _locationsFileName = "com.andrewlin.ontogether.echo.locations.cfg";
 
         /// <summary>
         /// Called once when the game starts. Use it to initialize config, set up Harmony patches, initialize resources, etc.
@@ -54,11 +56,14 @@ namespace Echo
 
             InitConfig();
 
+            Locations = new SavedLocationManager(Path.Combine(Paths.ConfigPath, _locationsFileName));
+
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(PlayerMovementControllerPatch));
 
             AlphaPlugin.CommandManager?.Register(new EchoToggleCommand());
-            AlphaPlugin.CommandManager?.Register(new EchoTpToCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoTeleportPersonCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoTeleportLocationCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoRevertNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitCommand());

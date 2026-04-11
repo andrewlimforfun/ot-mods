@@ -23,6 +23,7 @@
 
   <Folder Name="/echo/">
     <Project Name="Echo" Path="Echo\Echo.csproj" />
+    <Project Name="Echo.Tests" Path="Echo.Tests\Echo.Tests.csproj" />
   </Folder>
 
   <Folder Name="/fomo/">
