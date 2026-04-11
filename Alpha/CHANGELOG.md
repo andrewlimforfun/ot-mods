@@ -4,6 +4,20 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.7] - 2026-04-11
+
+### Added
+
+- Added convenience admin check
+- Added obfuscator
+- **`SteamUtils.IsSteamID(string)`** - validates that a string is a Steam ID64 (17-digit `ulong`). Shared utility used by Hush relay resolution.
+
+### Changed
+
+- Updated gamelib to 2.0.0.
+- Cleaned up internal comments.
+
+---
 ## [0.0.6] - 2026-03-29
 
 ### Added
