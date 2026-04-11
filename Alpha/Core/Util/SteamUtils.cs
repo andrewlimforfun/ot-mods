@@ -5,6 +5,9 @@ namespace Alpha.Core.Util
 
     public static class SteamUtils
     {
+        public static bool IsSteamID(string value) =>
+            value != null && value.Length == 17 && ulong.TryParse(value, out _);
+
         public static string GetPlayerSteamID()
         {
             return Steamworks.SteamUser.GetSteamID().ToString();
