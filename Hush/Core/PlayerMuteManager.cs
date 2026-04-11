@@ -200,8 +200,12 @@ namespace Hush.Core
 
         private string DisplayId(string steamId)
         {
-            PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(steamId);
-            return player != null ? $"{player.UserName} ({steamId})" : steamId;
+            try
+            {
+                PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(steamId);
+                return player != null ? $"{player.UserName} ({steamId})" : steamId;
+            }
+            catch { return steamId; }
         }
 
         private class MuteConfig
