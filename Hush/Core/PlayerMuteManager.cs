@@ -24,31 +24,33 @@ namespace Hush.Core
         /// <summary>Permanently mutes a player. Removes any existing timed mute. Returns true if newly muted.</summary>
         public bool Mute(string steamId)
         {
+            string display = DisplayId(steamId);
             bool hadTimed = _timedMutes.Remove(steamId);
-            if (hadTimed && HushSettings.VerboseLogging) _log.LogDebug($"Mute: removed existing timed mute for {steamId}");
+            if (hadTimed && HushSettings.VerboseLogging) _log.LogDebug($"Mute: removed existing timed mute for {display}");
             if (!_permaMuted.Add(steamId))
             {
-                if (HushSettings.VerboseLogging) _log.LogDebug($"Mute: {steamId} was already permanently muted (no-op)");
+                if (HushSettings.VerboseLogging) _log.LogDebug($"Mute: {display} was already permanently muted (no-op)");
                 return false;
             }
-            _log.LogInfo($"Permanently muted: {steamId}");
+            _log.LogInfo($"Permanently muted: {display}");
             return true;
         }
 
         /// <summary>Temporarily mutes a player for <paramref name="duration"/>. Removes any existing permanent mute. Returns true if applied.</summary>
         public bool MuteFor(string steamId, TimeSpan duration)
         {
+            string display = DisplayId(steamId);
             if (duration <= TimeSpan.Zero)
             {
-                _log.LogWarning($"MuteFor: invalid duration {duration} for {steamId} — ignored");
+                _log.LogWarning($"MuteFor: invalid duration {duration} for {display} — ignored");
                 return false;
             }
             bool hadPerma = _permaMuted.Remove(steamId);
-            if (hadPerma && HushSettings.VerboseLogging) _log.LogDebug($"MuteFor: removed existing permanent mute for {steamId}");
+            if (hadPerma && HushSettings.VerboseLogging) _log.LogDebug($"MuteFor: removed existing permanent mute for {display}");
             bool hadTimed = _timedMutes.ContainsKey(steamId);
             _timedMutes[steamId] = DateTime.UtcNow + duration;
-            if (hadTimed && HushSettings.VerboseLogging) _log.LogDebug($"MuteFor: extended/replaced existing timed mute for {steamId}");
-            _log.LogInfo($"Timed muted: {steamId} until {_timedMutes[steamId]:u} ({duration.TotalSeconds:0}s)");
+            if (hadTimed && HushSettings.VerboseLogging) _log.LogDebug($"MuteFor: extended/replaced existing timed mute for {display}");
+            _log.LogInfo($"Timed muted: {display} until {_timedMutes[steamId]:u} ({duration.TotalSeconds:0}s)");
             return true;
         }
 
@@ -59,10 +61,10 @@ namespace Hush.Core
             bool removedTimed = _timedMutes.Remove(steamId);
             if (removedPerma || removedTimed)
             {
-                _log.LogInfo($"Unmuted: {steamId} (wasPerma={removedPerma}, wasTimed={removedTimed})");
+                _log.LogInfo($"Unmuted: {DisplayId(steamId)} (wasPerma={removedPerma}, wasTimed={removedTimed})");
                 return true;
             }
-            if (HushSettings.VerboseLogging) _log.LogDebug($"Unmute: {steamId} was not muted (no-op)");
+            if (HushSettings.VerboseLogging) _log.LogDebug($"Unmute: {DisplayId(steamId)} was not muted (no-op)");
             return false;
         }
 
@@ -71,16 +73,16 @@ namespace Hush.Core
         {
             if (_permaMuted.Contains(steamId))
             {
-                if (HushSettings.VerboseLogging) _log.LogDebug($"IsMuted: {steamId} → true (permanent)");
+                if (HushSettings.VerboseLogging) _log.LogDebug($"IsMuted: {DisplayId(steamId)} → true (permanent)");
                 return true;
             }
             else if (_timedMutes.TryGetValue(steamId, out DateTime expiry))
             {
                 bool active = expiry > DateTime.UtcNow;
-                if (HushSettings.VerboseLogging) _log.LogDebug($"IsMuted: {steamId} → {active} (timed, expires {expiry:u}, remaining {(expiry - DateTime.UtcNow).TotalSeconds:0}s)");
+                if (HushSettings.VerboseLogging) _log.LogDebug($"IsMuted: {DisplayId(steamId)} → {active} (timed, expires {expiry:u}, remaining {(expiry - DateTime.UtcNow).TotalSeconds:0}s)");
                 return active;
             } 
-            if (HushSettings.VerboseLogging) _log.LogDebug($"IsMuted: {steamId} → false (not in either list)");
+            if (HushSettings.VerboseLogging) _log.LogDebug($"IsMuted: {DisplayId(steamId)} → false (not in either list)");
             return false;
         }
 
@@ -93,7 +95,7 @@ namespace Hush.Core
         public bool AddDelegate(string steamId)
         {
             if (!_delegates.Add(steamId)) return false;
-            _log.LogInfo($"Added mute delegate: {steamId}");
+            _log.LogInfo($"Added mute delegate: {DisplayId(steamId)}");
             return true;
         }
 
@@ -101,7 +103,7 @@ namespace Hush.Core
         public bool RemoveDelegate(string steamId)
         {
             if (!_delegates.Remove(steamId)) return false;
-            _log.LogInfo($"Removed mute delegate: {steamId}");
+            _log.LogInfo($"Removed mute delegate: {DisplayId(steamId)}");
             return true;
         }
 
@@ -119,12 +121,9 @@ namespace Hush.Core
             foreach (string id in expired)
             {
                 _timedMutes.Remove(id);
-                // try to get player name for better UX in the notification, but fall back to Steam ID if not found
-                PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(id);
-                string displayId = player != null ? $"{player.UserName} ({id})" : id;
-
-                ChatUtils.AddGlobalNotification($"Timed mute expired for player {displayId}.");
-                _log.LogInfo($"Timed mute expired: {player?.UserNameClean ?? id}");
+                string display = DisplayId(id);
+                ChatUtils.AddGlobalNotification($"Timed mute expired for player {display}.");
+                _log.LogInfo($"Timed mute expired: {display}");
             }
         }
 
@@ -197,6 +196,12 @@ namespace Hush.Core
                         _delegates.Add(id.Trim());
 
             if (HushSettings.VerboseLogging) _log.LogInfo($"Loaded mute config: {_permaMuted.Count} permanent, {_timedMutes.Count} timed, {_delegates.Count} delegates.");
+        }
+
+        private string DisplayId(string steamId)
+        {
+            PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(steamId);
+            return player != null ? $"{player.UserName} ({steamId})" : steamId;
         }
 
         private class MuteConfig
