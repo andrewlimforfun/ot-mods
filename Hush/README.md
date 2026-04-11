@@ -15,8 +15,8 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 | Command | Short | Description |
 |---|---|---|
 | `/hushmute <player>` | `/hmu` | Permanently mute a player (host only) |
-| `/hushtmute <player> <duration>` | `/htm` | Temporarily mute a player (host or delegate; e.g. `10m`, `1h30m`, `30s`) |
-| `/hushunmute <player>` | `/humu` | Unmute a player (accepts Steam ID for offline players; host only) |
+| `/hushtmute <player> <duration>` | `/htm` | Temporarily mute a player (host, delegate, or mod admin; e.g. `10m`, `1h30m`, `30s`) |
+| `/hushunmute <player>` | `/humu` | Unmute a player (host, delegate, or mod admin; accepts Steam ID for offline players) |
 | `/hushgetmutes` | `/hgm` | List all currently muted players with expiry (host only) |
 
 **Player query formats** — name (partial match), Steam ID suffix (digits only), or `_host`.
@@ -34,7 +34,19 @@ Ban commands write to the game's own ban list (`DataManager.BanData`), so bans p
 
 ### Mute & ban delegates
 
-The host can whitelist trusted non-host players to use `/hushtmute` and `/hushban`. When a delegate issues either command, a hidden sentinel message is sent to the host; the host validates the whitelist and executes the action server-side. The sentinel is never visible to other clients. Delegates also add the ban to their own local ban list.
+The host can whitelist trusted non-host players to use `/hushtmute`, `/hushunmute`, and `/hushban`. When a delegate issues one of these commands, a hidden sentinel message is sent to the host; the host validates the whitelist and executes the action server-side. The sentinel is never visible to other clients. Delegates also add the ban to their own local ban list.
+
+**Delegates do not need Hush installed.** Any player can manually type a sentinel directly into chat and the host will execute it if the sender is on the whitelist:
+
+| Sentinel format | Action |
+|---|---|
+| `hush:tmute:<player_or_steamid>:<seconds>` | Timed mute |
+| `hush:unmute:<player_or_steamid>` | Unmute |
+| `hush:ban:<player_or_steamid>` | Ban |
+
+The `<player_or_steamid>` field accepts either a Steam ID64 (17-digit number) or any player query string (partial name, name suffix, Steam persona name). Steam IDs are resolved directly; name queries resolve to the first online match.
+
+**Mod admins** — Steam IDs listed in `Alpha.ModAdmins` bypass the delegate whitelist and can relay all commands regardless of whitelist status.
 
 | Command | Short | Description |
 |---|---|---|

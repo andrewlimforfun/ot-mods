@@ -6,15 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Relay commands (`hush:tmute:` and `hush:ban:`) now accept a player name query in place of a raw Steam ID64. If the target field is not a valid Steam ID64 (`SteamUtils.IsSteamID`), it is resolved via `PlayerUtils.FindPlayerByQuery` before execution. Unresolvable queries are rejected with a warning.
-- **`RelayExecutor`** - relay business logic extracted from `TextChannelManagerPatch` into a standalone injectable class. All game-API dependencies (mute manager, ban, name resolution, notifications) are injected via constructor, making the relay logic fully unit-testable.
-- 26 unit tests in `RelayExecutorTest` covering tmute/ban by Steam ID and by query, offline players, unresolvable queries, and notification content.
-- Admin override
-
-### Changed
-
-- Player mute/unmute log lines now include the player's display name alongside the Steam ID: `UserName (steamId)`. Falls back to Steam ID only when the player is not online.
-- `TextChannelManagerPatch.ExecuteRelay` reduced to a thin factory method that wires live game-API implementations into `RelayExecutor`.
+- Relay commands (e.g. `hush:tmute:`) now accept a player name query in place of a raw Steam ID64. If the target field is not a valid Steam ID64 (`SteamUtils.IsSteamID`), it is resolved via `PlayerUtils.FindPlayerByQuery` before execution. Unresolvable queries are rejected with a warning.
+- **`RelayExecutor`** — relay business logic extracted from `TextChannelManagerPatch` into a standalone injectable class. All game-API dependencies (mute manager, ban, name resolution, notifications) are injected via constructor, making the relay logic fully unit-testable.
+- `/hushunmute` is no longer host-only: whitelisted delegates and mod admins can now relay unmute requests to the host via `hush:unmute:<target>` sentinel, matching the existing tmute/ban relay pattern.
+- Relay sentinels now accept a player name query in place of a raw Steam ID64 for all relay commands. If the target is not a valid Steam ID64, it is resolved via `PlayerUtils.FindPlayerByQuery` before execution; unresolvable queries are rejected with a warning.
 
 ## [0.1.7] - 2026-04-11
 

@@ -2,7 +2,7 @@ using System;
 
 namespace Hush.Core
 {
-    public enum RelayCommandType { TimedMute, Ban, Unknown }
+    public enum RelayCommandType { TimedMute, Ban, Unmute, Unknown }
 
     public readonly struct ParsedRelayCommand
     {
@@ -45,6 +45,7 @@ namespace Hush.Core
         /// <list type="bullet">
         /// <item><c>tmute:&lt;targetSteamId&gt;:&lt;seconds&gt;</c></item>
         /// <item><c>ban:&lt;targetSteamId&gt;</c></item>
+        /// <item><c>unmute:&lt;targetSteamId&gt;</c></item>
         /// </list>
         /// </summary>
         public static ParsedRelayCommand Parse(string payload)
@@ -82,6 +83,13 @@ namespace Hush.Core
                         return ParsedRelayCommand.Invalid("Empty ban target");
 
                     return ParsedRelayCommand.Valid(RelayCommandType.Ban, rest);
+                }
+                case "unmute":
+                {
+                    if (string.IsNullOrEmpty(rest))
+                        return ParsedRelayCommand.Invalid("Empty unmute target");
+
+                    return ParsedRelayCommand.Valid(RelayCommandType.Unmute, rest);
                 }
                 default:
                     return ParsedRelayCommand.Invalid($"Unknown command: {cmd}");

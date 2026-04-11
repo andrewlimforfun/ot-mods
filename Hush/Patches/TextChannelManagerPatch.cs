@@ -80,13 +80,13 @@ namespace Hush.Patches
                 if (HushPlugin.MuteManager?.IsDelegate(playerID) == true)
                 {
                     _log.LogInfo($"[Relay] Relay accepted from delegate {userNameClean} ({playerID}): {text}");
-                    ExecuteRelay(text.Substring(RelayPrefix.Length), playerID);
+                    ExecuteRelay(text, playerID);
                 }
                 // admin override
                 else if (ModAdmins.IsAdmin(playerID))
                 {
                     _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
-                    ExecuteRelay(text.Substring(RelayPrefix.Length), playerID);
+                    ExecuteRelay(text, playerID);
                 }
                 else
                     _log.LogWarning($"[Relay] Relay rejected from non-delegate {userNameClean} ({playerID}): {text}");
@@ -145,6 +145,7 @@ namespace Hush.Patches
             var executor = new RelayExecutor(
                 mutes: mutes,
                 ban: (id, name) => HushPlugin.BanManager?.Ban(id, name) ?? false,
+                unmute: id => mutes.Unmute(id),
                 resolveName: id => PlayerUtils.FindPlayerBySteamID(id)?.UserNameClean,
                 resolveQuery: q => PlayerUtils.FindPlayerByQuery(q)?.SteamID,
                 notify: ChatUtils.AddGlobalNotification,

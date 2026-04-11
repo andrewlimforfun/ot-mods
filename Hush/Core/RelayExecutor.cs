@@ -12,6 +12,7 @@ namespace Hush.Core
     {
         private readonly PlayerMuteManager _mutes;
         private readonly Func<string, string, bool> _ban;       // (steamId, displayName) → success
+        private readonly Func<string, bool> _unmute;            // steamId → was muted
         private readonly Func<string, string?> _resolveName;    // steamId → display name (null if offline)
         private readonly Func<string, string?> _resolveQuery;   // query → steamId (null if not found)
         private readonly Action<string> _notify;
@@ -21,6 +22,7 @@ namespace Hush.Core
         public RelayExecutor(
             PlayerMuteManager mutes,
             Func<string, string, bool> ban,
+            Func<string, bool> unmute,
             Func<string, string?> resolveName,
             Func<string, string?> resolveQuery,
             Action<string> notify,
@@ -29,6 +31,7 @@ namespace Hush.Core
         {
             _mutes = mutes;
             _ban = ban;
+            _unmute = unmute;
             _resolveName = resolveName;
             _resolveQuery = resolveQuery;
             _notify = notify;
@@ -37,11 +40,19 @@ namespace Hush.Core
         }
 
         /// <summary>
-        /// Parses and executes a relay payload sent by a whitelisted delegate.
+        /// Parses and executes a relay message sent by a whitelisted delegate.
+        /// Accepts the full message text including the <c>hush:</c> prefix.
         /// Returns false if the payload is invalid or the target cannot be resolved.
         /// </summary>
-        public bool Execute(string payload, string senderSteamId)
+        public bool Execute(string text, string senderSteamId)
         {
+            const string Prefix = "hush:";
+            if (text == null || !text.StartsWith(Prefix, StringComparison.Ordinal))
+            {
+                _log.LogWarning($"[Relay] Missing 'hush:' prefix from {senderSteamId}: {text}");
+                return false;
+            }
+            string payload = text.Substring(Prefix.Length);
             var cmd = RelayParser.Parse(payload);
             if (!cmd.IsValid)
             {
@@ -74,7 +85,7 @@ namespace Hush.Core
                 _log.LogInfo($"[Relay] Resolved query \"{cmd.TargetSteamId}\" → {targetName ?? resolvedTargetId} ({resolvedTargetId})");
             }
 
-            string targetDisplay = targetName ?? resolvedTargetId;
+            string targetDisplay = targetName != null ? $"{targetName} ({resolvedTargetId})" : resolvedTargetId;
 
             switch (cmd.Type)
             {
@@ -83,16 +94,26 @@ namespace Hush.Core
                     _mutes.MuteFor(resolvedTargetId, TimeSpan.FromSeconds(cmd.DurationSeconds));
                     _saveMutes();
                     string dur = DurationFormatter.Format(TimeSpan.FromSeconds(cmd.DurationSeconds));
-                    _notify($"Hush: delegate {senderName} muted {targetDisplay} ({resolvedTargetId}) for {dur}.");
-                    _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) muted {targetDisplay} ({resolvedTargetId}) for {cmd.DurationSeconds}s.");
+                    _notify($"Hush: delegate {senderName} muted {targetDisplay} for {dur}.");
+                    _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) muted {targetDisplay} for {cmd.DurationSeconds}s.");
                     return true;
                 }
                 case RelayCommandType.Ban:
                 {
-                    if (_ban(resolvedTargetId, targetDisplay))
+                    if (_ban(resolvedTargetId, targetName ?? resolvedTargetId))
                     {
-                        _notify($"Hush: delegate {senderName} banned {targetDisplay} ({resolvedTargetId}).");
-                        _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) banned {targetDisplay} ({resolvedTargetId}).");
+                        _notify($"Hush: delegate {senderName} banned {targetDisplay}.");
+                        _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) banned {targetDisplay}.");
+                    }
+                    return true;
+                }
+                case RelayCommandType.Unmute:
+                {
+                    if (_unmute(resolvedTargetId))
+                    {
+                        _saveMutes();
+                        _notify($"Hush: delegate {senderName} unmuted {targetDisplay}.");
+                        _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) unmuted {targetDisplay}.");
                     }
                     return true;
                 }

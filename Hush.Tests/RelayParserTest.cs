@@ -90,6 +90,33 @@ public class RelayParserTest
         Assert.That(cmd.Error, Does.Contain("ban"));
     }
 
+    // -- unmute ------------------------------------------------------------
+
+    [Test]
+    public void Parse_Unmute_ValidPayload()
+    {
+        var cmd = RelayParser.Parse("unmute:steam_003");
+        Assert.That(cmd.IsValid, Is.True);
+        Assert.That(cmd.Type, Is.EqualTo(RelayCommandType.Unmute));
+        Assert.That(cmd.TargetSteamId, Is.EqualTo("steam_003"));
+    }
+
+    [Test]
+    public void Parse_Unmute_ValidSteamId64()
+    {
+        var cmd = RelayParser.Parse("unmute:76561198000000002");
+        Assert.That(cmd.IsValid, Is.True);
+        Assert.That(cmd.TargetSteamId, Is.EqualTo("76561198000000002"));
+    }
+
+    [Test]
+    public void Parse_Unmute_EmptyTarget()
+    {
+        var cmd = RelayParser.Parse("unmute:");
+        Assert.That(cmd.IsValid, Is.False);
+        Assert.That(cmd.Error, Does.Contain("unmute"));
+    }
+
     // -- unknown / malformed -----------------------------------------------
 
     [Test]

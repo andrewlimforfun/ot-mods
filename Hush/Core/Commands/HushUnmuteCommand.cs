@@ -1,46 +1,74 @@
+using System.Text;
 using Alpha.Core.Command;
 using Alpha.Core.Util;
 using Hush;
 using Hush.Core;
+using PurrNet;
+using UnityEngine;
 
 namespace Hush.Core.Commands
 {
-    /// <summary>Host-only command to remove a mute from a player.</summary>
+    /// <summary>
+    /// Unmutes a player. The host executes directly;
+    /// whitelisted delegates and mod admins relay the request to the host via a sentinel message.
+    /// </summary>
     public class HushUnmuteCommand : IChatCommand
     {
         public string Name => "hushunmute";
         public string ShortName => "hum";
-        public string Description => "Unmute a player (host only). Usage: /hushunmute <player>";
+        public string Description => "Unmute a player. Host executes directly; delegates relay to host. Usage: /hushunmute <player|steamid>";
         public string Namespace => "hush";
 
         public void Execute(string[] args)
         {
-            if (!HushMuteCommand.HostGuard()) return;
             if (args.Length == 0)
             {
-                ChatUtils.AddGlobalNotification("Usage: /hushunmute <player>");
+                ChatUtils.AddGlobalNotification("Usage: /hushunmute <player|steamid>");
                 return;
             }
 
             string query = string.Join(" ", args);
-            PlayerMuteManager? mutes = HushPlugin.MuteManager;
-            if (mutes == null) return;
 
-            // Try to resolve to a current lobby player for a friendly name;
-            // fall back to the raw query as the Steam ID for offline-player unmutes
+            // Try to resolve to a current lobby player; fall back to raw query as Steam ID for offline unmutes
             PlayerDetail? player = PlayerUtils.FindPlayerByQuery(query);
-            string steamId = player?.SteamID ?? query;
+            string targetId = player?.SteamID ?? query;
             string displayName = player?.UserNameClean ?? query;
 
-            if (mutes.Unmute(steamId))
+            // Host: execute directly
+            if (PlayerUtils.GetHost()?.SteamID == SteamUtils.GetPlayerSteamID())
             {
-                HushPlugin.SaveMutes();
-                ChatUtils.AddGlobalNotification($"Hush: unmuted {displayName}.");
+                PlayerMuteManager? mutes = HushPlugin.MuteManager;
+                if (mutes == null) return;
+                if (mutes.Unmute(targetId))
+                {
+                    HushPlugin.SaveMutes();
+                    ChatUtils.AddGlobalNotification($"Hush: unmuted {displayName}.");
+                }
+                else
+                {
+                    ChatUtils.AddGlobalNotification($"Hush: {displayName} is not muted.");
+                }
+                return;
             }
-            else
+
+            // Non-host: relay to host via sentinel
+            var tcm = NetworkSingleton<TextChannelManager>.I;
+            if (tcm == null)
             {
-                ChatUtils.AddGlobalNotification($"Hush: {displayName} is not muted.");
+                ChatUtils.AddGlobalNotification("Hush: not connected - cannot relay unmute request.");
+                return;
             }
+
+            string sentinel = $"hush:unmute:{targetId}";
+            Vector3 pos = tcm.MainPlayer != null ? tcm.MainPlayer.position : Vector3.zero;
+            tcm.SendMessageAsync(
+                Encoding.Unicode.GetBytes(sentinel),
+                Encoding.Unicode.GetBytes(tcm.UserName ?? string.Empty),
+                false,
+                pos,
+                SteamUtils.GetPlayerSteamID()
+            );
+            ChatUtils.AddGlobalNotification($"Hush: unmute request sent for {displayName}.");
         }
     }
 }
