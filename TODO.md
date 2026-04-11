@@ -10,12 +10,7 @@
 
 ## Echo
 
-- [ ] Revert name should not revert OB's status
-- [x] Copy outfit
-- [x] Copy appearance
-- [x] Teleport
 - [ ] TeleportHat
-- [ ] Test copy
 
 ## Chalky
 

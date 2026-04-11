@@ -1,3 +1,6 @@
 {
-  "xml.format.maxLineWidth": 200
+  "xml.format.maxLineWidth": 200,
+  "chat.tools.terminal.autoApprove": {
+    "dotnet test": true
+  }
 }

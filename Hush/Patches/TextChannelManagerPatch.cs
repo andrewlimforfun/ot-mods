@@ -128,47 +128,23 @@ namespace Hush.Patches
         // -- Relay helpers --------------------------------------------------------------
 
         /// <summary>
-        /// Parses and executes a relay payload sent by a whitelisted delegate.
+        /// Wires up a <see cref="RelayExecutor"/> with live game-API implementations and runs it.
         /// </summary>
         private static void ExecuteRelay(string payload, string senderSteamId)
         {
             PlayerMuteManager? mutes = HushPlugin.MuteManager;
             if (mutes == null) return;
 
-            var cmd = RelayParser.Parse(payload);
-            if (!cmd.IsValid)
-            {
-                _log.LogWarning($"[Relay] {cmd.Error} from {senderSteamId}");
-                return;
-            }
-
-            string senderName = PlayerUtils.FindPlayerBySteamID(senderSteamId)?.UserNameClean ?? senderSteamId;
-            string targetName = PlayerUtils.FindPlayerBySteamID(cmd.TargetSteamId)?.UserNameClean ?? cmd.TargetSteamId;
-
-            switch (cmd.Type)
-            {
-                case RelayCommandType.TimedMute:
-                {
-                    mutes.MuteFor(cmd.TargetSteamId, TimeSpan.FromSeconds(cmd.DurationSeconds));
-                    HushPlugin.SaveMutes();
-                    string dur = DurationFormatter.Format(TimeSpan.FromSeconds(cmd.DurationSeconds));
-                    ChatUtils.AddGlobalNotification($"Hush: delegate {senderName} muted {targetName} ({cmd.TargetSteamId}) for {dur}.");
-                    _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) muted {targetName} ({cmd.TargetSteamId}) for {cmd.DurationSeconds}s.");
-                    break;
-                }
-                case RelayCommandType.Ban:
-                {
-                    if (HushPlugin.BanManager?.Ban(cmd.TargetSteamId, targetName) == true)
-                    {
-                        ChatUtils.AddGlobalNotification($"Hush: delegate {senderName} banned {targetName} ({cmd.TargetSteamId}).");
-                        _log.LogInfo($"[Relay] {senderName} ({senderSteamId}) banned {targetName} ({cmd.TargetSteamId}).");
-                    }
-                    break;
-                }
-                default:
-                    _log.LogWarning($"[Relay] Unhandled command type from {senderSteamId}.");
-                    break;
-            }
+            var executor = new RelayExecutor(
+                mutes: mutes,
+                ban: (id, name) => HushPlugin.BanManager?.Ban(id, name) ?? false,
+                resolveName: id => PlayerUtils.FindPlayerBySteamID(id)?.UserNameClean,
+                resolveQuery: q => PlayerUtils.FindPlayerByQuery(q)?.SteamID,
+                notify: ChatUtils.AddGlobalNotification,
+                saveMutes: HushPlugin.SaveMutes,
+                log: _log
+            );
+            executor.Execute(payload, senderSteamId);
         }
 
 #pragma warning disable Harmony003
