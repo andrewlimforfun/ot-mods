@@ -6,26 +6,18 @@ using UnityEngine;
 namespace Alpha.Core.Util
 {
     /// <summary>
-    /// Compile-time lists of mod admins (obfuscated) and blacklisted players (plaintext).
+    /// Compile-time lists of mod admins and blacklisted players (plaintext Steam ID64s).
     /// Use <see cref="IsAdmin"/> and <see cref="IsBlacklisted"/> to check membership at runtime.
     /// </summary>
     public static class PlayerLists
     {
         private static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{AlphaPlugin.ModName}.PL");
-        private static readonly HashSet<string> _adminIds = BuildAdminSet();
 
-        private static HashSet<string> BuildAdminSet()
+        private static readonly HashSet<string> _adminIds = new HashSet<string>
         {
-            string[] obfuscated =
-            {
-                /*Alpha*/ "lMH354nRrVmSw/blgdmtUpM=",
-                /*Beta*/  "lMH354nRrVmUxfvkgNitWZA=",
-            };
-            var set = new HashSet<string>();
-            foreach (string entry in obfuscated)
-                set.Add(StringObfuscator.Deobfuscate(entry));
-            return set;
-        }
+            /*Alpha*/ "76561198144499930",
+            /*Beta*/  "76561198729588983",
+        };
 
         /// <summary>Steam ID64s of players permanently blacklisted (e.g. known trolls).</summary>
         private static readonly HashSet<string> _blacklistedIds = new HashSet<string>
@@ -57,7 +49,6 @@ namespace Alpha.Core.Util
             _log.LogInfo($"Player Steam ID: {mySteamId}");
             if (IsBlacklisted(mySteamId))
             {
-                // misdirection for trolls looking at the logs
                 ManualLogSource _falseLog = BepInEx.Logging.Logger.CreateLogSource($"Unity Log");
                 _falseLog.LogError($"Player '{mySteamId}' has issues");
                 _falseLog.Dispose();

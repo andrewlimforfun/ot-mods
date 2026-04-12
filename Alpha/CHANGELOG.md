@@ -4,6 +4,20 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.10] - 2026-04-12
+
+### Changed
+
+- Compliance with Thunderstore policy
+
+---
+## [0.0.9] - 2026-04-11
+
+### Added
+
+- Increment minor ver due to thunderstore anomaly
+
+---
 ## [0.0.8] - 2026-04-11
 
 ### Added
@@ -17,7 +31,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added convenience admin check
-- Added obfuscator
 - **`SteamUtils.IsSteamID(string)`** - validates that a string is a Steam ID64 (17-digit `ulong`). Shared utility used by Hush relay resolution.
 
 ### Changed

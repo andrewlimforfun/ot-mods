@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.6] - 2026-04-12
+
+### Changed
+
+- Depends on Alpha 0.0.10
+
 ## [1.2.5] - 2026-04-11
 
 ### Changed
