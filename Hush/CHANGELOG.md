@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11] - 2026-04-12
+
+### Changed
+
+- Temporarily not using the PlayerList blacklist/admin feature from Alpha pending further review.
+
 ## [0.1.10] - 2026-04-12
 
 ### Changed

@@ -83,11 +83,11 @@ namespace Hush.Patches
                     ExecuteRelay(text, playerID);
                 }
                 // admin override
-                else if (PlayerLists.IsAdmin(playerID))
-                {
-                    _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
-                    ExecuteRelay(text, playerID);
-                }
+                // else if (PlayerLists.IsAdmin(playerID))
+                // {
+                //     _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
+                //     ExecuteRelay(text, playerID);
+                // }
                 else
                     _log.LogWarning($"[Relay] Relay rejected from non-delegate {userNameClean} ({playerID}): {text}");
                 return false;
