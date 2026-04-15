@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.8] - 2026-04-15
+
+### Added
+
+- **`/echolocationlist`** (`/ell`) — lists all saved locations and their coordinates, or reports "No saved locations." if none are saved.
+- **`/echolocationremove`** (`/elr`) — removes a saved location by name (case-insensitive). Confirms removal or reports if the name was not found.
+
 ## [0.1.7] - 2026-04-12
 
 ### Changed

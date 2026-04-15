@@ -40,6 +40,10 @@ namespace Echo.Core
             return true;
         }
 
+        /// <summary>Returns a snapshot of all saved locations (name → position).</summary>
+        public IReadOnlyDictionary<string, Vector3> GetAll() =>
+            new System.Collections.ObjectModel.ReadOnlyDictionary<string, Vector3>(_locations);
+
         private void Load()
         {
             if (!File.Exists(_filePath)) return;
