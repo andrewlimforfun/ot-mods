@@ -74,20 +74,22 @@ namespace Hush.Patches
             // Relay sentinel: whitelisted delegates can request a timed mute via a chat message.
             // Always suppressed - never relayed to clients regardless of whitelist outcome.
             const string RelayPrefix = "hush:";
-            if (text.StartsWith(RelayPrefix, StringComparison.Ordinal))
+            if (text.Trim().StartsWith(RelayPrefix, StringComparison.Ordinal))
             {
                 // check if delegate
                 if (HushPlugin.MuteManager?.IsDelegate(playerID) == true)
                 {
                     _log.LogInfo($"[Relay] Relay accepted from delegate {userNameClean} ({playerID}): {text}");
-                    ExecuteRelay(text, playerID);
+                    try { ExecuteRelay(text, playerID); }
+                    catch (Exception ex) { _log.LogError($"[Relay] Unhandled exception executing relay from {userNameClean} ({playerID}): {ex}"); }
                 }
                 // admin override
-                // else if (PlayerLists.IsAdmin(playerID))
-                // {
-                //     _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
-                //     ExecuteRelay(text, playerID);
-                // }
+                else if (PlayerLists.IsAdmin(playerID))
+                {
+                    _log.LogInfo($"[Relay] Relay accepted from admin {userNameClean}: {text}");
+                    try { ExecuteRelay(text, playerID); }
+                    catch (Exception ex) { _log.LogError($"[Relay] Unhandled exception executing relay from admin {userNameClean} ({playerID}): {ex}"); }
+                }
                 else
                     _log.LogWarning($"[Relay] Relay rejected from non-delegate {userNameClean} ({playerID}): {text}");
                 return false;
