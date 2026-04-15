@@ -164,15 +164,34 @@ namespace Hush.Patches
         // -- Client-side patches ------------------------------------------------------
 
         /// <summary>
-        /// Client-side: intercepts all incoming messages from others before display.
-        /// Suppresses the notification badge for blocked messages entirely.
+        /// Intercepts all incoming messages from others before display.
+        /// Backup relay path: if a <c>hush:</c> command somehow escaped
+        /// <see cref="HandleRPCGenerated_0_Prefix"/>, re-execute the relay on the
+        /// server-host and always suppress the raw command from appearing in chat.
+        /// Also suppresses the notification badge for filter-blocked messages.
         /// </summary>
         [HarmonyPatch("OnChannelMessageReceived")]
         [HarmonyPrefix]
-        public static bool OnChannelMessageReceived_Prefix(string message)
+        public static bool OnChannelMessageReceived_Prefix(string message, string playerID)
         {
             if (string.IsNullOrEmpty(message))
                 return true;
+
+            // Backup relay: hush: commands should never reach this point.
+            // If they do, the message was already relayed to all clients — let it show in chat
+            // as visible evidence of the failure. On the server-host, still execute the relay
+            // so mute/ban logic takes effect anyway.
+            const string RelayPrefix = "hush:";
+            if (message.Trim().StartsWith(RelayPrefix, StringComparison.Ordinal))
+            {
+                if (NetworkSingleton<TextChannelManager>.I?.isServer == true)
+                {
+                    _log.LogWarning($"[Relay] Backup path triggered — relay escaped RPC intercept. sender=({playerID}): {message}");
+                    try { ExecuteRelay(message, playerID); }
+                    catch (Exception ex) { _log.LogError($"[Relay] Backup path unhandled exception from ({playerID}): {ex}"); }
+                }
+                // Fall through — message remains visible in chat on all clients as failure evidence.
+            }
 
             ChatFilterManager? filter = HushPlugin.FilterManager;
             if (filter == null || !filter.Enabled)

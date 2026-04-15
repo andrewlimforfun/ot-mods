@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.13] - 2026-04-15
+
+### Fixed
+
+- Relay command targeting could silently fail or crash for certain player names. `PlayerUtils.QueryMatchesPlayer` passed the user-supplied query string directly as a regex pattern; names or queries containing regex metacharacters (e.g. `[`, `(`, `+`, `.`) would throw `ArgumentException` and abort the relay path entirely. The `Contains` check is now evaluated first (unchanged behaviour), and `Regex.IsMatch` is called only as a fallback wrapped in a try-catch so an invalid pattern skips the regex step instead of throwing.
+
+### Changed
+
+- Relay prefix detection in `TextChannelManagerPatch` now uses `text.Trim().StartsWith("hush:")` so leading whitespace in a relay message does not cause the sentinel to be missed.
+- Admin override for relay commands (`PlayerLists.IsAdmin`) re-enabled; admins can now issue relay commands in addition to whitelisted delegates.
+- `ExecuteRelay` calls are now wrapped in a try-catch so any unhandled exception logs a full error instead of silently escaping the Harmony prefix.
+
 ## [0.1.12] - 2026-04-12
 
 ### Changed
