@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.7] - 2026-04-12
+
+### Changed
+
+- Dependency update to Alpha 0.0.11
+
 ## [0.2.3] - 2026-03-06
 
 ### Changed

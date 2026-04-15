@@ -4,11 +4,18 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.11] - 2026-04-12
+
+### Changed
+
+- Compliance with Thunderstore policy regarding blacklisting (allowed in specialized mod)
+
+---
 ## [0.0.10] - 2026-04-12
 
 ### Changed
 
-- Compliance with Thunderstore policy
+- Compliance with Thunderstore policy regarding obfuscation
 
 ---
 ## [0.0.9] - 2026-04-11

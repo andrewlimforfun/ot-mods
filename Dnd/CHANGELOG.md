@@ -2,6 +2,12 @@
 
 All notable changes to DnDUtil will be documented in this file.
 
+## [1.0.5] - 2026-04-12
+
+### Changed
+
+- Dependency update to Alpha 0.0.11
+
 ## [1.0.4] - 2026-04-12
 
 ### Changed

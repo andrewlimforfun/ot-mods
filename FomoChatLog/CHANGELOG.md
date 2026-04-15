@@ -2,6 +2,12 @@
 
 All notable changes to FomoChatLog will be documented in this file.
 
+## [1.2.7] - 2026-04-12
+
+### Changed
+
+- Dependency update to Alpha 0.0.11
+
 ## [1.2.4] - 2026-03-29
 
 ### Added

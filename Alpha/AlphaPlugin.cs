@@ -72,10 +72,7 @@ namespace Alpha
         }
 
         /// <summary>Called after Awake() on all objects. Steamworks is initialized by this point.</summary>
-        void Start()
-        {
-            PlayerLists.Validate();
-        }
+        void Start() { }
 
         /// <summary> Called when the plugin is unloaded or the game exits. Clean up resources here.</summary>
         void OnDestroy() { }

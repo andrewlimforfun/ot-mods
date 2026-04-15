@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.10] - 2026-04-12
+
+### Changed
+
+- Dependency update to Alpha 0.0.11
+
 ## [1.1.9] - 2026-04-12
 
 ### Changed

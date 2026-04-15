@@ -33,28 +33,4 @@ public class PlayerListsTest
     {
         Assert.That(PlayerLists.IsAdmin(null!), Is.False);
     }
-
-    [Test]
-    public void IsBlacklisted_KnownTroll_ReturnsTrue()
-    {
-        Assert.That(PlayerLists.IsBlacklisted("76561199028273253"), Is.True);
-    }
-
-    [Test]
-    public void IsBlacklisted_UnknownId_ReturnsFalse()
-    {
-        Assert.That(PlayerLists.IsBlacklisted("76561198000000001"), Is.False);
-    }
-
-    [Test]
-    public void IsBlacklisted_EmptyString_ReturnsFalse()
-    {
-        Assert.That(PlayerLists.IsBlacklisted(""), Is.False);
-    }
-
-    [Test]
-    public void IsBlacklisted_Null_ReturnsFalse()
-    {
-        Assert.That(PlayerLists.IsBlacklisted(null!), Is.False);
-    }
 }
