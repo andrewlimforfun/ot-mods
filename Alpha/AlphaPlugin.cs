@@ -51,6 +51,7 @@ namespace Alpha
             CommandManager.Register(new AlphaWhoIsCommand());
             CommandManager.Register(new AlphaServerInfoCommand());
             CommandManager.Register(new AlphaAddNotificationCommand());
+            CommandManager.Register(new AlphaUnloadUnusedAssetsCommand());
         }
 
         void InitConfig()

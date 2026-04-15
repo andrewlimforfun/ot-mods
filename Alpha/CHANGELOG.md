@@ -4,6 +4,13 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.13] - 2026-04-15
+
+### Added
+
+- **`/alphaunloadunusedassets`** (`/auua`) — Calls `UnityEngine.Resources.UnloadUnusedAssets()` to free GPU VRAM and RAM accumulated during an On-Together session.
+
+---
 ## [0.0.12] - 2026-04-15
 
 ### Fixed

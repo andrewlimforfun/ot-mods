@@ -7,6 +7,18 @@ A shared BepInEx mod for **On Together** that provides common utilities and a co
 
 ---
 
+## Workaround: On-Together GPU VRAM & RAM Usage
+
+On-Together accumulates GPU VRAM and system RAM over time as Unity loads assets during a session. If you experience frame drops or out-of-memory issues, run this command in chat to immediately free unused assets:
+
+```
+/auua
+```
+
+This calls `UnityEngine.Resources.UnloadUnusedAssets()` and can reclaim significant memory without restarting the game. Run it whenever the game feels sluggish or after leaving a busy lobby.
+
+---
+
 ## In-Game Commands
 
 Alpha registers its own `/alpha` namespace commands. Type them in chat — they are intercepted locally and not sent to other players.
@@ -17,6 +29,7 @@ Alpha registers its own `/alpha` namespace commands. Type them in chat — they 
 | `/alphawhois [player]` | `/awi` | Show info about a player (name, Steam ID, position) |
 | `/alphamyposition` | `/amp` | Show your current world position |
 | `/alphaaddnotification <message>` | `/aan` | Post a local notification to your own chat |
+| `/alphaunloadunusedassets` | `/auua` | Free GPU VRAM & RAM by unloading unused Unity assets |
 | `/alphahelp` | `/ah` | List all Alpha commands |
 
 ---
