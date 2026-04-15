@@ -150,8 +150,16 @@ namespace Alpha.Core.Util
             string cleanName = ChatUtils.CleanTMPTags(name).Trim();
 
             // Check if the query matches in the player's display name (without TMP tags)
-            if (cleanName.Contains(query, StringComparison.OrdinalIgnoreCase) || Regex.IsMatch(cleanName, query, RegexOptions.IgnoreCase))
+            // Regex.IsMatch is a fallback for pattern queries; guard against ArgumentException
+            // from user-supplied strings that are invalid regex (e.g. "[alice", "bob+").
+            if (cleanName.Contains(query, StringComparison.OrdinalIgnoreCase))
                 return true;
+            try
+            {
+                if (Regex.IsMatch(cleanName, query, RegexOptions.IgnoreCase))
+                    return true;
+            }
+            catch (ArgumentException) { /* invalid pattern - skip regex match */ }
 
             // Check if the query matches the player's Steam persona name
             string? persona = SteamUtils.GetSteamPersonaName(steamId);

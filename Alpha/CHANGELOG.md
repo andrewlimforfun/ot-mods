@@ -4,6 +4,13 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.12] - 2026-04-15
+
+### Fixed
+
+- `PlayerUtils.QueryMatchesPlayer` passed the caller-supplied query string directly to `Regex.IsMatch` as a pattern. Queries containing regex metacharacters (e.g. `[`, `(`, `+`, `.`) threw `ArgumentException` and crashed the calling code. The literal `Contains` check is now performed first (unchanged behaviour); `Regex.IsMatch` is called only as a fallback and is wrapped in a try-catch so an invalid pattern is silently skipped rather than thrown.
+
+---
 ## [0.0.11] - 2026-04-12
 
 ### Changed
