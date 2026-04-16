@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.8] - 2026-04-16
+
+### Changed
+
+- Improved error logging in `FomoTelegramManager.ValidateAndStartReceiverAsync`:
+  - `HttpRequestException` (network/TLS failure) is now caught separately and logged as a network error rather than misleadingly suggesting an invalid API key.
+  - Full inner exception chain is logged so the root cause (DNS, TLS negotiation, missing certificates) is visible.
+  - Telegram `error_code` and `description` fields are extracted from the JSON response and logged when the API itself rejects the request.
+  - Added `LogDebug` of the raw `getMe` HTTP status and response body.
+- Added `ServicePointManager.SecurityProtocol = Tls12` in the constructor to fix TLS negotiation failures on Mono/Unity.
+
+---
+
 ## [1.2.7] - 2026-04-12
 
 ### Changed

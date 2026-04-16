@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -46,6 +47,9 @@ namespace FomoTelegram
 
         public FomoTelegramManager(string apiKey, string chatId)
         {
+            // Mono/Unity may default to TLS 1.0 or have cert-store gaps; force TLS 1.2.
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             _apiBase = $"https://api.telegram.org/bot{apiKey}";
             _chatId = chatId;
             long.TryParse(chatId, out _chatIdLong);
@@ -94,13 +98,19 @@ namespace FomoTelegram
         {
             try
             {
+                _log.LogInfo($"Validating Telegram credentials against {_apiBase}/getMe ...");
                 var resp = await _http.GetAsync($"{_apiBase}/getMe");
                 string raw = await resp.Content.ReadAsStringAsync();
+                _log.LogDebug($"getMe HTTP {(int)resp.StatusCode}: {raw}");
+
                 var json = JObject.Parse(raw);
 
                 if (json["ok"]?.Value<bool>() != true)
                 {
-                    _log.LogError($"Telegram validation failed - check your API key. Response: {raw}");
+                    // Telegram returned a well-formed error — the API key itself is likely wrong.
+                    string description = json["description"]?.Value<string>() ?? raw;
+                    int errorCode = json["error_code"]?.Value<int>() ?? 0;
+                    _log.LogError($"Telegram validation failed (HTTP {(int)resp.StatusCode}, error_code={errorCode}): {description}. Check your API key in the config.");
                     return;
                 }
 
@@ -109,9 +119,23 @@ namespace FomoTelegram
                 _log.LogInfo($"Connected to Telegram as @{username} (id={id}).");
                 IsReady = true;
             }
+            catch (HttpRequestException ex)
+            {
+                // Network-level failure (DNS, TLS, firewall, etc.) — not an API key problem.
+                _log.LogError($"Telegram validation failed - network error reaching api.telegram.org. This is NOT an API key issue.");
+                _log.LogError($"  HttpRequestException: {ex.Message}");
+                if (ex.InnerException != null)
+                    _log.LogError($"  Caused by ({ex.InnerException.GetType().Name}): {ex.InnerException.Message}");
+                if (ex.InnerException?.InnerException != null)
+                    _log.LogError($"  Root cause ({ex.InnerException.InnerException.GetType().Name}): {ex.InnerException.InnerException.Message}");
+                _log.LogError("  Possible causes: no internet, firewall blocking api.telegram.org, TLS negotiation failure on Mono, or missing root certificates.");
+                return;
+            }
             catch (Exception ex)
             {
-                _log.LogError($"Telegram validation failed - check your API key. Error: {ex.Message}");
+                _log.LogError($"Telegram validation failed - unexpected {ex.GetType().Name}: {ex.Message}");
+                if (ex.InnerException != null)
+                    _log.LogError($"  Caused by ({ex.InnerException.GetType().Name}): {ex.InnerException.Message}");
                 return;
             }
 
