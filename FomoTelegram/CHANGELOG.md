@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.9] - 2026-04-17
+
+### Added
+
+- `/fomotelegramrestart` (`/ftr`) - reload config from disk and restart the Telegram connection without a game restart. Disposes the old manager and creates a new one with the freshly loaded credentials.
+- `/fomotelegramreloadconfig` (`/ftrc`) - reload config from disk and display the current API key (masked) and chat ID, without reconnecting.
+
+### Changed
+
+- Setup no longer requires a game restart after filling in the config. Edit the config file then run `/ftr` to connect immediately.
+- API key is masked in all notifications (first 4 + last 4 characters visible) to prevent accidental exposure in chat.
+
+---
+
 ## [1.2.8] - 2026-04-16
 
 ### Changed

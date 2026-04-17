@@ -38,7 +38,7 @@ After the first run a config file is generated at:
 BepInEx/config/com.andrewlin.ontogether.fomotelegram.cfg
 ```
 
-Fill in `TelegramBotApiKey` and `TelegramChatId`, then restart the game.
+Fill in `TelegramBotApiKey` and `TelegramChatId`:
 
 ```ini
 [Telegram]
@@ -55,19 +55,30 @@ MessageFormat      = [{channel:short}] {username}: {message}
 NotificationFormat = {message}
 ```
 
+### 4. Connect without restarting
+
+With the config saved, run `/ftr` in the in-game chat to reload the config and start the Telegram connection immediately. No game restart required.
+
+To verify what credentials are loaded at any time, run `/ftrc`.
+
 ## In-Game Commands
 
 Type any command into the in-game chat. Commands start with `/` and are **not sent** to other players.
 
-- `/fomotelegramtoggle` (`/ftt`) — Toggle Telegram forwarding on/off
-- `/fomotelegramsetupinfo` (`/ftsinfo`) — Print setup instructions and current config status
-- `/fomotelegrammessageformat [format]` (`/ftmf`) — Get or set the chat message format string
-- `/fomotelegramnotificationformat [format]` (`/ftnf`) — Get or set the notification format string
+| Command | Short | Description |
+|---------|-------|-------------|
+| `/fomotelegramtoggle` | `/ftt` | Toggle Telegram forwarding on/off |
+| `/fomotelegramrestart` | `/ftr` | Reload config from disk and restart the Telegram connection |
+| `/fomotelegramreloadconfig` | `/ftrc` | Reload config from disk and show the current API key (masked) and chat ID |
+| `/fomotelegramsetupinfo` | `/ftsinfo` | Print setup instructions |
+| `/fomotelegrammessageformat [format]` | `/ftmf` | Get or set the chat message format string |
+| `/fomotelegramnotificationformat [format]` | `/ftnf` | Get or set the notification format string |
 
 ### Examples
 
 ```
 /fomotelegramtoggle
+/ftr
 /fomotelegrammessageformat [{timestamp:HH:mm}] [{channel:short}] {username}: {message}
 ```
 
@@ -107,8 +118,9 @@ Use `r2modman` or the Thunderstore app for the simplest install. Fomo must be in
 **Manual:**
 1. Install [Fomo](https://thunderstore.io/c/on-together/p/AndrewLin/Fomo/) first
 2. Copy `AndrewLin.FomoTelegram.dll` into `BepInEx/plugins/`
-3. Launch the game — a config file will be generated at `BepInEx/config/com.andrewlin.ontogether.fomotelegram.cfg`
-4. Fill in `TelegramBotApiKey` and `TelegramChatId` and restart
+3. Launch the game - a config file will be generated at `BepInEx/config/com.andrewlin.ontogether.fomotelegram.cfg`
+4. Fill in `TelegramBotApiKey` and `TelegramChatId`
+5. Run `/ftr` in-game to connect - no restart needed
 
 ## Dependencies
 

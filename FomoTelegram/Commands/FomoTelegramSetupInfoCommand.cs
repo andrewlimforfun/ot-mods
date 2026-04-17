@@ -18,8 +18,8 @@ namespace FomoTelegram.Commands
                 "2. Your Telegram chat ID from @userinfobot.\n" +
                 "3. Update the API key and chat ID in the mod configuration.\n" +
                 "Config path: " + FomoTelegramPlugin.ConfigPath + "\n" +
-                "4. Then restart the game.\n" +
-                "Inputting API key and chat ID via chat commands is not supported for security reasons. Please update the config file directly.");
+                "4. Reload config with /ftrc.\n" +
+                "5. Restart telegram manager with /ftr.");
         }
     }
 }
