@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>$(SweepVersion)</Version>
+    <AssemblyName>AndrewLin.Sweep</AssemblyName>
+    <PackageName>Sweep</PackageName>
+    <RootNamespace>Sweep</RootNamespace>
+    <Description>Sweep: Periodically unloads unused Unity assets to reclaim memory.</Description>
+    <LocalInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)Dev\</LocalInstallPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="OnTogether.GameLibs" Version="$(OnTogetherGameLibsVersion)" />
+    <PackageReference Include="UnityEngine.Modules" Version="6000.0.61" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alpha\Alpha.csproj" SetConfiguration="Configuration=Debug" />
+  </ItemGroup>
+
+</Project>

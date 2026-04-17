@@ -47,4 +47,8 @@
     <Project Name="Reconnect.Tests" Path="Reconnect.Tests\Reconnect.Tests.csproj" />
   </Folder>
 
+  <Folder Name="/sweep/">
+    <Project Name="Sweep" Path="Sweep\Sweep.csproj" />
+  </Folder>
+
 </Solution>

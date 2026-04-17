@@ -29,6 +29,7 @@
         <HushVersion>0.1.13</HushVersion>
         <ReconnectVersion>0.0.2</ReconnectVersion>
         <RemindVersion>1.1.10</RemindVersion>
+        <SweepVersion>0.0.1</SweepVersion>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->
         <RestoreAdditionalProjectSources>
