@@ -44,6 +44,7 @@
 
   <Folder Name="/reconnect/">
     <Project Name="Reconnect" Path="Reconnect\Reconnect.csproj" />
+    <Project Name="Reconnect.Tests" Path="Reconnect.Tests\Reconnect.Tests.csproj" />
   </Folder>
 
 </Solution>
