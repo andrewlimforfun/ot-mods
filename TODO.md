@@ -11,3 +11,7 @@
 ## Chalky
 
 - [ ] Blacklist/Whitelist
+
+## Hush
+
+- [ ] Add personal mute

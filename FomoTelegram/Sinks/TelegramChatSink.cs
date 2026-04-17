@@ -12,9 +12,14 @@ namespace FomoTelegram
     {
         private static readonly ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource($"{FomoTelegramPlugin.ModName}.TCS");
 
-        private readonly FomoTelegramManager _manager;
+        private FomoTelegramManager _manager;
 
         public TelegramChatSink(FomoTelegramManager manager)
+        {
+            _manager = manager;
+        }
+
+        internal void SwapManager(FomoTelegramManager manager)
         {
             _manager = manager;
         }

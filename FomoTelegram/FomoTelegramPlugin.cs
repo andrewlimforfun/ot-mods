@@ -27,6 +27,7 @@ namespace FomoTelegram
         public static ConfigEntry<string>?  NotificationFormat { get; private set; }
         // -- Singleton manager -------------------------------------------------
         public static FomoTelegramManager? TelegramManager { get; private set; }
+        private static TelegramChatSink? _sink;
 
         public static string ConfigPath { get; private set; } = $"BepInEx/config/{ModGUID}.cfg";
 
@@ -46,6 +47,8 @@ namespace FomoTelegram
             AlphaPlugin.CommandManager?.Register(new FomoTelegramMessageFormatCommand());
             AlphaPlugin.CommandManager?.Register(new FomoTelegramNotificationFormatCommand());
             AlphaPlugin.CommandManager?.Register(new FomoTelegramSetupInfoCommand());
+            AlphaPlugin.CommandManager?.Register(new FomoTelegramReloadConfigCommand());
+            AlphaPlugin.CommandManager?.Register(new FomoTelegramRestartCommand());
 
             string apiKey = TelegramBotApiKey?.Value ?? string.Empty;
             string chatId = TelegramChatId?.Value  ?? string.Empty;
@@ -61,8 +64,8 @@ namespace FomoTelegram
             else
             {
                 TelegramManager = new FomoTelegramManager(apiKey, chatId);
-                var sink = new TelegramChatSink(TelegramManager);
-                FomoPlugin.SinkManager?.Register(sink);
+                _sink = new TelegramChatSink(TelegramManager);
+                FomoPlugin.SinkManager?.Register(_sink);
                 Log.LogInfo("TelegramChatSink registered with Fomo SinkManager.");
             }
 
@@ -72,6 +75,61 @@ namespace FomoTelegram
         void OnDestroy()
         {
             TelegramManager?.Dispose();
+        }
+
+        /// <summary>
+        /// Re-reads the config file from disk and returns a summary of the loaded values.
+        /// </summary>
+        internal static string ReloadConfig()
+        {
+            TelegramBotApiKey?.ConfigFile?.Reload();
+
+            string apiKey = TelegramBotApiKey?.Value ?? string.Empty;
+            string chatId = TelegramChatId?.Value ?? string.Empty;
+            string maskedKey = MaskApiKey(apiKey);
+
+            return $"ApiKey = {maskedKey}\nChatId = {chatId}";
+        }
+
+        /// <summary>
+        /// Disposes the current manager, re-reads config, and creates a new manager + swaps the sink.
+        /// </summary>
+        internal static string RestartTelegram()
+        {
+            TelegramBotApiKey?.ConfigFile?.Reload();
+
+            string apiKey = TelegramBotApiKey?.Value ?? string.Empty;
+            string chatId = TelegramChatId?.Value ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(apiKey) || apiKey == FomoTelegramManager.PlaceholderApiKey)
+                return "Cannot restart: TelegramBotApiKey is not set.";
+            if (string.IsNullOrWhiteSpace(chatId) || chatId == FomoTelegramManager.PlaceholderChatId)
+                return "Cannot restart: TelegramChatId is not set.";
+
+            TelegramManager?.Dispose();
+            TelegramManager = new FomoTelegramManager(apiKey, chatId);
+
+            if (_sink != null)
+            {
+                _sink.SwapManager(TelegramManager);
+            }
+            else
+            {
+                _sink = new TelegramChatSink(TelegramManager);
+                FomoPlugin.SinkManager?.Register(_sink);
+            }
+
+            string maskedKey = MaskApiKey(apiKey);
+            return $"Telegram restarted.\nApiKey = {maskedKey}\nChatId = {chatId}";
+        }
+
+        internal static string MaskApiKey(string apiKey)
+        {
+            if (string.IsNullOrWhiteSpace(apiKey) || apiKey == FomoTelegramManager.PlaceholderApiKey)
+                return apiKey;
+            return apiKey.Length > 8
+                ? apiKey.Substring(0, 4) + "..." + apiKey.Substring(apiKey.Length - 4)
+                : "****";
         }
 
         private void InitConfig()
