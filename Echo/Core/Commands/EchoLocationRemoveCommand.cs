@@ -5,7 +5,7 @@ using Echo.Core;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echolocationremove &lt;name&gt; — removes a saved location by name.
+    /// /echolocationremove &lt;name&gt; - removes a saved location by name.
     /// </summary>
     public class EchoLocationRemoveCommand : IChatCommand
     {

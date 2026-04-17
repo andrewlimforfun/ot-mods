@@ -104,7 +104,7 @@ public class RelayExecutorTest
     [Test]
     public void Execute_Tmute_BySteamId_OfflinePlayer_StillMutes()
     {
-        // Player not in name lookup (offline) but Steam ID64 is valid — must still mute
+        // Player not in name lookup (offline) but Steam ID64 is valid - must still mute
         const string offlineId = "76561198000000099";
         _executor.Execute($"hush:tmute:{offlineId}:60", SenderSteamId);
         Assert.That(_mutes.IsMuted(offlineId), Is.True);
@@ -287,7 +287,7 @@ public class RelayExecutorTest
     [Test]
     public void Execute_Unmute_NotMuted_ReturnsTrueNoNotification()
     {
-        // Player is not muted — unmute is a no-op but the relay itself succeeded
+        // Player is not muted - unmute is a no-op but the relay itself succeeded
         _executor.Execute($"hush:unmute:{TargetSteamId}", SenderSteamId);
         Assert.That(_notifications, Is.Empty);
     }

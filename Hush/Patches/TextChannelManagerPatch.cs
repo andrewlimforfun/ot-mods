@@ -178,7 +178,7 @@ namespace Hush.Patches
                 return true;
 
             // Backup relay: hush: commands should never reach this point.
-            // If they do, the message was already relayed to all clients — let it show in chat
+            // If they do, the message was already relayed to all clients - let it show in chat
             // as visible evidence of the failure. On the server-host, still execute the relay
             // so mute/ban logic takes effect anyway.
             const string RelayPrefix = "hush:";
@@ -186,11 +186,11 @@ namespace Hush.Patches
             {
                 if (NetworkSingleton<TextChannelManager>.I?.isServer == true)
                 {
-                    _log.LogWarning($"[Relay] Backup path triggered — relay escaped RPC intercept. sender=({playerID}): {message}");
+                    _log.LogWarning($"[Relay] Backup path triggered - relay escaped RPC intercept. sender=({playerID}): {message}");
                     try { ExecuteRelay(message, playerID); }
                     catch (Exception ex) { _log.LogError($"[Relay] Backup path unhandled exception from ({playerID}): {ex}"); }
                 }
-                // Fall through — message remains visible in chat on all clients as failure evidence.
+                // Fall through - message remains visible in chat on all clients as failure evidence.
             }
 
             ChatFilterManager? filter = HushPlugin.FilterManager;

@@ -79,7 +79,7 @@ public class LocationManagerTest
     {
         _mgr.Save("spawn", new Vector3(10f, 20f, 30f));
 
-        // New instance from same file — simulates restart
+        // New instance from same file - simulates restart
         var mgr2 = new SavedLocationManager(_filePath);
 
         Assert.That(mgr2.TryGet("spawn", out var result), Is.True);

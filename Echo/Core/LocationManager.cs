@@ -7,7 +7,7 @@ namespace Echo.Core
 {
     /// <summary>
     /// Manages named saved locations, persisted to a simple key=x|y|z file.
-    /// Instantiate once and store as a singleton — inject the file path for testability.
+    /// Instantiate once and store as a singleton - inject the file path for testability.
     /// </summary>
     public class SavedLocationManager
     {

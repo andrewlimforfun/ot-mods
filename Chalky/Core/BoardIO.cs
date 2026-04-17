@@ -71,7 +71,7 @@ namespace Chalky.Core
             {
                 _log.LogError(
                     $"Invalid board index {index}. " +
-                    $"Valid range: 0–{dm.QuadPainterGPUS.Count - 1}. " +
+                    $"Valid range: 0-{dm.QuadPainterGPUS.Count - 1}. " +
                     "Interact with a board first, or pass an explicit index.");
                 return -1;
             }

@@ -34,7 +34,7 @@ public class PlayerMuteManagerTest
         Assert.That(_mutes.Mute("steam_001"), Is.True);
         Assert.That(_mutes.IsMuted("steam_001"), Is.True);
 
-        // Should now be permanent — verify via GetMutes
+        // Should now be permanent - verify via GetMutes
         var list = _mutes.GetMutes();
         var entry = list.Find(m => m.SteamId == "steam_001");
         Assert.That(entry.Expiry, Is.Null, "Should be permanent (null expiry)");

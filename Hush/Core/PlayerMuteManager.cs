@@ -42,7 +42,7 @@ namespace Hush.Core
             string display = DisplayId(steamId);
             if (duration <= TimeSpan.Zero)
             {
-                _log.LogWarning($"MuteFor: invalid duration {duration} for {display} — ignored");
+                _log.LogWarning($"MuteFor: invalid duration {duration} for {display} - ignored");
                 return false;
             }
             bool hadPerma = _permaMuted.Remove(steamId);

@@ -7,8 +7,8 @@ using UnityEngine;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echoteleportlocation <name> — teleport to a saved location, or save the current spot under that name.
-    /// /echoteleportlocation <x> <y> <z> — teleport directly to the given world coordinates.
+    /// /echoteleportlocation <name> - teleport to a saved location, or save the current spot under that name.
+    /// /echoteleportlocation <x> <y> <z> - teleport directly to the given world coordinates.
     /// </summary>
     public class EchoTeleportLocationCommand : IChatCommand
     {
@@ -23,7 +23,7 @@ namespace Echo.Core.Commands
         {
             if (args.Length == 0)
             {
-                ChatUtils.AddGlobalNotification("Usage: /etl <name>  — teleport to or save a location\n       /etl <x> <y> <z>  — teleport to coordinates");
+                ChatUtils.AddGlobalNotification("Usage: /etl <name>  - teleport to or save a location\n       /etl <x> <y> <z>  - teleport to coordinates");
                 return;
             }
 

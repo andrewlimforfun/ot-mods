@@ -6,7 +6,7 @@ using Echo.Core;
 namespace Echo.Core.Commands
 {
     /// <summary>
-    /// /echolocationlist — lists all saved locations and their coordinates.
+    /// /echolocationlist - lists all saved locations and their coordinates.
     /// </summary>
     public class EchoLocationListCommand : IChatCommand
     {

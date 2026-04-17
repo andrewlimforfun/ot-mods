@@ -42,4 +42,8 @@
     <Project Name="Hush.Tests" Path="Hush.Tests\Hush.Tests.csproj" />
   </Folder>
 
+  <Folder Name="/reconnect/">
+    <Project Name="Reconnect" Path="Reconnect\Reconnect.csproj" />
+  </Folder>
+
 </Solution>

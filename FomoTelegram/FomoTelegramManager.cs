@@ -107,7 +107,7 @@ namespace FomoTelegram
 
                 if (json["ok"]?.Value<bool>() != true)
                 {
-                    // Telegram returned a well-formed error — the API key itself is likely wrong.
+                    // Telegram returned a well-formed error - the API key itself is likely wrong.
                     string description = json["description"]?.Value<string>() ?? raw;
                     int errorCode = json["error_code"]?.Value<int>() ?? 0;
                     _log.LogError($"Telegram validation failed (HTTP {(int)resp.StatusCode}, error_code={errorCode}): {description}. Check your API key in the config.");
@@ -121,7 +121,7 @@ namespace FomoTelegram
             }
             catch (HttpRequestException ex)
             {
-                // Network-level failure (DNS, TLS, firewall, etc.) — not an API key problem.
+                // Network-level failure (DNS, TLS, firewall, etc.) - not an API key problem.
                 _log.LogError($"Telegram validation failed - network error reaching api.telegram.org. This is NOT an API key issue.");
                 _log.LogError($"  HttpRequestException: {ex.Message}");
                 if (ex.InnerException != null)
