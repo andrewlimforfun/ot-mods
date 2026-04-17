@@ -4,64 +4,50 @@ namespace Reconnect.Tests;
 
 public class ReconnectManagerTest
 {
+    private int _maxAttempts;
+    private float _intervalSec;
+    private float _cooldownSec;
     private ReconnectManager _mgr = null!;
 
     [SetUp]
     public void Setup()
     {
-        _mgr = new ReconnectManager();
+        _maxAttempts = 3;
+        _intervalSec = 5f;
+        _cooldownSec = 30f;
+        _mgr = new ReconnectManager(() => _maxAttempts, () => _intervalSec, () => _cooldownSec);
     }
 
-    // -- Constructor / clamping --------------------------------------------
+    // -- Live config reads -------------------------------------------------
 
     [Test]
-    public void Ctor_DefaultValues()
+    public void MaxAttempts_ReflectsLiveChange()
     {
+        _maxAttempts = 3;
         Assert.That(_mgr.MaxAttempts, Is.EqualTo(3));
+
+        _maxAttempts = 7;
+        Assert.That(_mgr.MaxAttempts, Is.EqualTo(7));
+    }
+
+    [Test]
+    public void AttemptIntervalSec_ReflectsLiveChange()
+    {
+        _intervalSec = 5f;
         Assert.That(_mgr.AttemptIntervalSec, Is.EqualTo(5f));
+
+        _intervalSec = 10f;
+        Assert.That(_mgr.AttemptIntervalSec, Is.EqualTo(10f));
+    }
+
+    [Test]
+    public void CooldownSec_ReflectsLiveChange()
+    {
+        _cooldownSec = 30f;
         Assert.That(_mgr.CooldownSec, Is.EqualTo(30f));
-    }
 
-    [Test]
-    public void Ctor_ClampsMaxAttempts_Low()
-    {
-        var mgr = new ReconnectManager(maxAttempts: 0);
-        Assert.That(mgr.MaxAttempts, Is.EqualTo(1));
-    }
-
-    [Test]
-    public void Ctor_ClampsMaxAttempts_High()
-    {
-        var mgr = new ReconnectManager(maxAttempts: 99);
-        Assert.That(mgr.MaxAttempts, Is.EqualTo(10));
-    }
-
-    [Test]
-    public void Ctor_ClampsAttemptInterval_Low()
-    {
-        var mgr = new ReconnectManager(attemptIntervalSec: 0.5f);
-        Assert.That(mgr.AttemptIntervalSec, Is.EqualTo(2f));
-    }
-
-    [Test]
-    public void Ctor_ClampsAttemptInterval_High()
-    {
-        var mgr = new ReconnectManager(attemptIntervalSec: 100f);
-        Assert.That(mgr.AttemptIntervalSec, Is.EqualTo(30f));
-    }
-
-    [Test]
-    public void Ctor_ClampsCooldown_Low()
-    {
-        var mgr = new ReconnectManager(cooldownSec: 1f);
-        Assert.That(mgr.CooldownSec, Is.EqualTo(10f));
-    }
-
-    [Test]
-    public void Ctor_ClampsCooldown_High()
-    {
-        var mgr = new ReconnectManager(cooldownSec: 999f);
-        Assert.That(mgr.CooldownSec, Is.EqualTo(120f));
+        _cooldownSec = 60f;
+        Assert.That(_mgr.CooldownSec, Is.EqualTo(60f));
     }
 
     // -- TryBeginSequence --------------------------------------------------
@@ -143,7 +129,7 @@ public class ReconnectManagerTest
     [Test]
     public void TryNextAttempt_CustomMaxAttempts()
     {
-        var mgr = new ReconnectManager(maxAttempts: 5);
+        var mgr = new ReconnectManager(() => 5, () => 5f, () => 30f);
         mgr.TryBeginSequence(100f);
 
         int count = 0;

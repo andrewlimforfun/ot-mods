@@ -27,7 +27,7 @@
         <EchoVersion>0.1.8</EchoVersion>
         <FomoVersion>1.2.8</FomoVersion>
         <HushVersion>0.1.13</HushVersion>
-        <ReconnectVersion>0.0.1</ReconnectVersion>
+        <ReconnectVersion>0.0.2</ReconnectVersion>
         <RemindVersion>1.1.10</RemindVersion>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->

@@ -16,9 +16,9 @@ namespace Reconnect.Core.Commands
 
             if (args.Length >= 1)
             {
-                if (!int.TryParse(args[0], out int value) || value < 1 || value > 10)
+                if (!int.TryParse(args[0], out int value) || value < 1 || value > 100)
                 {
-                    ChatUtils.AddGlobalNotification("Usage: /rcma [1-10]");
+                    ChatUtils.AddGlobalNotification("Usage: /rcma [1-100]");
                     return;
                 }
                 ReconnectPlugin.MaxAttempts.Value = value;

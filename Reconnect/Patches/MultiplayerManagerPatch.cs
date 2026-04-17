@@ -27,13 +27,13 @@ namespace Reconnect.Patches
     [HarmonyPatch(typeof(MainSceneManager))]
     public static class MainSceneManagerQuitPatch
     {
-        static ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("Reconnect.MainSceneManagerQuitPatch");
+        static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource("Reconnect.MainSceneManagerQuitPatch");
 
         [HarmonyPatch(nameof(MainSceneManager.ButtonQuit))]
         [HarmonyPrefix]
         static void ButtonQuit_Prefix()
         {
-            Logger.LogInfo("ButtonQuit called - marking as intentional leave.");
+            _log.LogInfo("ButtonQuit called - marking as intentional leave.");
             ReconnectPlugin.IsIntentionalLeave = true;
         }
     }

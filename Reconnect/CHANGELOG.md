@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.2
+
+- Better default values
+- Update configs in-game
+
 ## 0.0.1
 
 - Initial release

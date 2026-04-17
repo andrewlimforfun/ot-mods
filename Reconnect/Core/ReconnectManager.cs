@@ -7,20 +7,24 @@ namespace Reconnect.Core
         private float _lastSequenceTime;
         private int _currentAttempt;
 
-        public int MaxAttempts { get; }
-        public float AttemptIntervalSec { get; }
-        public float CooldownSec { get; }
+        private readonly Func<int> _maxAttempts;
+        private readonly Func<float> _attemptIntervalSec;
+        private readonly Func<float> _cooldownSec;
+
+        public int MaxAttempts => _maxAttempts();
+        public float AttemptIntervalSec => _attemptIntervalSec();
+        public float CooldownSec => _cooldownSec();
 
         public bool IsIntentionalLeave { get; set; }
         public bool IsReconnecting { get; private set; }
         public string? SavedLobbyId { get; set; }
         public int CurrentAttempt => _currentAttempt;
 
-        public ReconnectManager(int maxAttempts = 3, float attemptIntervalSec = 5f, float cooldownSec = 30f)
+        public ReconnectManager(Func<int> maxAttempts, Func<float> attemptIntervalSec, Func<float> cooldownSec)
         {
-            MaxAttempts = Math.Clamp(maxAttempts, 1, 10);
-            AttemptIntervalSec = Math.Clamp(attemptIntervalSec, 2f, 30f);
-            CooldownSec = Math.Clamp(cooldownSec, 10f, 120f);
+            _maxAttempts = maxAttempts;
+            _attemptIntervalSec = attemptIntervalSec;
+            _cooldownSec = cooldownSec;
         }
 
         /// <summary>

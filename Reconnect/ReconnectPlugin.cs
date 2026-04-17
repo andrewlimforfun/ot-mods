@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using Alpha;
+using Alpha.Core.Util;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -29,7 +30,11 @@ namespace Reconnect
         public static ConfigEntry<float>? AttemptIntervalSec { get; private set; }
         public static ConfigEntry<float>? CooldownSec { get; private set; }
 
-        internal static ReconnectManager Manager { get; private set; } = new ReconnectManager();
+        internal static ReconnectManager ReconnectManager { get; private set; } = new ReconnectManager(
+            () => MaxAttempts?.Value ?? 10,
+            () => AttemptIntervalSec?.Value ?? 5f,
+            () => CooldownSec?.Value ?? 30f
+        );
 
         /// <summary>
         /// Set to true by <see cref="MultiplayerManagerPatch"/> before a deliberate leave.
@@ -38,18 +43,18 @@ namespace Reconnect
         /// </summary>
         public static bool IsIntentionalLeave
         {
-            get => Manager.IsIntentionalLeave;
-            set => Manager.IsIntentionalLeave = value;
+            get => ReconnectManager.IsIntentionalLeave;
+            set => ReconnectManager.IsIntentionalLeave = value;
         }
 
         /// <summary>True while a reconnect coroutine is actively running.</summary>
-        public static bool IsReconnecting => Manager.IsReconnecting;
+        public static bool IsReconnecting => ReconnectManager.IsReconnecting;
 
         /// <summary>Saved lobby ID captured at disconnect time for potential full rejoin.</summary>
         public static string? SavedLobbyId
         {
-            get => Manager.SavedLobbyId;
-            set => Manager.SavedLobbyId = value;
+            get => ReconnectManager.SavedLobbyId;
+            set => ReconnectManager.SavedLobbyId = value;
         }
 
         private static ReconnectPlugin? _instance;
@@ -60,12 +65,6 @@ namespace Reconnect
             Log = Logger;
             Logger.LogInfo($"{ModName} v{ModVersion} is loaded!");
             InitConfig();
-
-            Manager = new ReconnectManager(
-                MaxAttempts?.Value ?? 3,
-                AttemptIntervalSec?.Value ?? 5f,
-                CooldownSec?.Value ?? 30f
-            );
 
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(MainSceneManagerPatch));
@@ -82,8 +81,8 @@ namespace Reconnect
         {
             Enabled = Config.Bind("General", "Enabled", true,
                 "Enable auto-reconnect on unexpected disconnection.");
-            MaxAttempts = Config.Bind("General", "MaxAttempts", 3,
-                "Maximum reconnect attempts before giving up (1-10).");
+            MaxAttempts = Config.Bind("General", "MaxAttempts", 100,
+                "Maximum reconnect attempts before giving up (1-100).");
             AttemptIntervalSec = Config.Bind("General", "AttemptIntervalSec", 5f,
                 "Seconds between reconnect attempts.");
             CooldownSec = Config.Bind("General", "CooldownSec", 30f,
@@ -99,26 +98,27 @@ namespace Reconnect
 
         private static IEnumerator ReconnectCoroutine()
         {
-            if (!Manager.TryBeginSequence(Time.unscaledTime))
+            if (!ReconnectManager.TryBeginSequence(Time.unscaledTime))
             {
-                Log.LogWarning($"Reconnect cooldown active ({Manager.CooldownSec}s). Allowing normal disconnect flow.");
+                Log.LogWarning($"Reconnect cooldown active ({ReconnectManager.CooldownSec}s). Allowing normal disconnect flow.");
                 FallbackToMenu();
                 yield break;
             }
 
-            Log.LogInfo($"Starting reconnect sequence. Max attempts: {Manager.MaxAttempts}, interval: {Manager.AttemptIntervalSec}s");
+            Log.LogInfo($"Starting reconnect sequence. Max attempts: {ReconnectManager.MaxAttempts}, interval: {ReconnectManager.AttemptIntervalSec}s");
 
-            while (Manager.TryNextAttempt())
+            while (ReconnectManager.TryNextAttempt())
             {
                 ConnectionState state = NetworkManager.main.clientState;
                 if (state == ConnectionState.Connected)
                 {
                     Log.LogInfo("Already connected - reconnect succeeded (or wasn't needed).");
-                    Manager.OnConnected();
+                    ReconnectManager.OnConnected();
                     yield break;
                 }
 
-                Log.LogInfo($"Reconnect attempt {Manager.CurrentAttempt}/{Manager.MaxAttempts}...");
+                ChatUtils.AddGlobalNotification($"Reconnect attempt {ReconnectManager.CurrentAttempt}/{ReconnectManager.MaxAttempts}...");
+                Log.LogInfo($"Reconnect attempt {ReconnectManager.CurrentAttempt}/{ReconnectManager.MaxAttempts}...");
 
                 try
                 {
@@ -132,7 +132,7 @@ namespace Reconnect
 
                 // Wait for the connection attempt to resolve
                 float waited = 0f;
-                float timeout = Manager.AttemptIntervalSec;
+                float timeout = ReconnectManager.AttemptIntervalSec;
                 while (waited < timeout)
                 {
                     yield return null;
@@ -141,8 +141,9 @@ namespace Reconnect
                     ConnectionState current = NetworkManager.main.clientState;
                     if (current == ConnectionState.Connected)
                     {
-                        Log.LogInfo($"Reconnected successfully on attempt {Manager.CurrentAttempt}!");
-                        Manager.OnConnected();
+                        ChatUtils.AddGlobalNotification($"Reconnected successfully on attempt {ReconnectManager.CurrentAttempt}/{ReconnectManager.MaxAttempts}!");
+                        Log.LogInfo($"Reconnected successfully on attempt {ReconnectManager.CurrentAttempt}/{ReconnectManager.MaxAttempts}!");
+                        ReconnectManager.OnConnected();
                         yield break;
                     }
 
@@ -154,7 +155,7 @@ namespace Reconnect
 
             // All attempts exhausted - fall back to normal menu return
             Log.LogWarning("Reconnect failed after all attempts. Returning to menu.");
-            Manager.OnFailed();
+            ReconnectManager.OnFailed();
             FallbackToMenu();
         }
 
