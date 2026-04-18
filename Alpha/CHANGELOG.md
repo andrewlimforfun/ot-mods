@@ -4,6 +4,13 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.0.14] - 2026-04-18
+
+### Added
+
+- **Timestamped disk log** - each line in `LogOutput.log` is now prefixed with `[HH:mm:ss]`. Controlled by the `[Logging] TimestampLog` config entry (default: `true`).
+
+---
 ## [0.0.13] - 2026-04-15
 
 ### Added

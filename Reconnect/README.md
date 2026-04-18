@@ -56,7 +56,7 @@ A **cooldown** (`CooldownSec`) prevents a new reconnect sequence from starting t
 | Setting | Default | Description |
 |---------|---------|-------------|
 | Enabled | true | Enable auto-reconnect |
-| MaxAttempts | 3 | Max reconnect attempts (1-10) |
+| MaxAttempts | 3 | Max reconnect attempts (1-100) |
 | AttemptIntervalSec | 5 | Seconds between attempts |
 | CooldownSec | 30 | Minimum seconds between reconnect sequences |
 

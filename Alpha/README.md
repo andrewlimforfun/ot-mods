@@ -19,6 +19,16 @@ This calls `UnityEngine.Resources.UnloadUnusedAssets()` and can reclaim signific
 
 ---
 
+## Configuration
+
+Alpha creates a config file at `BepInEx/config/com.andrewlin.ontogether.alpha.cfg`.
+
+| Section | Key | Default | Description |
+|---------|-----|---------|-------------|
+| `Logging` | `TimestampLog` | `true` | Prepend `[HH:mm:ss]` timestamps to each line in `LogOutput.log`. |
+
+---
+
 ## In-Game Commands
 
 Alpha registers its own `/alpha` namespace commands. Type them in chat — they are intercepted locally and not sent to other players.
