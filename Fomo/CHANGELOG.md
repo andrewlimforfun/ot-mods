@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.9] - 2026-04-18
+
+### Added
+
+- **Host-only join notification** - when a player joins the server, a second notification is shown to the host only displaying their display name and Steam ID (`Name - 76561198XXXXXXXXX`).
+
 ## [1.2.7] - 2026-04-12
 
 ### Changed

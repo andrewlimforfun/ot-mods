@@ -95,6 +95,7 @@ namespace Fomo
             harmony.PatchAll(typeof(TextChannelManagerPatch));
             harmony.PatchAll(typeof(GameSettingsPatch));
             harmony.PatchAll(typeof(MainSceneManagerPatch));
+            harmony.PatchAll(typeof(PlayerCustomizationControllerPatch));
 
             // Register commands with the shared Alpha command manager
             AlphaPlugin.CommandManager?.Register(new FomoChatLocalCommand());

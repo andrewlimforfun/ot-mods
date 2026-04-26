@@ -7,6 +7,7 @@ A BepInEx mod for [On Together](https://store.steampowered.com/app/2688490/On_To
 - **In-game commands** :: Toggle and configure all features without leaving the game
 - **Configurable chat history length** :: Increase how many messages are visible in the global and local chat windows
 - **Message UI Redirection** :: Subscription to message UI allows for redirection to logs, websocket, telegram, etc.
+- **Host join notification** :: When a player joins, the host sees an additional notification with their Steam ID
 
 > Looking for WebSocket support? Install the [FomoWebSocket](https://thunderstore.io/c/on-together/p/AndrewLin/FomoWebSocket/) add-on.
 > Looking for chat file logging? Install the [FomoChatLog](https://thunderstore.io/c/on-together/p/AndrewLin/FomoChatLog/) add-on.
