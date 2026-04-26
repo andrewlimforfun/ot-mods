@@ -23,6 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Exclude CommandAPIRef build artifacts from this project's compile glob -->
+    <Compile Remove="lib\obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- CommandAPI.dll from Jaide's Thunderstore mod - compile-only reference, loaded at runtime by BepInEx -->
     <Reference Include="CommandAPI">
       <HintPath>lib\CommandAPI.dll</HintPath>
