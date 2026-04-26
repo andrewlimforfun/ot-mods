@@ -20,6 +20,7 @@ namespace Alpha
         public static ConfigEntry<bool>? EnableFeature { get; private set; }
         public static ConfigEntry<bool>? ShowCommand { get; private set; }
         public static ConfigEntry<bool>? TimestampLog { get; private set; }
+        public static ConfigEntry<bool>? SuppressPurrNetNullRef { get; private set; }
         public static ChatCommandManager? CommandManager { get; private set; }
 
         // Thread-safe queue to marshal background-thread work onto the Unity main thread
@@ -39,9 +40,11 @@ namespace Alpha
         {
             InitConfig();
 
-            // Replace default BepInEx disk log listener with a timestamped version
+            // Replace default BepInEx disk and console log listeners with timestamped versions
             if (TimestampLog!.Value)
                 TimestampLogListener.Install();
+
+            TimestampLogListener.SuppressPurrNetNullRef = SuppressPurrNetNullRef!.Value;
 
             // This runs once when the game starts
             Logger.LogInfo($"{ModName} v{ModVersion} is loaded!");
@@ -64,7 +67,8 @@ namespace Alpha
             // Initialize config entries
             EnableFeature = Config.Bind("General", "EnableFeature", true, "Enable or disable the mod feature.");
             ShowCommand = Config.Bind("General", "ShowCommand", false, "Show the command in chat when used.");
-            TimestampLog = Config.Bind("Logging", "TimestampLog", true, "Prepend [HH:mm:ss] timestamps to each line in LogOutput.log.");
+            TimestampLog = Config.Bind("Logging", "TimestampLog", true, "Prepend [HH:mm:ss] timestamps to each line in LogOutput.log and the console.");
+            SuppressPurrNetNullRef = Config.Bind("Logging", "SuppressPurrNetNullRef", true, "Suppress spammy PurrNet NetworkReflection NullReferenceException lines from LogOutput.log and the console (known PurrNet bug).");
         }
 
         /// <summary> Called every frame by Unity. We use it to execute actions on the main thread that were scheduled from background threads (e.g. WebSocket message handlers).</summary>
