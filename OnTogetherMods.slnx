@@ -51,4 +51,8 @@
     <Project Name="Sweep" Path="Sweep\Sweep.csproj" />
   </Folder>
 
+  <Folder Name="/jaideadapter/">
+    <Project Name="JaideAdapter" Path="JaideAdapter\JaideAdapter.csproj" />
+  </Folder>
+
 </Solution>

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>$(JaideAdapterVersion)</Version>
+    <AssemblyName>AndrewLin.JaideAdapter</AssemblyName>
+    <PackageName>JaideAdapter</PackageName>
+    <RootNamespace>JaideAdapter</RootNamespace>
+    <Description>JaideAdapter: Bridges Alpha commands into Jaide's CommandAPI for typeahead support.</Description>
+    <LocalInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)Dev\</LocalInstallPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="OnTogether.GameLibs" Version="$(OnTogetherGameLibsVersion)" />
+    <PackageReference Include="UnityEngine.Modules" Version="6000.0.61" IncludeAssets="compile" />
+    <PackageReference Include="HarmonyX" Version="2.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alpha\Alpha.csproj" SetConfiguration="Configuration=Debug" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CommandAPI.dll from Jaide's Thunderstore mod - compile-only reference, loaded at runtime by BepInEx -->
+    <Reference Include="CommandAPI">
+      <HintPath>lib\CommandAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>CommandAPI</AssemblyName>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\jaide\ontogether-commandapi\src\CommandRegistry.cs" />
+    <Compile Include="..\..\..\jaide\ontogether-commandapi\src\Parameter.cs" />
+    <Compile Include="..\..\..\jaide\ontogether-commandapi\src\ParameterType.cs" />
+    <Compile Include="..\..\..\jaide\ontogether-commandapi\src\CommandInfo.cs" />
+  </ItemGroup>
+</Project>
