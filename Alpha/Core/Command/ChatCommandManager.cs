@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BepInEx.Logging;
 using Alpha.Core.Util;
 
@@ -50,6 +51,8 @@ namespace Alpha.Core.Command
         }
 
         public bool ContainsCommand(string commandName) => _commands.ContainsKey(commandName);
+
+        public IEnumerable<IChatCommand> GetAllCommands() => _commands.Values.Distinct();
 
         public bool ProcessInput(string input)
         {

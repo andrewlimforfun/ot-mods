@@ -4,6 +4,17 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.1.0] - 2026-04-26
+
+### Added
+
+- **`SuppressPurrNetNullRef` config** (`[Logging]`, default: `true`) - suppresses the spammy `PurrNet.NetworkReflection NullReferenceException` lines from the disk log and console. This is a known PurrNet bug; the option makes logs readable.
+
+### Fixed
+
+- `TimestampLogListener` now captures the `DiskLogListener`'s writer and log level before removing it, preventing a `NullReferenceException` when the listener is disposed during swap. All log-event exceptions are caught and written to a diagnostic file instead of propagating.
+
+---
 ## [0.0.14] - 2026-04-18
 
 ### Added
