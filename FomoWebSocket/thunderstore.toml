@@ -14,7 +14,7 @@ containsNsfwContent = false
 
 [package.dependencies]
 BepInEx-BepInExPack = "5.4.2305"
-AndrewLin-Fomo = "1.2.8"
+AndrewLin-Fomo = "1.2.9"
 
 [build]
 icon = "../icon.png"
