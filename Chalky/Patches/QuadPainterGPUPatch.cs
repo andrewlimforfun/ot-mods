@@ -139,6 +139,13 @@ namespace Chalky.Patches
             // Skip relay for default sender to avoid triggering on host's own LoadBoard.
             if (sender == default(PlayerID)) return;
 
+            var senderDetail = PlayerUtils.FindPlayer((_steamId, _pid, _info, _transform) => _pid == sender);
+            string senderName = senderDetail?.UserNameClean ?? "(unknown)";
+            string senderSteamId = senderDetail?.SteamID ?? "?";
+            string boardId = __instance.id?.ToString() ?? "?";
+            ChatUtils.AddGlobalNotification($"Chalky relay from {senderName} ({senderSteamId}) [board {boardId}]");
+            _log.LogInfo($"[Relay] Host received board state update from {senderName} ({senderSteamId}) on board {boardId}, relaying to other players...");
+
             var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
             int count = 0;
 

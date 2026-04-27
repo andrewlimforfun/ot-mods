@@ -7,7 +7,7 @@ A BepInEx mod for [On Together](https://store.steampowered.com/app/2688490/On_To
 
 - **Configurable chalk brush size** - Paint a larger area on the chalkboard in a single stroke. The default game brush covers a 2×2 grid cell block; Chalky lets you scale this up to any integer size.
 - **Chalkboard save & load** - Save any board's full drawing state to a local file and restore it later. Saved files are portable JSON and include an optional PNG preview.
-- **Broadcast on load** - When loading a board, all currently connected players receive the restored drawing instantly. If you're the host, the update is sent directly. If you're a non-host client, the board state is relayed through the host (requires the host to also have Chalky installed). Late-joiners get it automatically through the game's existing sync flow.
+- **Broadcast on load** - When loading a board, all currently connected players receive the restored drawing instantly. If you're the host, the update is sent directly. If you're a non-host client, the board state is relayed through the host (requires the host to also have Chalky installed). Late-joiners get it automatically through the game's existing sync flow. The host relay notification includes the sender's name and the board's network ID for easy identification.
 - **In-game chat commands** - Control all mod behavior on the fly without leaving the game. Commands are typed into the chat box and are **never sent** to other players.
 - **Toggle on/off at runtime** - Enable or disable the mod's drawing enhancements instantly without restarting.
 - **Show/hide command echo** - Optionally suppress commands from appearing in your chat history.

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.8] - 2026-04-27
+
+### Changed
+
+- Host relay notification and log now include the board's network ID
+
 ## [1.2.7] - 2026-04-12
 
 ### Changed
