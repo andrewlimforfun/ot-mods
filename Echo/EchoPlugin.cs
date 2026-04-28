@@ -66,6 +66,8 @@ namespace Echo
             AlphaPlugin.CommandManager?.Register(new EchoTeleportLocationCommand());
             AlphaPlugin.CommandManager?.Register(new EchoLocationListCommand());
             AlphaPlugin.CommandManager?.Register(new EchoLocationRemoveCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoFollowCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoUnfollowCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoRevertNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitCommand());

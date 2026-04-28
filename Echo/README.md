@@ -13,7 +13,9 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 | `/echoteleportperson <player> [x y z]` | `/etp` | Teleport to a player. Optional XYZ offset relative to their position. |
 | `/echoteleportlocation <name>` | `/etl` | Teleport to a saved location by name, or save your current position under that name if it doesn't exist yet. |
 | `/echoteleportlocation <x> <y> <z>` | `/etl` | Teleport directly to the given world coordinates. |
-| `/echocopyname <player>` | `/ecn` | Copy another player's display name (including TMP colour/style tags). Token-gated — see `Security > AccessToken` in config. |
+| `/echofollow <player> [x y z]` | `/ef` | Follow a player at a fixed offset. Uses current distance if no offset given. Sit at a desk first to prevent falling. |
+| `/echounfollow` | `/eu` | Stop following the current target. Also stops on teleport or target disconnect. |
+| `/echocopyname <player>` | `/ecn` | Copy another player's display name (including TMP colour/style tags). Token-gated - see `Security > AccessToken` in config. |
 | `/echorevertname` | `/ern` | Revert your display name to what it was before any Echo rename. |
 | `/echocopyoutfit <player>` | `/eco` | Copy another player's full outfit and appearance onto yourself. |
 | `/echoremovestatuscommand <status_brakets>` | `/ers` | Remove status from copied name. |

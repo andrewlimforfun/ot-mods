@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.9] - 2026-04-28
+
+### Added
+
+- **`/echofollow`** (`/ef`) - Follow a player at a fixed offset. Usage: `/ef <player> [x y z]`. If no offset is given, uses your current distance from the target. Player should be focused (sitting) to prevent falling.
+- **`/echounfollow`** (`/eu`) - Stop following the current target. Following also stops automatically on teleport or if the target leaves.
+
 ## [0.1.8] - 2026-04-15
 
 ### Added
