@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2026-05-08
+
+### Added
+
+- **`/echosyncrotation`** (`/esr`) - Mirror another player's facing direction each frame. Works standalone or combined with `/echofollow`.
+- **`/echounsyncrotation`** (`/eur`) - Stop syncing rotation.
+
 ## [0.2.0] - 2026-05-08
 
 ### Fixed

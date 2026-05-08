@@ -24,8 +24,14 @@ namespace Echo.Patches
         private static Transform? _followTarget;
         private static Vector3 _followOffset;
 
+        // --- Rotation sync state ---
+        private static Transform? _rotationSyncTarget;
+
         /// <summary>Whether we are currently following a target.</summary>
         public static bool IsFollowing => _followTarget != null;
+
+        /// <summary>Whether we are currently syncing rotation to a target.</summary>
+        public static bool IsSyncingRotation => _rotationSyncTarget != null;
 
         /// <summary>Begin following <paramref name="target"/> at <paramref name="offset"/>.</summary>
         public static void StartFollowing(Transform target, Vector3 offset)
@@ -39,6 +45,18 @@ namespace Echo.Patches
         {
             _followTarget = null;
             _followOffset = Vector3.zero;
+        }
+
+        /// <summary>Begin mirroring <paramref name="target"/>'s Y rotation each frame.</summary>
+        public static void StartSyncingRotation(Transform target)
+        {
+            _rotationSyncTarget = target;
+        }
+
+        /// <summary>Stop syncing rotation.</summary>
+        public static void StopSyncingRotation()
+        {
+            _rotationSyncTarget = null;
         }
 
         /// <summary>Returns the local player's current world position.</summary>
@@ -88,25 +106,53 @@ namespace Echo.Patches
         [HarmonyPatch("Update")]
         public static void Update_Postfix(PlayerMovementController __instance)
         {
-            if (ReferenceEquals(_followTarget, null))
+            if (ReferenceEquals(_followTarget, null) && ReferenceEquals(_rotationSyncTarget, null))
                 return;
 
             var tcm = NetworkSingleton<TextChannelManager>.I;
             if (tcm == null || __instance != tcm.MainMovementController)
                 return;
 
-            // Target destroyed or left the session
-            if (_followTarget == null || _followTarget.gameObject == null
-                || !_followTarget.gameObject.activeInHierarchy)
+            // --- Position follow ---
+            if (!ReferenceEquals(_followTarget, null))
             {
-                StopFollowing();
-                ChatUtils.AddGlobalNotification("Stopped following (target left).");
+                // Target destroyed or left the session
+                if (_followTarget == null || _followTarget.gameObject == null
+                    || !_followTarget.gameObject.activeInHierarchy)
+                {
+                    StopFollowing();
+                    ChatUtils.AddGlobalNotification("Stopped following (target left).");
+                }
+                else
+                {
+                    Vector3 destination = _followTarget.position + _followOffset;
+                    __instance.transform.position = destination;
+                    tcm.MainPlayer.position = destination;
+                }
+            }
+
+            // --- Rotation sync ---
+            ApplyRotationSync(tcm.MainMovementController, __instance);
+        }
+
+        private static void ApplyRotationSync(PlayerMovementController mainCtrl, PlayerMovementController instance)
+        {
+            if (ReferenceEquals(_rotationSyncTarget, null))
+                return;
+
+            if (_rotationSyncTarget == null || _rotationSyncTarget.gameObject == null
+                || !_rotationSyncTarget.gameObject.activeInHierarchy)
+            {
+                StopSyncingRotation();
+                ChatUtils.AddGlobalNotification("Stopped syncing rotation (target left).");
                 return;
             }
 
-            Vector3 destination = _followTarget.position + _followOffset;
-            __instance.transform.position = destination;
-            tcm.MainPlayer.position = destination;
+            if (instance != mainCtrl)
+                return;
+
+            float targetY = _rotationSyncTarget.eulerAngles.y;
+            instance.transform.rotation = Quaternion.Euler(0f, targetY, 0f);
         }
     }
 }
