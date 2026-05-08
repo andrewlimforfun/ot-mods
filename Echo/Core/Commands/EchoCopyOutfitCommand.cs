@@ -64,8 +64,8 @@ namespace Echo.Core.Commands
             // ApplyCustomization broadcasts DataManager.CustomizationData (not its argument) via
             // ObserversRpc, so we must update DataManager first or other players see the old outfit.
             MonoSingleton<DataManager>.I.CustomizationData = new CustomizationData(data);
-            // MonoSingleton<DataManager>.I.PlayerDataZip.CurrentCustomizationDataIDs =
-            //     new CustomizationDataIDs(MonoSingleton<DataManager>.I.CustomizationData);
+            MonoSingleton<DataManager>.I.PlayerDataZip.CurrentCustomizationDataIDs =
+                new CustomizationDataIDs3(MonoSingleton<DataManager>.I.CustomizationData);
 
             localCtrl.ApplyCustomization(data);
             //MonoSingleton<DataManager>.I.SavePlayerZipData();

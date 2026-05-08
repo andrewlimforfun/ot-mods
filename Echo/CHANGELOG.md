@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2026-05-08
+
+### Fixed
+
+- **`/echocopyoutfit`** — fixed for game v1.1.0. The game restructured `CustomizationData` from individual fields to dictionaries and added new outfit types (`Bed`, `Floater`); now compiling against the new DLLs and persisting `CurrentCustomizationDataIDs` using `CustomizationDataIDs3`.
+
 ## [0.1.9] - 2026-04-28
 
 ### Added
