@@ -26,11 +26,4 @@
     <ProjectReference Include="..\Alpha\Alpha.csproj" SetConfiguration="Configuration=Debug" />
   </ItemGroup>
 
-  <!-- TEMPORARILY DISABLE PUBLISHING TO THUNDERSTORE AS ECHO CAN CAUSE CHAOS -->
-  <Target Name="ThunderstorePublish" AfterTargets="Build"
-    Condition="'$(Configuration)' == 'Publish' and '$(PackageName)' != ''">
-    
-    <Message Importance="high" Text="(TEMP DISABLED) Publishing $(PackageName) v$(Version) to Thunderstore..." />
-    
-  </Target>
 </Project>

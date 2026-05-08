@@ -20,6 +20,10 @@
         <BepInExVersion>5.4.2305</BepInExVersion>
         <OnTogetherGameLibsVersion>2.0.0</OnTogetherGameLibsVersion>
 
+        <!-- Set to true to use local game DLLs instead of the OnTogether.GameLibs NuGet package -->
+        <UseLocalGameLibs>true</UseLocalGameLibs>
+        <GameManagedPath>C:\Program Files (x86)\Steam\steamapps\common\On-Together\On-Together\OnTogether_Data\Managed</GameManagedPath>
+
         <!-- Mods Versions -->
         <AlphaVersion>0.1.0</AlphaVersion>
         <ChalkyVersion>1.2.8</ChalkyVersion>

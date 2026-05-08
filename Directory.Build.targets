@@ -8,6 +8,15 @@
     sync thunderstore.toml, publish to Thunderstore.
   -->
 
+    <!-- When UseLocalGameLibs is true, swap NuGet packages for local game DLLs -->
+    <ItemGroup Condition="'$(UseLocalGameLibs)' == 'true'">
+        <PackageReference Remove="OnTogether.GameLibs" />
+        <PackageReference Remove="UnityEngine.Modules" />
+        <Reference Include="$(GameManagedPath)\*.dll"
+                   Exclude="$(GameManagedPath)\mscorlib.dll;$(GameManagedPath)\netstandard.dll;$(GameManagedPath)\System*.dll"
+                   Private="false" />
+    </ItemGroup>
+
     <!-- Generate BuildInfo.g.cs with the current version at build time -->
     <Target Name="GenerateVersionFile" BeforeTargets="BeforeBuild" Condition="'$(PackageName)' != ''">
         <PropertyGroup>

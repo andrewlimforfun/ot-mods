@@ -71,25 +71,42 @@ namespace Echo.Patches
                 return false;
             }
 
-            // --- Persistent follow ---
-            // ReferenceEquals checks the C# ref; Unity's == catches destroyed objects.
-            if (!ReferenceEquals(_followTarget, null))
-            {
-                if (_followTarget == null || _followTarget.gameObject == null
-                    || !_followTarget.gameObject.activeInHierarchy)
-                {
-                    StopFollowing();
-                    ChatUtils.AddGlobalNotification("Stopped following (target left).");
-                    return true;
-                }
-
-                Vector3 destination = _followTarget.position + _followOffset;
-                ____characterController.transform.position = destination;
-                tcm.MainPlayer.position = destination;
-                return false; // skip normal MovePlayer every tick
-            }
+            // When following, suppress CharacterController.Move() so it doesn't fight
+            // the position that Update_Postfix will apply this same frame.
+            if (!ReferenceEquals(_followTarget, null) && _followTarget != null)
+                return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Runs after every Update() tick regardless of focus/blocking state.
+        /// This is the only place that actually moves the player during a follow session,
+        /// because MovePlayer() is never called when the player is focused (sitting at desk).
+        /// </summary>
+        [HarmonyPostfix]
+        [HarmonyPatch("Update")]
+        public static void Update_Postfix(PlayerMovementController __instance)
+        {
+            if (ReferenceEquals(_followTarget, null))
+                return;
+
+            var tcm = NetworkSingleton<TextChannelManager>.I;
+            if (tcm == null || __instance != tcm.MainMovementController)
+                return;
+
+            // Target destroyed or left the session
+            if (_followTarget == null || _followTarget.gameObject == null
+                || !_followTarget.gameObject.activeInHierarchy)
+            {
+                StopFollowing();
+                ChatUtils.AddGlobalNotification("Stopped following (target left).");
+                return;
+            }
+
+            Vector3 destination = _followTarget.position + _followOffset;
+            __instance.transform.position = destination;
+            tcm.MainPlayer.position = destination;
         }
     }
 }
