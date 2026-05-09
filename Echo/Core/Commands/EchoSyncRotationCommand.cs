@@ -9,7 +9,7 @@ namespace Echo.Core.Commands
     /// /echosyncrotation (/esr) - Mirror another player's facing direction each frame.
     /// Compatible with /echofollow: you can follow AND sync rotation simultaneously.
     /// Usage: /esr &lt;name|steamid&gt;
-    /// Stop with /echostopsyncrotation (/eur).
+    /// Stop with /echounsyncrotation (/eur).
     /// </summary>
     public class EchoSyncRotationCommand : IChatCommand
     {
@@ -17,7 +17,7 @@ namespace Echo.Core.Commands
 
         public string Name => "echosyncrotation";
         public string ShortName => "esr";
-        public string Description => "Mirror another player's facing direction. Usage: /esr <name|steamid>. Stop with /esrx.";
+        public string Description => "Mirror another player's facing direction. Usage: /esr <name|steamid>. Stop with /eur.";
         public string Namespace => "echo";
 
         public void Execute(string[] args)
@@ -40,7 +40,7 @@ namespace Echo.Core.Commands
             PlayerMovementControllerPatch.StartSyncingRotation(target.PlayerTransform.transform);
 
             Logger.LogInfo($"Syncing rotation to {cleanName}.");
-            ChatUtils.AddGlobalNotification($"Syncing rotation to {cleanName}. Use /esrx to stop.");
+            ChatUtils.AddGlobalNotification($"Syncing rotation to {cleanName}. Use /eur to stop.");
         }
     }
 }
