@@ -25,7 +25,7 @@
     <ProjectReference Include="..\Fomo\Fomo.csproj"  SetConfiguration="Configuration=Debug"/>
   </ItemGroup>
 
-  <!-- FomoWebSocket ships Fleck.dll — copy it alongside the main assembly when installing locally -->
+  <!-- FomoWebSocket ships Fleck.dll - copy it alongside the main assembly when installing locally -->
   <Target Name="InstallFleck" AfterTargets="Install" Condition="'$(Configuration)' == 'Install'">
     <Copy SourceFiles="$(TargetDir)Fleck.dll" DestinationFolder="$(LocalInstallPath)" />
   </Target>

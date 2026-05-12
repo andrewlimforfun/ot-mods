@@ -51,4 +51,4 @@ Use `r2modman` or the Thunderstore app for the simplest install.
 **Manual:**
 1. Install [BepInEx](https://github.com/BepInEx/BepInEx/releases) into your On Together game folder
 2. Copy `AndrewLin.Fomo.dll` into `BepInEx/plugins/`
-3. Launch the game — a config file will be generated at `BepInEx/config/com.andrewlin.ontogether.fomo.cfg`
+3. Launch the game - a config file will be generated at `BepInEx/config/com.andrewlin.ontogether.fomo.cfg`

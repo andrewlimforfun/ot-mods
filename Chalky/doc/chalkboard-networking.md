@@ -41,7 +41,7 @@ targetRpcsCanTargetServer    = true  →  CanTargetServerWithTargetRpc() = true
 ```
 
 If `ignoreRequireServerAttribute` is enabled, the `requireServer` flag on all
-RPCs is effectively treated as `false`—clients can send ObserversRpc and
+RPCs is effectively treated as `false`-clients can send ObserversRpc and
 TargetRpc, and the server will relay them.
 
 ### Send Path (from `SendRPCNormal`)
@@ -73,11 +73,11 @@ TargetRPC (requireServer: false or ignoreRequireServer):
 
 ---
 
-## QuadPainterGPU — Key Fields
+## QuadPainterGPU - Key Fields
 
 | Field | Type | Purpose |
 |---|---|---|
-| `PaintColors` | `IntList[]` | Grid of color indices. `PaintColors[x].Ints[y]` = 0 (empty) or `n` where color = `GetColor(n-1)`. Grid: 320×180. **Not a SyncVar**—synced only via RPC snapshots. |
+| `PaintColors` | `IntList[]` | Grid of color indices. `PaintColors[x].Ints[y]` = 0 (empty) or `n` where color = `GetColor(n-1)`. Grid: 320×180. **Not a SyncVar**-synced only via RPC snapshots. |
 | `gridSize` | `Vector2Int` | Default `(320, 180)` |
 | `textureWidth/Height` | `int` | Default `1920 × 1080` |
 | `_rt` | `RenderTexture` (private) | The actual drawn canvas |
@@ -90,9 +90,9 @@ initialized with a given capacity.
 
 ---
 
-## QuadPainterGPU — RPCs
+## QuadPainterGPU - RPCs
 
-### 1. `ReadPixelData` — Board Sync Request
+### 1. `ReadPixelData` - Board Sync Request
 
 ```
 [ServerRpc(Channel.ReliableOrdered, requireOwnership: true)]
@@ -110,7 +110,7 @@ initialized with a given capacity.
 GetQuadImage(rpcInfo.sender, PaintColors);  // send board back to requester
 ```
 
-### 2. `GetQuadImage` — Full Board State Push
+### 2. `GetQuadImage` - Full Board State Push
 
 ```
 [TargetRpc(Channel.ReliableOrdered, requireServer: true)]
@@ -131,7 +131,7 @@ for x, y: if paintedColors[x][y] != 0 → PaintPixel(coord, color, idx)
 RenderBatch();
 ```
 
-### 3. `FillTheBlanksRPC` — Live Paint Stroke Broadcast
+### 3. `FillTheBlanksRPC` - Live Paint Stroke Broadcast
 
 ```
 [ObserversRpc(Channel.ReliableOrdered, requireServer: true)]
@@ -162,12 +162,12 @@ The sender check prevents double-rendering (local player already called
 ```
 QuadPainterGPU.Update()
   │ Raycast hit → textureCoord
-  ├─ FillTheBlanksRPC(uv, prev, ...)       [ObserversRpc: server sends to all]
+  ├- FillTheBlanksRPC(uv, prev, ...)       [ObserversRpc: server sends to all]
   │    → ValidateSendingRPC → OK (isServer)
   │    → BatchToTargets(observers)
   │    → Each observer: FillTheBlanksRPC_Original_2
   │         if sender != localPlayer → FillTheBlanks(..., isSelf: false)
-  └─ FillTheBlanks(uv, prev, ..., isSelf: true)  [local render immediately]
+  └- FillTheBlanks(uv, prev, ..., isSelf: true)  [local render immediately]
        → PaintOnTexture → TryPaint → PaintPixel → _pixelsToUpdate[coord]=color
        → LateUpdate() → RenderBatch()
 ```
@@ -182,7 +182,7 @@ QuadPainterGPU.Update()
 ```
 QuadPainterGPU.Update()
   │ Raycast hit → textureCoord
-  ├─ FillTheBlanksRPC(uv, prev, ...)
+  ├- FillTheBlanksRPC(uv, prev, ...)
   │    → ValidateSendingRPC
   │      if ignoreRequireServer:
   │         → BatchToServer(...)
@@ -190,15 +190,15 @@ QuadPainterGPU.Update()
   │         → Server forwards to all observers
   │      else:
   │         → LogError("...without server.") → BLOCKED
-  └─ FillTheBlanks(uv, prev, ..., isSelf: true)  [always runs locally]
+  └- FillTheBlanks(uv, prev, ..., isSelf: true)  [always runs locally]
 ```
 
 ### Late-Joiner Board Sync
 
 ```
 PlayerCustomizationController.OnSpawned()  [non-host only, isOwner check]
-  └─ StartCoroutine(DrawingManager.SyncBoards())
-       └─ for each board:
+  └- StartCoroutine(DrawingManager.SyncBoards())
+       └- for each board:
             board.ReadPixelData()              [ServerRpc → server]
               → Server: ReadPixelData_Original_0(rpcInfo)
                 → GetQuadImage(rpcInfo.sender, PaintColors)  [TargetRpc → requester]
@@ -208,26 +208,26 @@ PlayerCustomizationController.OnSpawned()  [non-host only, isOwner check]
             yield WaitForSeconds(1)
 ```
 
-### Board Load — Host
+### Board Load - Host
 
 ```
 BoardIO.LoadBoard(index, name)
-  ├─ Deserialize grid from JSON → write into board.PaintColors
-  ├─ RebuildRenderTexture(board, dm)
+  ├- Deserialize grid from JSON → write into board.PaintColors
+  ├- RebuildRenderTexture(board, dm)
   │    → GL.Clear → PaintPixel each cell → RenderBatch()
-  └─ BroadcastToPlayers(board)
-       └─ foreach player in PlayerIDs:
+  └- BroadcastToPlayers(board)
+       └- foreach player in PlayerIDs:
             board.GetQuadImage(player, board.PaintColors)  [TargetRpc: direct]
 ```
 
-### Board Load — Non-Host Client (Chalky Mod Workaround)
+### Board Load - Non-Host Client (Chalky Mod Workaround)
 
 ```
 BoardIO.LoadBoard(index, name)
-  ├─ Deserialize grid → write into board.PaintColors
-  ├─ RebuildRenderTexture (local only)
-  └─ BroadcastToPlayers(board)
-       └─ board.GetQuadImage(hostPlayer, board.PaintColors)
+  ├- Deserialize grid → write into board.PaintColors
+  ├- RebuildRenderTexture (local only)
+  └- BroadcastToPlayers(board)
+       └- board.GetQuadImage(hostPlayer, board.PaintColors)
             → TargetRpc sent to server
             → Server: GetQuadImage_Original_1 runs (applies pixels locally)
             → Harmony Postfix: RelayGetQuadImage triggers

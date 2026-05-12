@@ -11,7 +11,7 @@ namespace Alpha.Core.Util
 
     public static class ChatUtils
     {
-        private static readonly Regex _commonTMPTagRegex = new Regex(
+        public static readonly Regex TagRegex = new Regex(
         @"</?(?:color|b|i|u|s|sup|sub|size|alpha|mark|cspace|width|uppercase|lowercase|smallcaps|font|voffset|nobr|noparse|sprite|link|align|rotate|#[0-9a-fA-F]{3,8})[^>]*>",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -84,7 +84,7 @@ namespace Alpha.Core.Util
         public static string CleanTMPTags(string input)
         {
             // Remove common TMP tags
-            return _commonTMPTagRegex.Replace(input, string.Empty);
+            return TagRegex.Replace(input, string.Empty);
         }
 
         /// <summary>

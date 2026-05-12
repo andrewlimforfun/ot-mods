@@ -8,13 +8,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **`/alphaserverinfo`** — now shows session duration (time since joining the server). Join time is captured by patching `TextChannelManager.Start()`.
-- **`AlphaPlugin.ServerJoinTime`** — new `DateTime?` property exposing join time to other mods.
+- **`/alphaserverinfo`** - now shows session duration (time since joining the server). Join time is captured by patching `TextChannelManager.Start()`.
+- **`AlphaPlugin.ServerJoinTime`** - new `DateTime?` property exposing join time to other mods.
 
 ### Changed
 
-- **`/alphaserverinfo`** — builds message into a single string, then logs and notifies once.
-- **`/alphawhois`** — combines all player rows into one message before logging and notifying.
+- **`/alphaserverinfo`** - builds message into a single string, then logs and notifies once.
+- **`/alphawhois`** - combines all player rows into one message before logging and notifying.
 
 ---
 ## [0.1.0] - 2026-04-26
@@ -39,7 +39,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **`/alphaunloadunusedassets`** (`/auua`) — Calls `UnityEngine.Resources.UnloadUnusedAssets()` to free GPU VRAM and RAM accumulated during an On-Together session.
+- **`/alphaunloadunusedassets`** (`/auua`) - Calls `UnityEngine.Resources.UnloadUnusedAssets()` to free GPU VRAM and RAM accumulated during an On-Together session.
 
 ---
 ## [0.0.12] - 2026-04-15
@@ -95,14 +95,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **`TimeUtils`** — `TryParseDuration(string, out TimeSpan)` parses ISO 8601 duration strings (`1h30m`, `15s`, `PT1H30M`) and `hh:mm:ss` / `TimeSpan` formats. Extracted from `Remind.ScheduledTaskManager` so any mod can share the same duration-parsing logic without a dependency on Remind.
+- **`TimeUtils`** - `TryParseDuration(string, out TimeSpan)` parses ISO 8601 duration strings (`1h30m`, `15s`, `PT1H30M`) and `hh:mm:ss` / `TimeSpan` formats. Extracted from `Remind.ScheduledTaskManager` so any mod can share the same duration-parsing logic without a dependency on Remind.
 
 - In-game commands registered under the `alpha` namespace:
-  - `/alphaserverinfo` (`/asi`) — show lobby name, code, player count, and host.
-  - `/alphawhois [player]` (`/awi`) — show info about a player (name, Steam ID, position).
-  - `/alphamyposition` (`/amp`) — show your current world position.
-  - `/alphaaddnotification <message>` (`/aan`) — post a local notification to your own chat.
-  - `/alphahelp` (`/ah`) — list all Alpha commands.
+  - `/alphaserverinfo` (`/asi`) - show lobby name, code, player count, and host.
+  - `/alphawhois [player]` (`/awi`) - show info about a player (name, Steam ID, position).
+  - `/alphamyposition` (`/amp`) - show your current world position.
+  - `/alphaaddnotification <message>` (`/aan`) - post a local notification to your own chat.
+  - `/alphahelp` (`/ah`) - list all Alpha commands.
 
 ---
 ## [0.0.2] - 2026-03-18
@@ -118,36 +118,36 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **`AlphaPlugin`** — BepInEx plugin entry point providing shared static state for consuming mods:
+- **`AlphaPlugin`** - BepInEx plugin entry point providing shared static state for consuming mods:
   - Static `CommandManager` (`ChatCommandManager`) for cross-mod slash command registration.
   - `RunOnMainThread(Action)` for scheduling Unity main-thread work from background threads.
   - BepInEx config entries: `EnableFeature`, `ShowCommand`, `CleanChatSinkTags`, `GlobalMessageLimitCount`, `LocalMessageLimitCount`, `ChatLogLocalRange`.
 
-- **`IChatCommand`** — Interface for implementing in-game slash commands with `Name`, `ShortName`, `Description`, `Namespace`, and `Execute(string[])`.
+- **`IChatCommand`** - Interface for implementing in-game slash commands with `Name`, `ShortName`, `Description`, `Namespace`, and `Execute(string[])`.
 
-- **`ChatCommandManager`** — Registers and dispatches `IChatCommand` implementations; auto-creates a `/{namespace}help` (and short-form `/{ns[0]}h`) command the first time any command for a new namespace is registered.
+- **`ChatCommandManager`** - Registers and dispatches `IChatCommand` implementations; auto-creates a `/{namespace}help` (and short-form `/{ns[0]}h`) command the first time any command for a new namespace is registered.
 
-- **`ChatCommandArgs`** — Parses `/command arg1 arg2 …` chat input into a structured `Name` + `Args` record with `TryParse`.
+- **`ChatCommandArgs`** - Parses `/command arg1 arg2 …` chat input into a structured `Name` + `Args` record with `TryParse`.
 
-- **`NamespaceHelpCommand`** — Auto-generated help command per namespace; supports plain listing, `verbose` (with descriptions), and single-command lookup.
+- **`NamespaceHelpCommand`** - Auto-generated help command per namespace; supports plain listing, `verbose` (with descriptions), and single-command lookup.
 
 - **`ChatUtils`**:
-  - `AddGlobalNotification` — posts a notification to the in-game chat.
-  - `SendMessageAsync` — sends a chat message (capped at 250 characters).
-  - `SendChunkedMessageAsync` — splits long messages into ≤250-char chunks using a pluggable chunking strategy.
-  - `CleanTMPTags` — strips TextMeshPro formatting tags from strings.
-  - `CleanCommand` — hides processed slash commands from the chat input field.
-  - `UISendMessage` — programmatically injects and submits text via the UI input field.
+  - `AddGlobalNotification` - posts a notification to the in-game chat.
+  - `SendMessageAsync` - sends a chat message (capped at 250 characters).
+  - `SendChunkedMessageAsync` - splits long messages into ≤250-char chunks using a pluggable chunking strategy.
+  - `CleanTMPTags` - strips TextMeshPro formatting tags from strings.
+  - `CleanCommand` - hides processed slash commands from the chat input field.
+  - `UISendMessage` - programmatically injects and submits text via the UI input field.
 
-- **`IStringChunker`** — Interface for splitting text into bounded-length segments.
-  - `WordBoundaryChunker` — splits on whitespace, preserving whole words.
-  - `HardCutChunker` — hard-cuts at the character limit.
+- **`IStringChunker`** - Interface for splitting text into bounded-length segments.
+  - `WordBoundaryChunker` - splits on whitespace, preserving whole words.
+  - `HardCutChunker` - hard-cuts at the character limit.
 
 - **`PlayerUtils`**:
-  - `GetUserName` / `GetUserNameNoFormat` — local player display name (raw and TMP-stripped).
+  - `GetUserName` / `GetUserNameNoFormat` - local player display name (raw and TMP-stripped).
 
-- **`TextChannelManagerPatch`** — Harmony patches on `TextChannelManager`:
-  - `OnEnterPressed` prefix — intercepts slash commands and routes them through `CommandManager`.
-  - `AddNotification` postfix — strips TMP tags for notification sinks.
-  - `SendMessageAsync` postfix — strips TMP tags from outgoing messages when `CleanChatSinkTags` is enabled.
-  - `OnChannelMessageReceived` postfix — relays incoming messages to sinks, filtered by ban/mute list, self-filter, and local-range distance.
+- **`TextChannelManagerPatch`** - Harmony patches on `TextChannelManager`:
+  - `OnEnterPressed` prefix - intercepts slash commands and routes them through `CommandManager`.
+  - `AddNotification` postfix - strips TMP tags for notification sinks.
+  - `SendMessageAsync` postfix - strips TMP tags from outgoing messages when `CleanChatSinkTags` is enabled.
+  - `OnChannelMessageReceived` postfix - relays incoming messages to sinks, filtered by ban/mute list, self-filter, and local-range distance.

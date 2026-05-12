@@ -29,12 +29,12 @@ All notable changes to FomoWebSocket will be documented in this file.
 ### Added
 - Initial release as a standalone mod split from Fomo
 - WebSocket server via Fleck, forwarding all chat entries and notifications in real time
-- `/fomowebsockettoggle` (`/fwst`) — toggle the WebSocket server on/off
-- `/fomowebsocketport` (`/fwsp`) — get or set the WebSocket server port at runtime
-- `/fomowebsocketmessageformat` (`/fwsmf`) — get or set the chat message format string
-- `/fomowebsocketnotificationformat` (`/fwsnf`) — get or set the notification format string
+- `/fomowebsockettoggle` (`/fwst`) - toggle the WebSocket server on/off
+- `/fomowebsocketport` (`/fwsp`) - get or set the WebSocket server port at runtime
+- `/fomowebsocketmessageformat` (`/fwsmf`) - get or set the chat message format string
+- `/fomowebsocketnotificationformat` (`/fwsnf`) - get or set the notification format string
 - `EnableFeature` config to start the server automatically on launch
 - `WebSocketChatPort` config (default: `8765`)
 - `MessageFormat` config with named placeholders (`{timestamp}`, `{channel}`, `{username}`, `{message}`, etc.)
 - `NotificationFormat` config for system notifications
-- Bidirectional relay — incoming WebSocket messages are injected into the in-game chat on the Unity main thread
+- Bidirectional relay - incoming WebSocket messages are injected into the in-game chat on the Unity main thread

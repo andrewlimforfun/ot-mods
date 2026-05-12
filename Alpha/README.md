@@ -31,7 +31,7 @@ Alpha creates a config file at `BepInEx/config/com.andrewlin.ontogether.alpha.cf
 
 ## In-Game Commands
 
-Alpha registers its own `/alpha` namespace commands. Type them in chat — they are intercepted locally and not sent to other players.
+Alpha registers its own `/alpha` namespace commands. Type them in chat - they are intercepted locally and not sent to other players.
 
 | Command | Short | Description |
 |---|---|---|
@@ -75,8 +75,8 @@ When the first command for a namespace is registered, a `/{namespace}help` comma
 **Built-in help usage:**
 ```
 /{mymod}help
-/{mymod}help verbose       — includes descriptions
-/{mymod}help mycmd         — looks up a single command
+/{mymod}help verbose       - includes descriptions
+/{mymod}help mycmd         - looks up a single command
 ```
 
 ---

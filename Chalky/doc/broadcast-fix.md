@@ -1,4 +1,4 @@
-# BroadcastToPlayers Fix — Host Relay for Non-Host Clients
+# BroadcastToPlayers Fix - Host Relay for Non-Host Clients
 
 ## Problem
 
@@ -23,7 +23,7 @@ The `requireServer: true` flag means **only the server/host** can send this RPC.
 board.GetQuadImage(playerX, PaintColors)
   → SendRPCNormal
     → isServer == true
-    → BatchToTargets(playerX, ...)    // direct send — always works
+    → BatchToTargets(playerX, ...)    // direct send - always works
 ```
 
 All players receive it. No issues.
@@ -37,11 +37,11 @@ board.GetQuadImage(playerX, PaintColors)
     → ValidateSendingRPC checks:
       requireServer: true && !networkManager.isServer
       → LogError("Trying to send RPC 'GetQuadImage' without server.")
-      → return false — PACKET DROPPED
+      → return false - PACKET DROPPED
 ```
 
 The RPC never leaves the client. The only exception is when `targetID` equals
-`localPlayerForced` — in that case, the code skips `SendRPC` entirely and calls
+`localPlayerForced` - in that case, the code skips `SendRPC` entirely and calls
 `GetQuadImage_Original_1` locally. This is why the caller always sees their own
 load succeed.
 
@@ -58,7 +58,7 @@ foreach (var player in playerIDs)
   `GetQuadImage_Original_1` locally. Works.
 - **Host** (`player.isServer`): For non-host callers, the TargetRpc packet is
   blocked by `ValidateSendingRPC`. However since `requireServer: true` blocks
-  the send, the host never receives it either — unless `ignoreRequireServer` is
+  the send, the host never receives it either - unless `ignoreRequireServer` is
   enabled in NetworkRules.
 - **Other clients**: Same block. `ValidateSendingRPC` drops the packet.
 

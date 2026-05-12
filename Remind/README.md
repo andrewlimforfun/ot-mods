@@ -39,8 +39,8 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 
 Located in `BepInEx/config/com.andrewlin.ontogether.remind.cfg`
 
-- `EnableFeature` (default: `true`) — Enable or disable all mod features
-- `ShowCommand` (default: `false`) — Show commands in chat when used
+- `EnableFeature` (default: `true`) - Enable or disable all mod features
+- `ShowCommand` (default: `false`) - Show commands in chat when used
 
 ## Installation
 
@@ -49,4 +49,4 @@ Use `r2modman` or the Thunderstore app for the simplest install.
 **Manual:**
 1. Install [BepInEx](https://github.com/BepInEx/BepInEx/releases) into your On Together game folder
 2. Copy `AndrewLin.Remind.dll` into `BepInEx/plugins/`
-3. Launch the game — a config file will be generated automatically
+3. Launch the game - a config file will be generated automatically

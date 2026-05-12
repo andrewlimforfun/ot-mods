@@ -56,13 +56,13 @@ All notable changes to this project will be documented in this file.
 ## [0.0.1] - 2026-03-12
 
 ### Added
-- `/remindmein` (`/rmi`) — show a private notification after a duration (`hh:mm:ss`)
-- `/remindmeat` (`/rma`) — show a private notification at a local time (`HH:mm`)
-- `/remindlocalin` (`/rli`) — send a local chat message after a duration
-- `/remindlocalat` (`/rla`) — send a local chat message at a local time
-- `/remindglobalin` (`/rgi`) — send a global chat message after a duration
-- `/remindglobalat` (`/rga`) — send a global chat message at a local time
-- `/remindhelp` (`/rh`) — list all available commands
-- `/remindtoggle` (`/rt`) — toggle the mod on/off
-- `/remindshowcommand` (`/rsc`) — toggle showing commands in chat
-- `ScheduledTaskManager` — wall-clock based one-shot task scheduler with `ScheduleIn(TimeSpan)`, `ScheduleAt(DateTime)`, `TryScheduleIn(string, ...)`, and `TryScheduleAt(string, ...)` overloads
+- `/remindmein` (`/rmi`) - show a private notification after a duration (`hh:mm:ss`)
+- `/remindmeat` (`/rma`) - show a private notification at a local time (`HH:mm`)
+- `/remindlocalin` (`/rli`) - send a local chat message after a duration
+- `/remindlocalat` (`/rla`) - send a local chat message at a local time
+- `/remindglobalin` (`/rgi`) - send a global chat message after a duration
+- `/remindglobalat` (`/rga`) - send a global chat message at a local time
+- `/remindhelp` (`/rh`) - list all available commands
+- `/remindtoggle` (`/rt`) - toggle the mod on/off
+- `/remindshowcommand` (`/rsc`) - toggle showing commands in chat
+- `ScheduledTaskManager` - wall-clock based one-shot task scheduler with `ScheduleIn(TimeSpan)`, `ScheduleAt(DateTime)`, `TryScheduleIn(string, ...)`, and `TryScheduleAt(string, ...)` overloads

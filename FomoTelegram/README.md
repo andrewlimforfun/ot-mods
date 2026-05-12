@@ -9,9 +9,9 @@ A [Fomo](https://thunderstore.io/c/on-together/p/AndrewLin/Fomo/) add-on for [On
 ## Features
 
 - Forwards **global chat**, **local chat**, and **system notifications** to any Telegram chat or group
-- Respects the Fomo `ChatSinkLocalRange` setting — local messages from players outside your range are filtered before reaching Telegram
-- Rate-limited background send queue — won't hammer the Telegram API during busy chat sessions
-- Bidirectional relay — messages sent from Telegram back to the bot are injected into the in-game chat
+- Respects the Fomo `ChatSinkLocalRange` setting - local messages from players outside your range are filtered before reaching Telegram
+- Rate-limited background send queue - won't hammer the Telegram API during busy chat sessions
+- Bidirectional relay - messages sent from Telegram back to the bot are injected into the in-game chat
 - Configurable format strings for chat messages and notifications
 - Per-category toggles (global / local / notifications) and a master on/off switch
 
@@ -87,29 +87,29 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 Located in `BepInEx/config/com.andrewlin.ontogether.fomotelegram.cfg`
 
 - **General**
-  - `EnableFeature` (default: `true`) — Master switch; disable to pause all Telegram forwarding without removing the plugin
+  - `EnableFeature` (default: `true`) - Master switch; disable to pause all Telegram forwarding without removing the plugin
 - **Telegram**
-  - `TelegramBotApiKey` — Your bot token from @BotFather (e.g. `123456:ABC-DEF…`)
-  - `TelegramChatId` — Target chat / group / channel ID (group IDs are negative)
+  - `TelegramBotApiKey` - Your bot token from @BotFather (e.g. `123456:ABC-DEF…`)
+  - `TelegramChatId` - Target chat / group / channel ID (group IDs are negative)
 - **Filters**
-  - `RelayGlobalChat` (default: `true`) — Forward global chat messages to Telegram
-  - `RelayLocalChat` (default: `true`) — Forward local chat messages to Telegram
-  - `RelayNotifications` (default: `true`) — Forward system notifications (joins, leaves, etc.) to Telegram
+  - `RelayGlobalChat` (default: `true`) - Forward global chat messages to Telegram
+  - `RelayLocalChat` (default: `true`) - Forward local chat messages to Telegram
+  - `RelayNotifications` (default: `true`) - Forward system notifications (joins, leaves, etc.) to Telegram
 - **Formatting**
-  - `MessageFormat` (default: `[{channel:short}] {username}: {message}`) — Format string for chat messages sent to Telegram
-  - `NotificationFormat` (default: `{message}`) — Format string for system notifications sent to Telegram
+  - `MessageFormat` (default: `[{channel:short}] {username}: {message}`) - Format string for chat messages sent to Telegram
+  - `NotificationFormat` (default: `{message}`) - Format string for system notifications sent to Telegram
 
 ## Format Placeholders
 
 The `MessageFormat` and `NotificationFormat` settings accept the following placeholders:
 
-- `{timestamp}` — message time; accepts a C# DateTime format specifier (e.g. `{timestamp:HH:mm}`)
-- `{channel}` — full channel label use `{channel:short}` for just the first character (`G` / `L`)
-- `{username}` — display name of the sender
-- `{message}` — message body
-- `{distance}` — distance in metres for local messages, empty for global/notifications
-- `{source}` — internal message source identifier
-- `{playerid}` — sender's player ID
+- `{timestamp}` - message time; accepts a C# DateTime format specifier (e.g. `{timestamp:HH:mm}`)
+- `{channel}` - full channel label use `{channel:short}` for just the first character (`G` / `L`)
+- `{username}` - display name of the sender
+- `{message}` - message body
+- `{distance}` - distance in metres for local messages, empty for global/notifications
+- `{source}` - internal message source identifier
+- `{playerid}` - sender's player ID
 
 ## Installation
 
@@ -124,12 +124,12 @@ Use `r2modman` or the Thunderstore app for the simplest install. Fomo must be in
 
 ## Dependencies
 
-- [Fomo](https://thunderstore.io/c/on-together/p/AndrewLin/Fomo/) — Core mod providing `IChatSink`, `ChatEntry`, `ChatSinkManager`
-- [BepInEx 5.x](https://github.com/BepInEx/BepInEx) — Mod loader
-- [Newtonsoft.Json](https://www.newtonsoft.com/json) — JSON parsing for Telegram HTTP API responses
+- [Fomo](https://thunderstore.io/c/on-together/p/AndrewLin/Fomo/) - Core mod providing `IChatSink`, `ChatEntry`, `ChatSinkManager`
+- [BepInEx 5.x](https://github.com/BepInEx/BepInEx) - Mod loader
+- [Newtonsoft.Json](https://www.newtonsoft.com/json) - JSON parsing for Telegram HTTP API responses
 
-> Telegram communication uses the standard .NET `HttpClient` against the Telegram Bot HTTP API directly — no third-party Telegram library, ensuring full Mono/BepInEx compatibility.
+> Telegram communication uses the standard .NET `HttpClient` against the Telegram Bot HTTP API directly - no third-party Telegram library, ensuring full Mono/BepInEx compatibility.
 
 ## License
 
-MIT — same as the parent Fomo mod.
+MIT - same as the parent Fomo mod.

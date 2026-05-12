@@ -19,7 +19,7 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 | `/hushunmute <player>` | `/humu` | Unmute a player (host, delegate, or mod admin; accepts Steam ID for offline players) |
 | `/hushgetmutes` | `/hgm` | List all currently muted players with expiry (host only) |
 
-**Player query formats** — name (partial match), Steam ID suffix (digits only), or `_host`.
+**Player query formats** - name (partial match), Steam ID suffix (digits only), or `_host`.
 
 ### Player banning
 
@@ -46,7 +46,7 @@ The host can whitelist trusted non-host players to use `/hushtmute`, `/hushunmut
 
 The `<player_or_steamid>` field accepts either a Steam ID64 (17-digit number) or any player query string (partial name, name suffix, Steam persona name). Steam IDs are resolved directly; name queries resolve to the first online match.
 
-**Mod admins** — Steam IDs listed in `Alpha.ModAdmins` bypass the delegate whitelist and can relay all commands regardless of whitelist status.
+**Mod admins** - Steam IDs listed in `Alpha.ModAdmins` bypass the delegate whitelist and can relay all commands regardless of whitelist status.
 
 | Command | Short | Description |
 |---|---|---|

@@ -29,14 +29,14 @@ All notable changes to this project will be documented in this file.
 ## [1.1.0]
 
 ### Changed
-- Merged `/fomochatsinkgetlocalrange` (`/fcsglr`) and `/fomochatsinksetlocalrange` (`/fcsslr`) into `/fomochatsinklocalrange` (`/fcslr`) — no args gets the current value; passing a number sets it
-- `/fomoincomingmode` (`/fim`) — toggle whether messages dispatched from external sources (Telegram, WebSocket, etc.) are sent as global or local chat; persisted via config
-- `DispatchIncomingLocal` config entry (`Chat` section, default `false`) — set the default channel for dispatched incoming messages
+- Merged `/fomochatsinkgetlocalrange` (`/fcsglr`) and `/fomochatsinksetlocalrange` (`/fcsslr`) into `/fomochatsinklocalrange` (`/fcslr`) - no args gets the current value; passing a number sets it
+- `/fomoincomingmode` (`/fim`) - toggle whether messages dispatched from external sources (Telegram, WebSocket, etc.) are sent as global or local chat; persisted via config
+- `DispatchIncomingLocal` config entry (`Chat` section, default `false`) - set the default channel for dispatched incoming messages
 
 ## [1.0.0]
 
 ### Changed
-- Merged `/fomochatsinkgetlocalrange` (`/fcsglr`) and `/fomochatsinksetlocalrange` (`/fcsslr`) into `/fomochatsinklocalrange` (`/fcslr`) — no args gets the current value; passing a number sets it
+- Merged `/fomochatsinkgetlocalrange` (`/fcsglr`) and `/fomochatsinksetlocalrange` (`/fcsslr`) into `/fomochatsinklocalrange` (`/fcslr`) - no args gets the current value; passing a number sets it
 
 ## [0.2.4]
 
@@ -52,7 +52,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Notifications when the local player disconnects or returns to the main menu (new `MainSceneManagerPatch`)
-- `ChatUtils.DispatchIncomingText` — shared routing helper for text received from external sources (WebSocket, Telegram): `/fomo*` commands are processed directly by `ChatCommandManager`; other slash commands are injected via the UI input system; plain text is sent through the regular chat pipeline
+- `ChatUtils.DispatchIncomingText` - shared routing helper for text received from external sources (WebSocket, Telegram): `/fomo*` commands are processed directly by `ChatCommandManager`; other slash commands are injected via the UI input system; plain text is sent through the regular chat pipeline
 - `ChatUtils` and `PlayerUtils` moved into `Fomo.Core.Util` namespace
 
 ### Changed
@@ -60,11 +60,11 @@ All notable changes to this project will be documented in this file.
 - `Plugin.cs` renamed to `FomoPlugin.cs`
 - `CommandManager` renamed to `ChatCommandManager`; `CommandArgs` renamed to `ChatCommandArgs`
 - Renamed in-game commands:
-  - `/fomomessagelimit [global|local] <number>` (`/fml`) — set the global or local chat window size
-  - `/fomochatsinksetlocalrange <number>` (`/fcsslr`) — set local range for chat sinks
-  - `/fomochatsinkgetlocalrange` (`/fcsglr`) — get local range for chat sinks
-  - `/fomochatsinkcleantags` (`/fcsct`) — toggle TMP tag stripping for all sinks
-  - `/fomoplayerid` (`/fpi`) — print your current player ID
+  - `/fomomessagelimit [global|local] <number>` (`/fml`) - set the global or local chat window size
+  - `/fomochatsinksetlocalrange <number>` (`/fcsslr`) - set local range for chat sinks
+  - `/fomochatsinkgetlocalrange` (`/fcsglr`) - get local range for chat sinks
+  - `/fomochatsinkcleantags` (`/fcsct`) - toggle TMP tag stripping for all sinks
+  - `/fomoplayerid` (`/fpi`) - print your current player ID
 
 ## [0.2.1] - 2026-03-02
 
@@ -137,8 +137,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated manifest description
 - Updated short commands
-  - `/fomousefeature` (`/fuf`) — toggle all features on/off
-  - `/fomoshowcommand` (`/fsc`) — toggle command visibility in chat  
+  - `/fomousefeature` (`/fuf`) - toggle all features on/off
+  - `/fomoshowcommand` (`/fsc`) - toggle command visibility in chat  
 
 ## [0.0.1] - 2026-02-18
 
@@ -149,11 +149,11 @@ All notable changes to this project will be documented in this file.
 - Configurable global and local chat window message limits via `GlobalMessageLimitCount` / `LocalMessageLimitCount` config and `/fomosetmessagelimit` command
 - Raised notification badge cap from hardcoded 99 to configurable value (default 300, max 999) via `NotificationLimit` config
 - In-game command system with the following commands:
-  - `/fomohelp` (`/fh`) — list all commands
-  - `/fomousefeature` (`/uff`) — toggle all features on/off
-  - `/fomoshowcommand` (`/sfc`) — toggle command visibility in chat
-  - `/fomousechatlog` (`/fucl`) — toggle chat file logging
-  - `/fomogetchatlogpath` (`/fgclp`) — print current log file path
-  - `/fomosetchatlogpath` (`/fsclp`) — set log file path
-  - `/fomocleanchatlogtags` (`/fcclt`) — toggle TMP tag stripping in log
-  - `/fomosetmessagelimit` (`/fsml`) — set global/local chat window size
+  - `/fomohelp` (`/fh`) - list all commands
+  - `/fomousefeature` (`/uff`) - toggle all features on/off
+  - `/fomoshowcommand` (`/sfc`) - toggle command visibility in chat
+  - `/fomousechatlog` (`/fucl`) - toggle chat file logging
+  - `/fomogetchatlogpath` (`/fgclp`) - print current log file path
+  - `/fomosetchatlogpath` (`/fsclp`) - set log file path
+  - `/fomocleanchatlogtags` (`/fcclt`) - toggle TMP tag stripping in log
+  - `/fomosetmessagelimit` (`/fsml`) - set global/local chat window size

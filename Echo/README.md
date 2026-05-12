@@ -22,7 +22,7 @@ Type any command into the in-game chat. Commands start with `/` and are **not se
 | `/echotoggle` | `/ht` | Toggle all Echo features on or off. |
 | `/echohelp` | `/eh` | List all Echo commands. |
 
-**Player query formats** — display name (partial match), Steam ID suffix (digits only), Steam persona name, or `_host`.
+**Player query formats** - display name (partial match), Steam ID suffix (digits only), Steam persona name, or `_host`.
 
 ## Configuration
 
@@ -45,6 +45,6 @@ Use r2modman or the Thunderstore app for the simplest install.
 |---|---|
 | 1 | Install [BepInEx](https://github.com/BepInEx/BepInEx/releases) into your On Together game folder |
 | 2 | Copy `AndrewLin.Echo.dll` into `BepInEx/plugins/` |
-| 3 | Launch the game — config files will be generated automatically |
+| 3 | Launch the game - config files will be generated automatically |
 
 **Dependencies:** [BepInExPack](https://thunderstore.io/c/on-together/p/BepInEx/BepInExPack/), [Alpha](https://thunderstore.io/c/on-together/p/AndrewLin/Alpha/)

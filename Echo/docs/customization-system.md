@@ -2,7 +2,7 @@
 
 ## Overview
 
-Player customization is stored in a **single flat struct** (`CustomizationDataIDs2`) with 18 fields. The split between "Appearance" and "Outfit" is logical only — the same struct holds both, and the game uses the `CustomizationType` enum to route lookups.
+Player customization is stored in a **single flat struct** (`CustomizationDataIDs2`) with 18 fields. The split between "Appearance" and "Outfit" is logical only - the same struct holds both, and the game uses the `CustomizationType` enum to route lookups.
 
 ## `CustomizationType` enum
 
@@ -12,7 +12,7 @@ public enum CustomizationType { Appearance, Outfit }
 
 Used as a key when calling `CustomizationSettings.GetID(type, groupIndex, ...)` and `GetIndex(...)`.
 
-## Appearance fields (`AppearanceType` enum, indices 0–6)
+## Appearance fields (`AppearanceType` enum, indices 0-6)
 
 Face and body customization. Stored in `CustomizationData` / `CustomizationDataIDs2`:
 
@@ -26,7 +26,7 @@ Face and body customization. Stored in `CustomizationData` / `CustomizationDataI
 | `MouthData` | `Mouth` (5) | Sprite-based |
 | `FacialData` | `Facial` (6) | Sprite-based |
 
-## Outfit fields (`OutfitType` enum, indices 0–10)
+## Outfit fields (`OutfitType` enum, indices 0-10)
 
 Clothing and accessories. Also stored in the same `CustomizationDataIDs2`:
 
@@ -44,7 +44,7 @@ Clothing and accessories. Also stored in the same `CustomizationDataIDs2`:
 | `FullBody` | `FullBody` | 9 |
 | `Umbrella` | `Umbrella` | 10 |
 
-`IsFullBody: bool` — when true, hides `Top`/`Bottom` in favor of `FullBody`.
+`IsFullBody: bool` - when true, hides `Top`/`Bottom` in favor of `FullBody`.
 
 ## Style Slots (3 per player)
 
@@ -54,7 +54,7 @@ Clothing and accessories. Also stored in the same `CustomizationDataIDs2`:
 public CustomizationDataIDs2 CustomizationDataIDsNew;   // slot 0
 public CustomizationDataIDs2 CustomizationDataIDs1New;  // slot 1
 public CustomizationDataIDs2 CustomizationDataIDs2New;  // slot 2
-public int SelectedStyleIndex;                          // active slot (0–2)
+public int SelectedStyleIndex;                          // active slot (0-2)
 public List<string> StyleNames;                         // display names for each slot
 ```
 
@@ -63,7 +63,7 @@ The `CurrentCustomizationDataIDs` property gets/sets the struct for the active s
 ## Data flow
 
 ```
-PlayerDataZip.CurrentCustomizationDataIDs   (persisted IDs — integers)
+PlayerDataZip.CurrentCustomizationDataIDs   (persisted IDs - integers)
     ↕  CustomizationDataIDs2(CustomizationData) / new CustomizationData(ids)
 DataManager.CustomizationData               (in-memory indices for rendering)
     ↓  ApplyCustomization(data)
@@ -96,6 +96,6 @@ dm.SavePlayerZipData();
 ## Color palettes
 
 `CustomizationSettings` separates colors by domain:
-- `_bodyColors` — head, facial, tail
-- `_hairColors` — hair, mustache
-- `_outfitColors` — all other outfit slots
+- `_bodyColors` - head, facial, tail
+- `_hairColors` - hair, mustache
+- `_outfitColors` - all other outfit slots
