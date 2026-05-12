@@ -36,8 +36,8 @@ namespace Alpha.Core.Commands
                 return;
             }
 
-            _log.LogInfo($"Found {matches.Count} player(s) matching \"{query}\":");
-            ChatUtils.AddGlobalNotification($"Found {matches.Count} player(s) matching \"{query}\":");
+            string header = $"Found {matches.Count} player(s) matching \"{query}\":";
+            var sb = new System.Text.StringBuilder(header);
             foreach (PlayerDetail p in matches)
             {
                 string cleanName = ChatUtils.CleanTMPTags(p.UserName).Trim();
@@ -45,10 +45,12 @@ namespace Alpha.Core.Commands
                 var myPosition = PlayerUtils.GetPlayerDetail()?.Position ?? Vector3.zero;
                 var distance = (int)Vector3.Distance(p.Position, myPosition);
 
-                string msg = $"{cleanName} | {persona} | {p.SteamID}  | {p.Position} ({distance})";
-                _log.LogInfo(msg);
-                ChatUtils.AddGlobalNotification(msg);
+                sb.Append($"\n| {cleanName} | {persona} | {p.SteamID} | {p.Position} | {distance} |");
             }
+
+            string msg = sb.ToString();
+            _log.LogInfo(msg);
+            ChatUtils.AddGlobalNotification(msg);
         }
     }
 }

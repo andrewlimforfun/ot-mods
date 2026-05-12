@@ -23,11 +23,24 @@ namespace Alpha.Core.Commands
         public void Execute(string[] args)
         {
             var host = PlayerUtils.GetHost();
-            ChatUtils.AddGlobalNotification(
+
+            string duration = "unknown";
+            if (AlphaPlugin.ServerJoinTime.HasValue)
+            {
+                TimeSpan elapsed = DateTime.UtcNow - AlphaPlugin.ServerJoinTime.Value;
+                duration = $"{(int)elapsed.TotalHours:D2}h {elapsed.Minutes:D2}m";
+            }
+
+            string msg =
                 $"Lobby Name: {PlayerUtils.GetLobbyName()}\n" +
                 $"Lobby Code: {PlayerUtils.GetLobbyCode()}\n" +
                 $"Player Count: {PlayerUtils.GetPlayerCount()}/{PlayerUtils.GetMaxPlayers()}\n" +
-                $"Host: {host?.UserName} (Steam: {host?.SteamPersonaName})");
+                $"Host Name: {host?.UserName}\n" +
+                $"Host Steam: {host?.SteamPersonaName}\n" +
+                $"Session Duration: {duration}";
+
+            _log.LogInfo(msg);
+            ChatUtils.AddGlobalNotification(msg);
         }
     }
 }

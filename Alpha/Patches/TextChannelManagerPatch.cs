@@ -13,6 +13,13 @@ namespace Alpha.Patches
 
     public class TextChannelManagerPatch
     {
+        [HarmonyPatch("Start")]
+        [HarmonyPostfix]
+        public static void Start_Postfix()
+        {
+            AlphaPlugin.ServerJoinTime = DateTime.UtcNow;
+        }
+
         [HarmonyPatch("OnEnterPressed")]
         [HarmonyPrefix]
         public static void OnEnterPressedPrefix()

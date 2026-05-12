@@ -4,6 +4,19 @@ All notable changes to Alpha will be documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.1.1] - 2026-05-12
+
+### Added
+
+- **`/alphaserverinfo`** — now shows session duration (time since joining the server). Join time is captured by patching `TextChannelManager.Start()`.
+- **`AlphaPlugin.ServerJoinTime`** — new `DateTime?` property exposing join time to other mods.
+
+### Changed
+
+- **`/alphaserverinfo`** — builds message into a single string, then logs and notifies once.
+- **`/alphawhois`** — combines all player rows into one message before logging and notifying.
+
+---
 ## [0.1.0] - 2026-04-26
 
 ### Added

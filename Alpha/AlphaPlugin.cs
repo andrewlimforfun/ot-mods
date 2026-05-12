@@ -23,6 +23,9 @@ namespace Alpha
         public static ConfigEntry<bool>? SuppressPurrNetNullRef { get; private set; }
         public static ChatCommandManager? CommandManager { get; private set; }
 
+        /// <summary>UTC time when the local player last joined a server. Null until first join.</summary>
+        public static DateTime? ServerJoinTime { get; internal set; }
+
         // Thread-safe queue to marshal background-thread work onto the Unity main thread
         private static readonly ConcurrentQueue<Action> _mainThreadQueue = new ConcurrentQueue<Action>();
 
