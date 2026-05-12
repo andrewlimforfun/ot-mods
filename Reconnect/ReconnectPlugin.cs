@@ -74,7 +74,7 @@ namespace Reconnect
             AlphaPlugin.CommandManager?.Register(new ReconnectMaxAttemptsCommand());
             AlphaPlugin.CommandManager?.Register(new ReconnectIntervalCommand());
             AlphaPlugin.CommandManager?.Register(new ReconnectCooldownCommand());
-            AlphaPlugin.CommandManager?.Register(new ReconnectTestCommand());
+            AlphaPlugin.CommandManager?.Register(new ReconnectSimulateCommand());
         }
 
         void InitConfig()

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2026-05-12
+
+### Fixed
+
+- **`/echotoggle`** - short name changed from `/ht` to `/et` (was incorrectly using Hush's prefix).
+
 ## [0.2.2] - 2026-05-12
 
 ### Added

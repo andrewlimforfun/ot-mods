@@ -4,10 +4,10 @@ using PurrNet;
 
 namespace Reconnect.Core.Commands
 {
-    public class ReconnectTestCommand : IChatCommand
+    public class ReconnectSimulateCommand : IChatCommand
     {
-        public string Name => "reconnecttest";
-        public string ShortName => "rctest";
+        public string Name => "reconnectsimulate";
+        public string ShortName => "rcs";
         public string Description => "Simulate an unintentional disconnect to test the reconnect sequence.";
         public string Namespace => "reconnect";
 

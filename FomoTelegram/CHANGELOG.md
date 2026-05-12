@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.10] - 2026-05-12
+
+### Fixed
+
+- **`/fomotelegramsetupinfo`** - short name changed from `/ftsinfo` to `/ftsi` for consistency with other shortname conventions.
+
 ## [1.2.9] - 2026-04-17
 
 ### Added

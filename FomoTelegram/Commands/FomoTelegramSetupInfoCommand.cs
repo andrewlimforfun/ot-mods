@@ -7,7 +7,7 @@ namespace FomoTelegram.Commands
     {
         public const string CMD = "fomotelegramsetupinfo";
         public string Name => CMD;
-        public string ShortName => "ftsinfo";
+        public string ShortName => "ftsi";
         public string Description => "Instruction to set up the Telegram integration.";
         public string Namespace => "fomo";
         public void Execute(string[] args)

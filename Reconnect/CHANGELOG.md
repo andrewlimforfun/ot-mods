@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3
+
+### Fixed
+
+- **`/reconnecttest`** - renamed to `/reconnectsimulate` (`/rcs`) to avoid shortname collision with `/reconnecttoggle` (`/rct`).
+
 ## 0.0.2
 
 - Better default values

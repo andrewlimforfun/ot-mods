@@ -8,7 +8,7 @@ namespace Echo.Core.Commands
     {
         public const string CMD = "echotoggle";
         public string Name => CMD;
-        public string ShortName => "ht";
+        public string ShortName => "et";
         public string Description => "Toggle Echo feature on/off. ";
 
         public string Namespace => "echo";
