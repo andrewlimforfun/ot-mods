@@ -71,6 +71,8 @@ namespace Echo
             AlphaPlugin.CommandManager?.Register(new EchoSyncRotationCommand());
             AlphaPlugin.CommandManager?.Register(new EchoUnsyncRotationCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyNameCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoCopyNameStyleCommand());
+            AlphaPlugin.CommandManager?.Register(new EchoGetNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoRevertNameCommand());
             AlphaPlugin.CommandManager?.Register(new EchoCopyOutfitCommand());
             AlphaPlugin.CommandManager?.Register(new EchoRemoveStatusCommand());

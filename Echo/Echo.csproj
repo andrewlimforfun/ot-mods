@@ -11,6 +11,10 @@
     <LocalInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)Dev\</LocalInstallPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Echo.Tests" />
+  </ItemGroup>
+
   <!-- NuGet Packages -->
   <ItemGroup>
     <!-- dotnet nuget add source https://nuget.bepinex.dev/v3/index.json -n bepinex-->

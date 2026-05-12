@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2026-05-12
+
+### Added
+
+- **`/echocopynamestyle`** (`/ecns`) - Copy another player's TMP tag styling onto your own name's characters. Supports positional (default) and even (`-e` flag) distribution modes.
+- **`/echogetname`** (`/egn`) - Display another player's full display name including TMP rich-text tags.
+- **`NameStyleTransfer`** - Extracted name style parsing and application logic into a reusable utility class with unit tests.
+
 ## [0.2.1] - 2026-05-08
 
 ### Added
@@ -26,8 +34,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- **`/echolocationlist`** (`/ell`) — lists all saved locations and their coordinates, or reports "No saved locations." if none are saved.
-- **`/echolocationremove`** (`/elr`) — removes a saved location by name (case-insensitive). Confirms removal or reports if the name was not found.
+- **`/echolocationlist`** (`/ell`) - lists all saved locations and their coordinates, or reports "No saved locations." if none are saved.
+- **`/echolocationremove`** (`/elr`) - removes a saved location by name (case-insensitive). Confirms removal or reports if the name was not found.
 
 ## [0.1.7] - 2026-04-12
 
@@ -51,7 +59,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- **`/echoteleportlocation`** (`/etl`) — save named locations and teleport to them by name, or teleport directly to world coordinates (`/etl <x> <y> <z>`). Locations are persisted to `BepInEx/config/Echo_locations.cfg` across sessions.
+- **`/echoteleportlocation`** (`/etl`) - save named locations and teleport to them by name, or teleport directly to world coordinates (`/etl <x> <y> <z>`). Locations are persisted to `BepInEx/config/Echo_locations.cfg` across sessions.
 
 ### Changed
 
@@ -73,9 +81,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- **Teleportation** — `/echotpto <player> [x y z]` warps you to any connected player, with an optional XYZ offset. Implemented via a `PlayerMovementController.MovePlayer` Harmony prefix so the warp survives the movement controller's per-frame override.
-- **Name copying** — `/echocopyname <player>` copies another player's full display name (including TMP rich-text tags). Token-gated via SHA-256 `AccessToken` config entry. Saves your original name for revert.
-- **Name reverting** — `/echorevertname` restores your display name to what it was before any Echo rename.
-- **Outfit copying** — `/echocopyoutfit <player>` copies another player's full appearance (all 18 customization fields) onto your own character.
-- **Toggle** — `/echotoggle` enables or disables all Echo features at runtime.
+- **Teleportation** - `/echotpto <player> [x y z]` warps you to any connected player, with an optional XYZ offset. Implemented via a `PlayerMovementController.MovePlayer` Harmony prefix so the warp survives the movement controller's per-frame override.
+- **Name copying** - `/echocopyname <player>` copies another player's full display name (including TMP rich-text tags). Token-gated via SHA-256 `AccessToken` config entry. Saves your original name for revert.
+- **Name reverting** - `/echorevertname` restores your display name to what it was before any Echo rename.
+- **Outfit copying** - `/echocopyoutfit <player>` copies another player's full appearance (all 18 customization fields) onto your own character.
+- **Toggle** - `/echotoggle` enables or disables all Echo features at runtime.
 - OfficerBalls compatibility: when the `officerballs.StatusManager` plugin is present, `/setname` is also sent via the UI so that the OfficerBalls player-list stays in sync.
