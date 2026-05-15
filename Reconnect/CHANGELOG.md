@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.4
+
+### Added
+
+- Restore player position and rotation after successful reconnect
+- Capture focus state at disconnect time and notify player to re-enter manually
+
 ## 0.0.3
 
 ### Fixed

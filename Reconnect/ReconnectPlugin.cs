@@ -69,6 +69,7 @@ namespace Reconnect
             var harmony = new Harmony(ModGUID);
             harmony.PatchAll(typeof(MainSceneManagerPatch));
             harmony.PatchAll(typeof(MultiplayerManagerPatch));
+            harmony.PatchAll(typeof(PlayerControllerPatch));
 
             AlphaPlugin.CommandManager?.Register(new ReconnectToggleCommand());
             AlphaPlugin.CommandManager?.Register(new ReconnectMaxAttemptsCommand());
@@ -83,7 +84,7 @@ namespace Reconnect
                 "Enable auto-reconnect on unexpected disconnection.");
             MaxAttempts = Config.Bind("General", "MaxAttempts", 100,
                 "Maximum reconnect attempts before giving up (1-100).");
-            AttemptIntervalSec = Config.Bind("General", "AttemptIntervalSec", 5f,
+            AttemptIntervalSec = Config.Bind("General", "AttemptIntervalSec", 6f,
                 "Seconds between reconnect attempts.");
             CooldownSec = Config.Bind("General", "CooldownSec", 30f,
                 "Minimum seconds between reconnect sequences to prevent rapid-fire loops.");
@@ -164,6 +165,9 @@ namespace Reconnect
         /// </summary>
         private static void FallbackToMenu()
         {
+            // Discard saved state - we're going to menu, not reconnecting
+            ReconnectManager.SavedState = null;
+
             try
             {
                 MainSceneManager? msm = MonoSingleton<MainSceneManager>.I;

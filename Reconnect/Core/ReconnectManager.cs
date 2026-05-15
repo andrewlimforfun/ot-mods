@@ -18,6 +18,7 @@ namespace Reconnect.Core
         public bool IsIntentionalLeave { get; set; }
         public bool IsReconnecting { get; private set; }
         public string? SavedLobbyId { get; set; }
+        public PlayerStateSnapshot? SavedState { get; set; }
         public int CurrentAttempt => _currentAttempt;
 
         public ReconnectManager(Func<int> maxAttempts, Func<float> attemptIntervalSec, Func<float> cooldownSec)

@@ -45,10 +45,10 @@ A **cooldown** (`CooldownSec`) prevents a new reconnect sequence from starting t
 | Command | Short | Description |
 |---------|-------|-------------|
 | `/reconnecttoggle` | `/rct` | Get or set auto-reconnect on/off. No arg toggles; `on`/`off` sets directly |
-| `/reconnectmaxattempts` | `/rcma` | Get or set max reconnect attempts (1-10) |
+| `/reconnectmaxattempts` | `/rcma` | Get or set max reconnect attempts (1-100) |
 | `/reconnectinterval` | `/rciv` | Get or set seconds between attempts (2-30) |
 | `/reconnectcooldown` | `/rccd` | Get or set cooldown between sequences in seconds (10-120) |
-| `/reconnecttest` | `/rctest` | Simulate an unintentional disconnect to test the reconnect sequence |
+| `/reconnectsimulate` | `/rcs` | Simulate an unintentional disconnect to test the reconnect sequence |
 | `/reconnecthelp` | `/rch` | List all reconnect commands |
 
 ## Configuration

@@ -3,6 +3,7 @@ using HarmonyLib;
 using PurrNet;
 using PurrNet.Transports;
 using Alpha.Core.Util;
+using Reconnect.Core;
 
 namespace Reconnect.Patches
 {
@@ -64,7 +65,12 @@ namespace Reconnect.Patches
             _log.LogInfo($"Unexpected disconnect (status={notificationStatus}). Attempting reconnect...");
             ChatUtils.AddGlobalNotification("Connection lost - attempting to reconnect...");
 
-            // Suppress ConnectionLost → ReturnMenu flow
+            // Capture player state before it's lost
+            ReconnectPlugin.ReconnectManager.SavedState = PlayerStateSnapshot.Capture();
+            if (ReconnectPlugin.ReconnectManager.SavedState != null)
+                _log.LogInfo($"Saved player state: pos={ReconnectPlugin.ReconnectManager.SavedState.Position}, focused={ReconnectPlugin.ReconnectManager.SavedState.WasFocused}");
+
+            // Suppress ConnectionLost -> ReturnMenu flow
             ReconnectPlugin.StartReconnectCoroutine();
             return false;
         }
