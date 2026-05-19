@@ -66,14 +66,14 @@ namespace Alpha.Core.Commands
             string msg =
                 $"Lobby Name: {PlayerUtils.GetLobbyName()}\n" +
                 $"Lobby Code: {PlayerUtils.GetLobbyCode()}\n" +
-                $"Lobby Valid: {lobbyValid}\n" +
                 $"Player Count: {PlayerUtils.GetPlayerCount()}/{PlayerUtils.GetMaxPlayers()}\n" +
-                $"Host Name: {host?.UserName}\n" +
-                $"Host Steam: {host?.SteamPersonaName}\n" +
+                $"Lobby Valid: {lobbyValid}\n" +
+                $"isServer players: {serverPlayerCount}/{totalTrackedPlayers}\n" +
+                $"Session Duration: {duration}\n" +
                 $"Host SteamID (lobby owner): {lobbyOwnerSteamId}\n" +
                 $"Host SteamID (panel match): {host?.SteamID}\n" +
-                $"isServer players: {serverPlayerCount}/{totalTrackedPlayers}\n" +
-                $"Session Duration: {duration}";
+                $"Host Steam: {host?.SteamPersonaName}\n" +
+                $"Host Name: {host?.UserName}";
 
             _log.LogInfo(msg);
             ChatUtils.AddGlobalNotification(msg);
