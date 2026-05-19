@@ -143,6 +143,120 @@ namespace Echo.Core
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Even distribution mode that treats non-ASCII characters in the target as part of the style.
+        /// Non-ASCII chars are kept in place; only ASCII character slots are filled with the user's chars.
+        /// </summary>
+        internal static string ApplyEvenKeepNonAscii(List<StyledSegment> segments, string myChars)
+        {
+            if (segments.Count == 0)
+                return myChars;
+
+            int asciiSlots = 0;
+            foreach (StyledSegment seg in segments)
+            {
+                foreach (char c in seg.Text)
+                {
+                    if (c <= '\x7F')
+                        asciiSlots++;
+                }
+            }
+
+            if (asciiSlots == 0)
+            {
+                // No ASCII slots to fill - just reconstruct with tags + non-ASCII text
+                var fallback = new StringBuilder();
+                foreach (StyledSegment seg in segments)
+                {
+                    fallback.Append(seg.Tags);
+                    fallback.Append(seg.Text);
+                }
+                fallback.Append(myChars);
+                return fallback.ToString();
+            }
+
+            // Distribute user chars evenly across ASCII slots in each segment
+            int totalSegmentsWithAscii = 0;
+            foreach (StyledSegment seg in segments)
+            {
+                foreach (char c in seg.Text)
+                {
+                    if (c <= '\x7F')
+                    {
+                        totalSegmentsWithAscii++;
+                        break;
+                    }
+                }
+            }
+
+            int baseCount = myChars.Length / totalSegmentsWithAscii;
+            int remainder = myChars.Length % totalSegmentsWithAscii;
+
+            var sb = new StringBuilder();
+            int charIdx = 0;
+            int segIdx = 0;
+
+            foreach (StyledSegment seg in segments)
+            {
+                sb.Append(seg.Tags);
+
+                bool hasAscii = false;
+                foreach (char c in seg.Text)
+                {
+                    if (c <= '\x7F')
+                    {
+                        hasAscii = true;
+                        break;
+                    }
+                }
+
+                if (!hasAscii)
+                {
+                    // Keep all non-ASCII text as-is
+                    sb.Append(seg.Text);
+                    continue;
+                }
+
+                int take = baseCount + (segIdx < remainder ? 1 : 0);
+                int charsWritten = 0;
+
+                foreach (char c in seg.Text)
+                {
+                    if (c > '\x7F')
+                    {
+                        // Non-ASCII: keep as part of style
+                        sb.Append(c);
+                    }
+                    else
+                    {
+                        // ASCII slot: fill with user's char
+                        if (charsWritten < take && charIdx < myChars.Length)
+                        {
+                            sb.Append(myChars[charIdx]);
+                            charIdx++;
+                            charsWritten++;
+                        }
+                    }
+                }
+
+                // If we still have chars to place for this segment (fewer ASCII slots than take)
+                while (charsWritten < take && charIdx < myChars.Length)
+                {
+                    sb.Append(myChars[charIdx]);
+                    charIdx++;
+                    charsWritten++;
+                }
+
+                segIdx++;
+            }
+
+            // Append any remaining chars
+            if (charIdx < myChars.Length)
+                sb.Append(myChars, charIdx, myChars.Length - charIdx);
+
+            return sb.ToString();
+        }
+
         internal readonly struct StyledSegment
         {
             public readonly string Tags;

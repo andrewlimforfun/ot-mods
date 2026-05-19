@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.4] - 2026-05-19
+
+### Changed
+
+- **`/echocopynamestyle`** (`/ecns`) - Removed positional mode; even distribution is now the only mode. Replaced `-e` flag with `-s` flag: use `-s` to also keep non-ASCII characters from the target's name as part of the style rather than replacing them with your own characters.
+
 ## [0.2.3] - 2026-05-12
 
 ### Fixed
