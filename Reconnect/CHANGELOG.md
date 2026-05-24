@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.5
+
+### Added
+
+- Focus area repair: re-requests FocusAreaManager state after spawn if Init RPC was missed
+- Auto-restore focus activity after reconnect (sets up state via reflection and calls SetFocus)
+- New command: `/reconnectfocus` (`/rcf`) - manually trigger focus area repair
+- Config: `Fix.FocusArea` (default on) - toggle automatic focus area repair
+- Config: `Fix.RestoreFocus` (default on) - toggle automatic focus activity restoration
+
 ## 0.0.4
 
 ### Added

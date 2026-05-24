@@ -29,6 +29,8 @@ namespace Reconnect
         public static ConfigEntry<int>? MaxAttempts { get; private set; }
         public static ConfigEntry<float>? AttemptIntervalSec { get; private set; }
         public static ConfigEntry<float>? CooldownSec { get; private set; }
+        public static ConfigEntry<bool>? FixFocusArea { get; private set; }
+        public static ConfigEntry<bool>? RestoreFocus { get; private set; }
 
         internal static ReconnectManager ReconnectManager { get; private set; } = new ReconnectManager(
             () => MaxAttempts?.Value ?? 10,
@@ -76,6 +78,7 @@ namespace Reconnect
             AlphaPlugin.CommandManager?.Register(new ReconnectIntervalCommand());
             AlphaPlugin.CommandManager?.Register(new ReconnectCooldownCommand());
             AlphaPlugin.CommandManager?.Register(new ReconnectSimulateCommand());
+            AlphaPlugin.CommandManager?.Register(new ReconnectFocusCommand());
         }
 
         void InitConfig()
@@ -88,6 +91,12 @@ namespace Reconnect
                 "Seconds between reconnect attempts.");
             CooldownSec = Config.Bind("General", "CooldownSec", 30f,
                 "Minimum seconds between reconnect sequences to prevent rapid-fire loops.");
+
+            FixFocusArea = Config.Bind("Fix", "FocusArea", true,
+                "Re-request focus area state after spawn if Init RPC was missed.");
+
+            RestoreFocus = Config.Bind("Fix", "RestoreFocus", true,
+                "Automatically restore focus activity after reconnect.");
         }
 
         /// <summary>Starts the reconnect coroutine on the plugin MonoBehaviour.</summary>
@@ -95,6 +104,13 @@ namespace Reconnect
         {
             if (_instance == null) return null;
             return _instance.StartCoroutine(ReconnectCoroutine());
+        }
+
+        /// <summary>Starts an arbitrary coroutine on the plugin MonoBehaviour.</summary>
+        internal static Coroutine? StartPluginCoroutine(IEnumerator routine)
+        {
+            if (_instance == null) return null;
+            return _instance.StartCoroutine(routine);
         }
 
         private static IEnumerator ReconnectCoroutine()

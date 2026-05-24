@@ -1,8 +1,6 @@
 # Reconnect
 
-NOTE: !EXPERIMENTAL! Only get this if you have severe reconnection issue. Also when hosting you should disable this mod. Either via r2modman or via `/reconnecttoggle`.
-
-Auto-reconnect to lobby after unexpected disconnection. Will not attempt reconnect on deliberate leaves (quit button, etc.).
+Auto-reconnect to lobby after unexpected disconnection. Will not attempt reconnect on deliberate leaves (quit button, etc.). 
 
 ## Features
 
@@ -49,6 +47,7 @@ A **cooldown** (`CooldownSec`) prevents a new reconnect sequence from starting t
 | `/reconnectinterval` | `/rciv` | Get or set seconds between attempts (2-30) |
 | `/reconnectcooldown` | `/rccd` | Get or set cooldown between sequences in seconds (10-120) |
 | `/reconnectsimulate` | `/rcs` | Simulate an unintentional disconnect to test the reconnect sequence |
+| `/reconnectfocus` | `/rcf` | Manually repair broken focus areas after reconnect |
 | `/reconnecthelp` | `/rch` | List all reconnect commands |
 
 ## Configuration

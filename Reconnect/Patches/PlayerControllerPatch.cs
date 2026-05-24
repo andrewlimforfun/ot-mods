@@ -7,6 +7,7 @@ namespace Reconnect.Patches
 {
     /// <summary>
     /// Restores the player's position (and logs focus state) after a successful reconnect spawn.
+    /// Also schedules a focus area repair check in case the Init RPC was missed.
     /// </summary>
     [HarmonyPatch(typeof(PlayerController))]
     public static class PlayerControllerPatch
@@ -17,10 +18,14 @@ namespace Reconnect.Patches
         [HarmonyPostfix]
         static void OnSpawned_Postfix(PlayerController __instance)
         {
-            // Only act if we just reconnected and have saved state
             if (!__instance.isOwner)
                 return;
 
+            // Schedule focus area repair check (handles missed Init RPC)
+            if (ReconnectPlugin.FixFocusArea?.Value == true)
+                ReconnectPlugin.StartPluginCoroutine(FocusAreaFix.TryRepairAfterSpawn());
+
+            // Only restore position if we just reconnected and have saved state
             PlayerStateSnapshot? state = ReconnectPlugin.ReconnectManager.SavedState;
             if (state == null)
                 return;
@@ -33,10 +38,14 @@ namespace Reconnect.Patches
             __instance.transform.rotation = state.Rotation;
             _log.LogInfo($"Restored position: {state.Position}");
 
-            if (state.WasFocused)
+            if (state.WasFocused && ReconnectPlugin.RestoreFocus?.Value == true)
             {
-                _log.LogInfo($"Player was in focus mode ({state.FocusType}) before disconnect. Position restored to focus location - player can re-enter focus manually.");
-                Alpha.Core.Util.ChatUtils.AddGlobalNotification("Position restored. You were in focus mode before - press F to re-enter.");
+                _log.LogInfo($"Player was in focus mode ({state.FocusType}) before disconnect. Attempting auto-restore...");
+                ReconnectPlugin.StartPluginCoroutine(FocusRestorer.TryRestoreFocus(state));
+            }
+            else if (state.WasFocused)
+            {
+                Alpha.Core.Util.ChatUtils.AddGlobalNotification("Reconnected - position restored. Press F to re-enter focus.");
             }
             else
             {

@@ -1,3 +1,5 @@
+using HarmonyLib;
+using PurrNet;
 using UnityEngine;
 
 namespace Reconnect.Core
@@ -13,12 +15,27 @@ namespace Reconnect.Core
         public bool WasFocused { get; }
         public FocusType FocusType { get; }
 
-        public PlayerStateSnapshot(Vector3 position, Quaternion rotation, bool wasFocused, FocusType focusType)
+        /// <summary>Area controller ID the player was focused at, or -1 for free focus.</summary>
+        public int FocusAreaId { get; }
+
+        /// <summary>Position before entering focus (where to teleport on unfocus).</summary>
+        public Vector3 PreFocusPosition { get; }
+
+        /// <summary>Rotation before entering focus.</summary>
+        public Quaternion PreFocusRotation { get; }
+
+        public PlayerStateSnapshot(
+            Vector3 position, Quaternion rotation,
+            bool wasFocused, FocusType focusType,
+            int focusAreaId, Vector3 preFocusPosition, Quaternion preFocusRotation)
         {
             Position = position;
             Rotation = rotation;
             WasFocused = wasFocused;
             FocusType = focusType;
+            FocusAreaId = focusAreaId;
+            PreFocusPosition = preFocusPosition;
+            PreFocusRotation = preFocusRotation;
         }
 
         /// <summary>
@@ -36,15 +53,30 @@ namespace Reconnect.Core
 
             bool isFocused = false;
             FocusType focusType = default;
+            int focusAreaId = -1;
+            Vector3 preFocusPosition = position;
+            Quaternion preFocusRotation = rotation;
 
             PlayerFocusController? focusController = tcm.MainFocusController;
             if (focusController != null && focusController.IsFocus)
             {
                 isFocused = true;
                 focusType = focusController.FocusType;
+
+                FocusAreaController? area = focusController.CurrentFocusAreaController;
+                if (area != null)
+                    focusAreaId = area.ID;
+
+                // Read private _preFocusPosition/_preFocusRotation via reflection
+                var posField = AccessTools.Field(typeof(PlayerFocusController), "_preFocusPosition");
+                var rotField = AccessTools.Field(typeof(PlayerFocusController), "_preFocusRotation");
+                if (posField != null)
+                    preFocusPosition = (Vector3)posField.GetValue(focusController);
+                if (rotField != null)
+                    preFocusRotation = (Quaternion)rotField.GetValue(focusController);
             }
 
-            return new PlayerStateSnapshot(position, rotation, isFocused, focusType);
+            return new PlayerStateSnapshot(position, rotation, isFocused, focusType, focusAreaId, preFocusPosition, preFocusRotation);
         }
     }
 }
