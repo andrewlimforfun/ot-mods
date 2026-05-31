@@ -35,6 +35,7 @@
         <DesyncVersion>0.0.1</DesyncVersion>
         <RemindVersion>1.1.10</RemindVersion>
         <SweepVersion>0.0.1</SweepVersion>
+        <QuickHostVersion>0.0.1</QuickHostVersion>
         <JaideAdapterVersion>0.0.1</JaideAdapterVersion>
 
         <!-- NuGet sources: official + BepInEx + samboy + local -->

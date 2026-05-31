@@ -21,6 +21,11 @@
     <Project Name="Dnd.Tests" Path="Dnd.Tests\Dnd.Tests.csproj" />
   </Folder>
 
+  <Folder Name="/desync/">
+    <Project Name="Desync" Path="Desync\Desync.csproj" />
+    <Project Name="Desync.Tests" Path="Desync.Tests\Desync.Tests.csproj" />
+  </Folder>
+
   <Folder Name="/echo/">
     <Project Name="Echo" Path="Echo\Echo.csproj" />
     <Project Name="Echo.Tests" Path="Echo.Tests\Echo.Tests.csproj" />
@@ -53,6 +58,10 @@
 
   <Folder Name="/jaideadapter/">
     <Project Name="JaideAdapter" Path="JaideAdapter\JaideAdapter.csproj" />
+  </Folder>
+
+  <Folder Name="/quickhost/">
+    <Project Name="QuickHost" Path="QuickHost\QuickHost.csproj" />
   </Folder>
 
 </Solution>
