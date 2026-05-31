@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5] - 2026-05-31
+
+### Added
+
+- **`/echorotate`** (`/er`) - Set facing direction (one-shot). Accepts yaw degrees, full `pitch yaw roll`, cardinal directions (`n/s/e/w/ne/se/sw/nw`), or a player name to face toward. No args prints current rotation.
+- **`/echorotatelock`** (`/erl`) - Lock rotation to a fixed value every frame; same argument formats as `/er`. Movement no longer overrides the facing direction while locked.
+- **`/echorotateunlock`** (`/eru`) - Unlock rotation and let the game control it again.
+- **`/echofollowrelative`** (`/efr`) - Follow a player with a rotation-relative offset so you stay behind, beside, or in front regardless of which direction they face. Supports presets (`behind`, `beside`, `right`, `front`) or custom `x y z` offset.
+- **`/echolookat`** (`/ela`) - Continuously face toward a target player each frame. Pairs with `/efr` for face-to-face following. Stop with `/eru`.
+- **`/echosetname`** (`/esn`) - Change your display name text while preserving the current TMP tag styling.
+
 ## [0.2.4] - 2026-05-19
 
 ### Changed
