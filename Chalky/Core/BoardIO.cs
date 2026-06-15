@@ -198,26 +198,10 @@ namespace Chalky.Core
             GL.Clear(clearDepth: true, clearColor: true, Color.clear);
             RenderTexture.active = prev;
 
-            // Re-paint every non-empty cell into the pixel batch
-            // PaintPixel signature: private void PaintPixel(Vector2Int coord, Color color, int colorIndex = -1)
-            var paintPixel = traverse.Method("PaintPixel",
-                new[] { typeof(Vector2Int), typeof(Color), typeof(int) });
-
-            for (int x = 0; x < board.PaintColors.Length; x++)
-            {
-                for (int y = 0; y < board.PaintColors[x].Ints.Count; y++)
-                {
-                    int colorIdx = board.PaintColors[x].Ints[y];
-                    if (colorIdx != 0)
-                    {
-                        Color color = dm.GetColor(colorIdx - 1);
-                        paintPixel.GetValue(new Vector2Int(x, y), color, colorIdx);
-                    }
-                }
-            }
-
-            // Flush the accumulated pixel batch to the RenderTexture
-            traverse.Method("RenderBatch").GetValue();
+            // Use the game's own GetQuadImage_Original_1 to repaint the board.
+            // This method calls PaintPixel + RenderBatch internally using the same
+            // code path the game uses for syncing boards to joining players.
+            board.GetQuadImage_Original_1(default, board.PaintColors);
 
             _log.LogInfo("RenderTexture rebuilt from PaintColors.");
         }
@@ -255,10 +239,12 @@ namespace Chalky.Core
         {
             var playerIDs = NetworkSingleton<PlayerPanelController>.I.PlayerIDs;
 
-            // Host path: send directly to all players (server can target anyone)
+            // Host path: send directly to all remote players (server can target anyone).
+            // Skip self - local repaint is already handled by RebuildRenderTexture.
             int count = 0;
             foreach (var player in playerIDs)
             {
+                if (player == board.localPlayerForced) continue;
                 board.GetQuadImage(player, board.PaintColors);
                 count++;
             }

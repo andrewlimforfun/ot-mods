@@ -8,8 +8,8 @@
     sync thunderstore.toml, publish to Thunderstore.
   -->
 
-    <!-- When UseLocalGameLibs is true, swap NuGet packages for local game DLLs -->
-    <ItemGroup Condition="'$(UseLocalGameLibs)' == 'true'">
+    <!-- When UseLocalGameLibs is true, swap NuGet packages for local game DLLs (mod projects only) -->
+    <ItemGroup Condition="'$(UseLocalGameLibs)' == 'true' AND '$(PackageName)' != ''">
         <PackageReference Remove="OnTogether.GameLibs" />
         <PackageReference Remove="UnityEngine.Modules" />
         <Reference Include="$(GameManagedPath)\*.dll"

@@ -28,15 +28,17 @@ namespace Hush.Patches
         /// </summary>
         [HarmonyPatch("HandleRPCGenerated_0")]
         [HarmonyPrefix]
-        public static bool HandleRPCGenerated_0_Prefix(BitPacker stream, ref RPCPacket packet, RPCInfo info, bool asServer)
+        public static bool HandleRPCGenerated_0_Prefix(ref RPCPacket packet, RPCInfo info, bool asServer)
         {
             // Only intercept on the server relay path
             if (!asServer)
                 return true;
 
 
-            // Read the arguments from the packet payload
-            var reader = BitPackerPool.Get(packet.data);
+            // Read the arguments from the packet payload (copy without consuming original)
+            var reader = BitPackerPool.Get();
+            reader.WriteBitDataWithoutConsumingIt(packet.data);
+            reader.ResetPositionAndMode(true);
 
             byte[] textBytes = null!;
             Packer<byte[]>.Read(reader, ref textBytes);
@@ -124,12 +126,9 @@ namespace Hush.Patches
             Packer<UnityEngine.Vector3>.Write(writer, pos);
             Packer<string>.Write(writer, playerID);
 
-            int byteLen = writer.positionInBytes;
-            byte[] newBuf = new byte[byteLen];
-            System.Array.Copy(writer.buffer, 0, newBuf, 0, byteLen);
-            writer.Dispose();
-
-            packet.data = new ByteData(newBuf, 0, byteLen);
+            var newData = new BitData(writer);
+            writer.ResetPositionAndMode(true);
+            packet.data = newData;
 
             return true;
         }

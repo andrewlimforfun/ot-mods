@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.9] - 2026-06-15
+
+### Fixed
+
+- Adapt to game update 1.1.3 - replaced fragile Traverse reflection calls (PaintPixel/RenderBatch) in RebuildRenderTexture with the game's own GetQuadImage_Original_1 method
+- BroadcastToAllPlayers now skips self to avoid duplicate local repaint
+
 ## [1.2.8] - 2026-04-27
 
 ### Changed

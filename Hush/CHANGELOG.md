@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.14] - 2026-06-15
+
+### Fixed
+
+- Adapt to game update 1.1.3 - PurrNet RPC API removed BitPacker stream parameter from HandleRPCGenerated_0; updated Harmony prefix signature and packet read/write logic to use BitData instead of ByteData
+
 ## [0.1.13] - 2026-04-15
 
 ### Fixed

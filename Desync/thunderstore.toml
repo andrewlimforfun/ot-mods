@@ -3,18 +3,18 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "AndrewLin"
-name = "Echo"
-# Version is controlled by $(Version) in Directory.Build.props.
+name = "Desync"
+# Version is controlled by $(DesyncVersion) in Directory.Build.props.
 # The MSBuild Publish target injects the correct value via --package-version at build time.
-# Do not edit this field manually bump $(Version) in Directory.Build.props instead.
+# Do not edit this field manually - bump $(DesyncVersion) in Directory.Build.props instead.
 versionNumber = "0.0.0"
-description = "Echo: temporarily copy other players outfit and accessories, names (requires token), and chat teleport to players with offset. Use /echohelp"
+description = "Desync: Detect and fix lobby/host desync issues during long sessions."
 websiteUrl = "https://github.com/andrewlimforfun/ot-mods"
 containsNsfwContent = false
 
 [package.dependencies]
 BepInEx-BepInExPack = "5.4.2305"
-AndrewLin-Alpha = "0.1.1"
+AndrewLin-Alpha = "0.0.13"
 
 [build]
 icon = "../icon.png"
@@ -26,7 +26,7 @@ source = "./CHANGELOG.md"
 target = "/"
 
 [[build.copy]]
-source = "./bin/Publish/netstandard2.1/AndrewLin.Echo.dll"
+source = "./bin/Publish/netstandard2.1/AndrewLin.Desync.dll"
 target = "/"
 
 [publish]

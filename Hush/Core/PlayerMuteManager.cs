@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Alpha.Core.Util;
 using BepInEx.Logging;
@@ -202,10 +203,16 @@ namespace Hush.Core
         {
             try
             {
-                PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(steamId);
-                return player != null ? $"{player.UserName} ({steamId})" : steamId;
+                return ResolveDisplayName(steamId);
             }
             catch { return steamId; }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private string ResolveDisplayName(string steamId)
+        {
+            PlayerDetail? player = PlayerUtils.FindPlayerBySteamID(steamId);
+            return player != null ? $"{player.UserName} ({steamId})" : steamId;
         }
 
         private class MuteConfig

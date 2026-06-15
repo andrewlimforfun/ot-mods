@@ -1,0 +1,28 @@
+<!DOCTYPE Project>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>$(DesyncVersion)</Version>
+    <AssemblyName>AndrewLin.Desync</AssemblyName>
+    <PackageName>Desync</PackageName>
+    <!-- Publishing disabled until ready for release -->
+    <PackageName Condition="'$(Configuration)' == 'Publish'"></PackageName>
+    <RootNamespace>Desync</RootNamespace>
+    <Description>Desync: Detect and fix lobby/host desync issues during long sessions.</Description>
+    <LocalInstallPath>$(LocalBepInExPluginPath)\$(TeamName)-$(PackageName)Dev\</LocalInstallPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="OnTogether.GameLibs" Version="$(OnTogetherGameLibsVersion)" />
+    <PackageReference Include="UnityEngine.Modules" Version="6000.0.61" IncludeAssets="compile" />
+    <PackageReference Include="HarmonyX" Version="2.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alpha\Alpha.csproj" SetConfiguration="Configuration=Debug"/>
+  </ItemGroup>
+
+</Project>

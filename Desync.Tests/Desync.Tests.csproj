@@ -16,18 +16,12 @@
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
   </ItemGroup>
 
-  <!-- Reference real game DLLs for test runtime (stubs from NuGet have throw-null bodies) -->
-  <ItemGroup Condition="'$(UseLocalGameLibs)' == 'true'">
-    <Reference Include="$(GameManagedPath)\UnityEngine.CoreModule.dll" Private="true" />
-    <Reference Include="$(GameManagedPath)\UnityEngine.dll" Private="true" />
-  </ItemGroup>
-
   <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Echo\Echo.csproj" />
+    <ProjectReference Include="..\Desync\Desync.csproj" />
   </ItemGroup>
 
 </Project>
